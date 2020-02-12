@@ -1,0 +1,30 @@
+body {
+	
+	margin: auto;
+	text-align:center;
+	
+	color: #FFFFFF;
+	background-color: #010101;
+	
+	font-family: consolas;
+	font-size:25px;
+	
+	padding: 70px 0;
+	
+}
+
+input {
+	
+	margin: 10px 0;
+	
+	font-family: consolas;
+	font-size:25px;
+	text-align:center;
+	
+}
+
+h1 {
+	
+	font-size:100px;
+	
+}
