@@ -20,7 +20,7 @@ public class LoginController {
 	  
 	  if (loginInfo.getIp().equals("SERVERTEST0")) {
 	  
-		return "result";
+		return "clienthome";
 	  
 	  }
     

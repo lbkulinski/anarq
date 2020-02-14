@@ -3,10 +3,11 @@
 <head>
     <title>AnarQ Portal</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link href="./style.css" type="text/css" rel="stylesheet"/>
+	<link href="./style_login.css" type="text/css" rel="stylesheet"/>
+	<link rel="icon" href="./AnarQIcon.png"/>
 </head>
 <body>
-	<img src="./Icon_Large.png" width="500px"/>
+	<img src="./AnarQLogo.png" width="500px"/>
     <form action="#" th:action="@{/login}" th:object="${loginInfo}" method="post">
     	<input type="text" th:field="*{ip}" placeholder="Enter Key" />
 		<br/>

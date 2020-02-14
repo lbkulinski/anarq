@@ -1,3 +1,4 @@
+
 /* Font Definitions*/
 @font-face {
 	font-family: 'Bahnschrift Regular';
@@ -6,45 +7,26 @@
 	src: local('Bahnschrift Regular'), url('Fonts/BAHNSCHRIFT.woff') format('woff');
 }
 
+
 body {
+	
+	text-align:center;
 	
 	color: #FFFFFF;
 	background-color: #362e2e;
 	
 	font-family: Bahnschrift Regular;
-	font-size:20px;
+	font-size:25px;
 	
-}
+	
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
 
-div.column {
-	
-	background-color: #111111;
-	
-	margin:1%;
-	float:left;
-	width:48%;
-	
-}
-
-div.component {
-	
-	text-align:center;
-	
-}
-
-div.songRequest {
-	
-	padding:1%;
-	margin:1%;
-	background-color: #010101;
-	text-align:center;
-	
-}
-
-div.songRequest img {
-	
-	padding:1%;
-	margin:1%;
+	text-transform: uppercase;
 	
 }
 
@@ -87,9 +69,15 @@ h1 {
 	
 }
 
+A {
+	
+	text-transform: uppercase;
+	
+}
 
 a:link {
   color: #DDDDDD;
+  
 }
 
 /* visited link */
