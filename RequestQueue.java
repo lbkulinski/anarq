@@ -1,20 +1,68 @@
 import java.util.Comparator; 
 import java.util.PriorityQueue; 
   
-class VotesComparator implements Comparator<String> { 
+class VotesComparator implements Comparator<SongRequest> { 
+    @Override
     public int compare(SongRequest song1, SongRequest song2) 
     { 
-        return song1.votes.compareTo(song2.votes); 
-    } 
+        if (song1.votes < song2.votes) {
+            return -1; 
+        }
+        else if (song1.votes > song2.votes) {
+            return 1; 
+        }
+        else {
+            return 0; 
+        }
+    }
 } 
 
-public class RequestQueue extends SongRequest {
+public class RequestQueue {
     int MAX_REQUESTS = 100;
-    PriorityQueue<SongRequest> SongQueue = new PriorityQueue<SongRequest>(new VotesComparator); 
+    boolean acceptingRequests;
+    PriorityQueue<SongRequest> songQueue = new PriorityQueue<SongRequest>(new VotesComparator());
 
-    public RequestQueue() {}
+    public RequestQueue() {
+        acceptingRequests = true;
+    }
 
-    int getMaxRequests() {
-        return this.MAX_REQUESTS;
+    public boolean addSong(SongRequest song) {
+        if (songQueue.contains(song)) {
+            System.out.println("Request Failed: Queue already contains " + song.name);
+            return false;
+        }
+
+        if (!acceptingRequests) {
+            System.out.println("Request Failed: Queue is no longer accepting requests");
+            return false;
+        }
+
+        if (songQueue.size() < MAX_REQUESTS) {
+            return songQueue.add(song);
+        }
+        else {
+            System.out.println("Request Failed: Queue is full");
+            return false;
+        }
+    }
+
+    public boolean removeSong(SongRequest song) {
+        return songQueue.remove(song);
+    }
+
+    public SongRequest viewNextSong() {
+        return songQueue.peek();
+    }
+
+    public SongRequest getNextSong() {
+        return songQueue.poll();
+    }
+
+    public void clear() {
+        songQueue.clear();
+    }
+
+    public boolean isEmpty() {
+        return songQueue.isEmpty();
     }
 }

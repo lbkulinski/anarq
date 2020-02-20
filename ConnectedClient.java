@@ -1,11 +1,12 @@
-enum Permission 
-{ 
-    0, 1; 
-} 
+import java.time.LocalTime;
 
 public class ConnectedClient {
     String name;
     String ipAddress;
+    public enum Permission 
+    { 
+        DJ, JAMMER; 
+    } 
     Permission permissionLevel;
     LocalTime lastActive;
 
@@ -14,10 +15,6 @@ public class ConnectedClient {
         this.ipAddress = ipAddress;
         this.permissionLevel = permissionLevel;
         this.lastActive = lastActive;
-    }
-
-    int getMaxRequests() {
-        return this.MAX_REQUESTS;
     }
 
     String getName() {
@@ -32,7 +29,7 @@ public class ConnectedClient {
         return this.permissionLevel;
     }
 
-    LocalTime getLocalTime() {
-        return this.LocalTime
+    LocalTime getLastActive() {
+        return this.lastActive;
     }
 }
