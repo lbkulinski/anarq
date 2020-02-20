@@ -10,4 +10,8 @@ public class MusicChooser {
     public void addValidGenre(String genre) {
         validGenres.add(genre);
     }
+
+    public boolean isValidGenre(String genre) {
+        return validGenres.contains(genre);
+    }
 }

@@ -1,14 +1,14 @@
 public class SongRequest {
-    String id;
+    int id;
     String album;
     String name;
     String artist;
     String genre;
+    String clientIp;
     boolean playing;
     int votes;
-    int clientIp;
 
-    public SongRequest(String id, String album, String name, String artist, String genre, int clientIp) {
+    public SongRequest(int id, String album, String name, String artist, String genre, String clientIp) {
         this.id = id;
         this.album = album;
         this.name = name;
@@ -19,45 +19,45 @@ public class SongRequest {
         this.playing = false;
     }
 
-    public void likeSong(int clientIp) {
+    public void likeSong(String clientIp) {
         if (clientIp != getClientIp() && !playing) {
             votes++;
         }
         //updateQueue()
     }
 
-    public void dislikeSong(int clientIp) {
+    public void dislikeSong(String clientIp) {
         if (clientIp != getClientIp() && !playing) {
             votes--;
         }
         //updateQueue()
     }
     
-    String getId() {
+    public int getId() {
         return this.id;
     }
 
-    String getAlbum() {
+    public String getAlbum() {
         return this.album;
     }
 
-    String getName() {
+    public String getName() {
         return this.name;
     }
 
-    String getArtist() {
+    public String getArtist() {
         return this.artist;
     }
 
-    String getGenre() {
+    public String getGenre() {
         return this.genre;
     }
 
-    int getVotes() {
+    public int getVotes() {
         return this.votes;
     }
 
-    int getClientIp() {
+    public String getClientIp() {
         return this.clientIp;
     }
 }

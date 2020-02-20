@@ -18,15 +18,32 @@ class VotesComparator implements Comparator<SongRequest> {
 } 
 
 public class RequestQueue {
-    int MAX_REQUESTS = 100;
+    int maxRequests;
     boolean acceptingRequests;
+    MusicChooser musicChooser;
     PriorityQueue<SongRequest> songQueue = new PriorityQueue<SongRequest>(new VotesComparator());
 
     public RequestQueue() {
-        acceptingRequests = true;
+        this.acceptingRequests = true;
+        this.maxRequests = 50;
+        this.musicChooser = new MusicChooser();
+    }
+
+    public RequestQueue(MusicChooser musicChooser, int maxRequests, boolean acceptingRequests) {
+        this.maxRequests = maxRequests;
+        this.musicChooser = musicChooser;
+        this.acceptingRequests = acceptingRequests;
+    }
+
+    public int getMaxRequests() {
+        return this.maxRequests;
     }
 
     public boolean addSong(SongRequest song) {
+        if (!musicChooser.isValidGenre(song.genre)) {
+            System.out.println("Request Failed: Genre (" + song.genre + ") is not accepted in the queue");
+            return false;
+        }
         if (songQueue.contains(song)) {
             System.out.println("Request Failed: Queue already contains " + song.name);
             return false;
@@ -37,7 +54,7 @@ public class RequestQueue {
             return false;
         }
 
-        if (songQueue.size() < MAX_REQUESTS) {
+        if (songQueue.size() < getMaxRequests()) {
             return songQueue.add(song);
         }
         else {
@@ -54,7 +71,7 @@ public class RequestQueue {
         return songQueue.peek();
     }
 
-    public SongRequest getNextSong() {
+    public SongRequest playNextSong() {
         return songQueue.poll();
     }
 
@@ -64,5 +81,56 @@ public class RequestQueue {
 
     public boolean isEmpty() {
         return songQueue.isEmpty();
+    }
+
+    public String printQueue() {
+        return songQueue.toString();
+    }
+
+    public static void main(String[] args) {
+        MusicChooser musicChooser = new MusicChooser();
+        musicChooser.addValidGenre("Pop");
+        System.out.println("Creating queue with max 5 and valid genre Pop...");
+        RequestQueue queue = new RequestQueue(musicChooser, 5, true);
+        queue.printQueue();
+
+        System.out.println("Attempting to add invalid genre...");
+        queue.addSong(new SongRequest(4, "album", "name", "artist", "Rock", "clientIp"));
+        System.out.println();
+
+        System.out.println("Adding 5 songs...");
+        for (int i = 0; i < 5; i++) {
+            queue.addSong(new SongRequest(i, "album", "name" + i, "artist", "Pop", "clientIp"));
+        }
+        System.out.println();
+        queue.printQueue();
+        System.out.println();
+
+        System.out.println("Adding one more song...");
+        queue.addSong(new SongRequest(5, "album", "name", "artist", "Pop", "clientIp"));
+
+        System.out.println("Removing one song...");
+        queue.removeSong(new SongRequest(4, "album", "name4", "artist", "Pop", "clientIp"));
+        System.out.println();
+        queue.printQueue();
+        System.out.println();
+
+        System.out.println("Adding duplicate song...");
+        queue.addSong(new SongRequest(2, "album", "name2", "artist", "Pop", "clientIp"));
+        System.out.println();
+        queue.printQueue();
+        System.out.println();
+
+        queue.acceptingRequests = false;
+        System.out.println("No longer accepting songs/add a song...");
+        queue.addSong(new SongRequest(7, "album", "name", "artist", "Pop", "clientIp"));
+        System.out.println();
+
+        System.out.println("Play all songs...");
+        while (!queue.isEmpty()) {
+            System.out.println("Playing: " + queue.playNextSong().name);
+        }
+        System.out.println("Printing empty queue...");
+        System.out.println();
     }
 }
