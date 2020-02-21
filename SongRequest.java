@@ -21,14 +21,14 @@ public class SongRequest {
 
     public void likeSong(String clientIp) {
         if (clientIp != getClientIp() && !playing) {
-            votes++;
+            this.votes++;
         }
         //updateQueue()
     }
 
     public void dislikeSong(String clientIp) {
         if (clientIp != getClientIp() && !playing) {
-            votes--;
+            this.votes--;
         }
         //updateQueue()
     }
@@ -59,5 +59,15 @@ public class SongRequest {
 
     public String getClientIp() {
         return this.clientIp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return (o.getClass() == this.getClass() && this.id == ((SongRequest) o).id);
+    }
+
+    public void printSongInfo() {
+        System.out.println(getName() + ": id(" + getId() + ") artist(" + getArtist() +") album(" + getAlbum() + ") genre(" + getGenre() + ") clientIp(" +
+                getClientIp() + ") voteScore(" + getVotes() + ")");
     }
 }
