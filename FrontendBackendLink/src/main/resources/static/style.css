@@ -48,6 +48,13 @@ div.songRequest img {
 	
 }
 
+div.songRequest input {
+	
+	width:25%;
+	font-size:15px;
+	
+}
+
 input {
 	
 	margin: 10px 0;
