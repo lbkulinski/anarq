@@ -45,7 +45,14 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.ClientCredentialsExample">
+    <configuration name="ClientCredentialsExample" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ClientCredentialsExample" />
+      <module name="AnarQ" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="test" />
       <method v="2">
@@ -84,6 +91,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ClientCredentialsExample" />
         <item itemvalue="Application.test" />
       </list>
     </recent_temporary>
@@ -99,10 +107,19 @@
       <option name="presentableId" value="Default" />
       <updated>1581621375208</updated>
       <workItem from="1581621379502" duration="4609000" />
+      <workItem from="1582393196213" duration="10135000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint enabled="true" type="java-exception" />
+        <breakpoint enabled="true" type="javascript-exception" />
+      </default-breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
