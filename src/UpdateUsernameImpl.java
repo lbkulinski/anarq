@@ -32,6 +32,16 @@ public final class UpdateUsernameImpl {
     } //UserType
 
     /**
+     * The database username to be used in this implementation.
+     */
+    private static String databaseUsername;
+
+    /**
+     * The database password to be used in this implementation.
+     */
+    private static String databasePassword;
+
+    /**
      * Attempts to update the username of the user with the specified current username with the specified new username.
      *
      * @param userType the user type to be used in the operation
@@ -40,7 +50,8 @@ public final class UpdateUsernameImpl {
      * @return {@code true}, if the user's username was successfully updated and {@code false} otherwise
      */
     public static boolean updateUsername(UserType userType, String currentUsername, String newUsername) {
-        final String uri = "mongodb+srv://lbk:HashMap<T>@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
+        final String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
+        String uri;
         MongoClient client;
         final String databaseName = "user-database";
         MongoDatabase userDatabase;
@@ -56,6 +67,8 @@ public final class UpdateUsernameImpl {
         Objects.requireNonNull(currentUsername, "the specified current username is null");
 
         Objects.requireNonNull(newUsername, "the specified new username is null");
+
+        uri = String.format(format, databaseUsername, databasePassword);
 
         client = MongoClients.create(uri);
 
@@ -93,6 +106,12 @@ public final class UpdateUsernameImpl {
     public static void main(String[] args) {
         String currentUsername = "5b47648b-94c4-4479-ba5f-f5fb9fc00c86";
         String newUsername = "jimseven";
+
+        assert args.length == 2;
+
+        databaseUsername = args[0];
+
+        databasePassword = args[1];
 
         System.out.println(updateUsername(UserType.JAMMER, currentUsername, newUsername));
     } //main
