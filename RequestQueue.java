@@ -7,10 +7,10 @@ class VotesComparator implements Comparator<SongRequest> {
     public int compare(SongRequest song1, SongRequest song2) 
     { 
         if (song1.votes < song2.votes) {
-            return -1; 
+            return 1; 
         }
         else if (song1.votes > song2.votes) {
-            return 1; 
+            return -1; 
         }
         else {
             return 0; 
@@ -67,6 +67,28 @@ public class RequestQueue {
 
     public SongRequest getSong(SongRequest song) {
         return songs.get(songs.indexOf(song));
+    }
+
+    public void likeSong(SongRequest song, String client) {
+        boolean accepting = this.acceptingRequests;
+        this.acceptingRequests = true;
+        removeSong(song);
+        song.likeSong(client);
+        addSong(song);
+        if (!accepting) {
+            this.acceptingRequests = true;
+        }
+    }
+
+    public void dislikeSong(SongRequest song, String client) {
+        boolean accepting = this.acceptingRequests;
+        this.acceptingRequests = true;
+        removeSong(song);
+        song.dislikeSong(client);
+        addSong(song);
+        if (!accepting) {
+            this.acceptingRequests = true;
+        }
     }
 
     public boolean removeSong(SongRequest song) {
@@ -147,11 +169,11 @@ public class RequestQueue {
         System.out.println();
 
         System.out.println("Like some songs...");
-        song1.likeSong("yolo");
-        song2.likeSong("yolo");
-        song3.likeSong("yolo");
-        song1.likeSong("yolo");
-        song1.likeSong("yolo");
+        queue.likeSong(song1, "yolo");
+        queue.likeSong(song2, "yolo");
+        queue.likeSong(song3, "yolo");
+        queue.likeSong(song1, "yolo");
+        queue.likeSong(song1, "yolo");
         System.out.println("song0: " + song0.votes);
         System.out.println("song1: " + song1.votes);
         System.out.println("song2: " + song2.votes);
@@ -168,7 +190,8 @@ public class RequestQueue {
 
         System.out.println("Play all songs...");
         while (!queue.isEmpty()) {
-            System.out.println("Playing: " + queue.playNextSong().votes);
+            SongRequest playSong = queue.playNextSong();
+            System.out.println("Playing: " + playSong.votes + " Name: " + playSong.name);
         }
         System.out.println("Printing empty queue...");
         System.out.println();
