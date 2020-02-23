@@ -21,10 +21,12 @@ public final class DatabaseDemo {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String uriString = "mongodb+srv://lbk:List<T>@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
+        final int requiredLength = 2;
+        String format;
+        String uriString;
         MongoClientURI uri;
         MongoClient client;
-        String databaseName = "user-database";
+        String databaseName;
         MongoDatabase database;
         MongoCollection<Document> jammerCollection;
         String name;
@@ -35,9 +37,17 @@ public final class DatabaseDemo {
         BsonString searchString;
         BsonDocument searchDocument;
 
+        assert args.length == requiredLength;
+
+        format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
+
+        uriString = String.format(format, args[0], args[1]);
+
         uri = new MongoClientURI(uriString);
 
         client = new MongoClient(uri);
+
+        databaseName = "user-database";
 
         database = client.getDatabase(databaseName);
 
