@@ -55,6 +55,29 @@ div.songRequest input {
 	
 }
 
+div.connectedUser {
+	
+	padding:1%;
+	margin:1%;
+	background-color: #010101;
+	text-align:center;
+	
+}
+
+div.connectedUser img {
+	
+	padding:1%;
+	margin:1%;
+	
+}
+
+div.connectedUser input {
+	
+	width:25%;
+	font-size:15px;
+	
+}
+
 input {
 	
 	margin: 10px 0;
@@ -96,7 +119,8 @@ h1 {
 
 h2 {
 	
-	font-size:30px;
+	font-size:70px;
+	text-align:center;
 	
 }
 

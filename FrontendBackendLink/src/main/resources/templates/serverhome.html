@@ -15,11 +15,19 @@
 	
 	<div class="column">
 		<div class="component">
-			<h1>Welcome!</h1>	
-			<p th:text="'Successfully connected to ' + ${loginInfo.ip}" />
-			<p th:text="'With the username ' + ${loginInfo.username}" />
-			<a href="/login">Leave Lobby</a>
+			<h1>Host</h1>	
+			<p th:text="'Your connection code is ' + ${loginInfo.ip}" />
+			<a href="/login">Finish Session</a>
 		</div>
+		
+		<h2>Connected Jammers</h2>	
+		<div class="connectedUser" th:each="connectedUser : *{connectedUsers}">
+				<img src="./unknown.png" width="128px" height="128px" align="left"/>
+				<h2 th:text="${connectedUser.userid}"></h2>
+				<h3 th:text="${connectedUser.ip}"></h3>
+				<input type="button" value="Kick" /> <input type="button" value="Mute" />
+			</div>
+		
 	</div>
 	
 	<!-- Right Column -->
@@ -29,9 +37,10 @@
 			<h2>Current Playlist</h2>
 			<div class="songRequest" th:each="request : *{songRequests}">
 				<img src="./unknown.png" width="128px" height="128px" align="left"/>
-				<h2 th:text="${request.songName}"></h2>
-				<h3 th:text="${request.bandName}"></h3>
-				<input type="button" value="Like" /> <input type="button" value="Dislike" />
+				<h2 th:text="${entry.songName}"></h2>
+				<h3 th:text="${entry.bandName}"></h3>
+				<h3 th:text="${entry.userid}"></h3>
+				<input type="button" value="Remove" />
 			</div>
 		</div>
 	</div>
