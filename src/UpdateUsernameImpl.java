@@ -13,7 +13,7 @@ import com.mongodb.client.result.UpdateResult;
  * An implementation for updating a user's username in a MongoDB database.
  *
  * @author Logan Kulinski, lbk@purdue.edu
- * @version February 23, 2020
+ * @version February 25, 2020
  */
 public final class UpdateUsernameImpl {
     /**
