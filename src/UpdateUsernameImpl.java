@@ -32,24 +32,17 @@ public final class UpdateUsernameImpl {
     } //UserType
 
     /**
-     * The database username to be used in this implementation.
-     */
-    private static String databaseUsername;
-
-    /**
-     * The database password to be used in this implementation.
-     */
-    private static String databasePassword;
-
-    /**
      * Attempts to update the username of the user with the specified current username with the specified new username.
      *
+     * @param databaseUsername the username used to access the database
+     * @param databasePassword the password used to access the database
      * @param userType the user type to be used in the operation
      * @param currentUsername the current username to be used in the operation
      * @param newUsername the new username to be used in the operation
      * @return {@code true}, if the user's username was successfully updated and {@code false} otherwise
      */
-    public static boolean updateUsername(UserType userType, String currentUsername, String newUsername) {
+    public static boolean updateUsername(String databaseUsername, String databasePassword, UserType userType,
+                                         String currentUsername, String newUsername) {
         final String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
         String uri;
         MongoClient client;
@@ -104,6 +97,8 @@ public final class UpdateUsernameImpl {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        String databaseUsername;
+        String databasePassword;
         String currentUsername = "5b47648b-94c4-4479-ba5f-f5fb9fc00c86";
         String newUsername = "jimseven";
 
@@ -113,6 +108,7 @@ public final class UpdateUsernameImpl {
 
         databasePassword = args[1];
 
-        System.out.println(updateUsername(UserType.JAMMER, currentUsername, newUsername));
+        System.out.println(updateUsername(databaseUsername, databasePassword, UserType.JAMMER, currentUsername,
+                                          newUsername));
     } //main
 }
