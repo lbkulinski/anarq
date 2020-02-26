@@ -63,16 +63,6 @@ public final class UpdatePasswordImpl {
     } //HashedPassword
 
     /**
-     * The database username to be used in this implementation.
-     */
-    private static String databaseUsername;
-
-    /**
-     * The database password to be used in this implementation.
-     */
-    private static String databasePassword;
-
-    /**
      * Hashes the specified password.
      *
      * @param password the password to be used in the operation
@@ -111,13 +101,16 @@ public final class UpdatePasswordImpl {
     /**
      * Attempts to update the password of the user with the specified username with the specified new password.
      *
+     * @param databaseUsername the username used to access the database
+     * @param databasePassword the password used to access the database
      * @param userType the user type to be used in the operation
      * @param username the username to be used in the operation
      * @param newPassword the new password to be used in the operation
      * @return {@code true}, if the user's password was successfully updated and {@code false} otherwise
      * @throws Exception if an exception occurs during the update
      */
-    public static boolean updatePassword(UserType userType, String username, String newPassword) throws Exception {
+    public static boolean updatePassword(String databaseUsername, String databasePassword, UserType userType,
+                                         String username, String newPassword) throws Exception {
         final String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
         String uri;
         MongoClient client;
@@ -181,6 +174,8 @@ public final class UpdatePasswordImpl {
      * @throws Exception if an exception occurs during the update
      */
     public static void main(String[] args) throws Exception {
+        String databaseUsername;
+        String databasePassword;
         String username = "jimseven";
         String newPassword = "coffee";
 
@@ -190,6 +185,6 @@ public final class UpdatePasswordImpl {
 
         databasePassword = args[1];
 
-        System.out.println(updatePassword(UserType.JAMMER, username, newPassword));
+        System.out.println(updatePassword(databaseUsername, databasePassword, UserType.JAMMER, username, newPassword));
     } //main
 }

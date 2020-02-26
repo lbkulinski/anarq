@@ -12,6 +12,7 @@ public final class TestCaseRunner {
     public static void main(String[] args) {
         JUnitCore jUnitCore;
         Result updateUsernameResult;
+        Result updatePasswordResult;
 
         assert args.length == 2;
 
@@ -23,10 +24,16 @@ public final class TestCaseRunner {
 
         updateUsernameResult = jUnitCore.run(UpdateUsernameImplTest.class);
 
-        for (Failure failure : updateUsernameResult.getFailures()) {
-            System.out.println(failure.getTrace());
-        } //end for
+        updatePasswordResult = jUnitCore.run(UpdatePasswordImplTest.class);
+
+        updateUsernameResult.getFailures()
+                            .forEach(System.out::println);
 
         System.out.printf("Update username test cases successful: %b%n", updateUsernameResult.wasSuccessful());
+
+        updatePasswordResult.getFailures()
+                            .forEach(System.out::println);
+
+        System.out.printf("Update password test cases successful: %b%n", updatePasswordResult.wasSuccessful());
     } //main
 }
