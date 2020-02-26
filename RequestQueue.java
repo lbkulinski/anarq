@@ -21,6 +21,7 @@ class VotesComparator implements Comparator<SongRequest> {
 public class RequestQueue {
     int maxRequests;
     boolean acceptingRequests;
+    boolean autoDJ;
     MusicChooser musicChooser;
     ArrayList<SongRequest> songs = new ArrayList<SongRequest>();
     PriorityQueue<SongRequest> songQueue = new PriorityQueue<SongRequest>(new VotesComparator());
@@ -29,12 +30,14 @@ public class RequestQueue {
         this.acceptingRequests = true;
         this.maxRequests = 50;
         this.musicChooser = new MusicChooser();
+        this.autoDJ = false;
     }
 
     public RequestQueue(MusicChooser musicChooser, int maxRequests, boolean acceptingRequests) {
         this.maxRequests = maxRequests;
         this.musicChooser = musicChooser;
         this.acceptingRequests = acceptingRequests;
+        this.autoDJ = false;
     }
 
     public int getMaxRequests() {
@@ -57,6 +60,7 @@ public class RequestQueue {
         }
 
         if (songQueue.size() < getMaxRequests()) {
+            this.autoDJ = false;
             return songQueue.add(song);
         }
         else {
@@ -72,9 +76,9 @@ public class RequestQueue {
     public void likeSong(SongRequest song, String client) {
         boolean accepting = this.acceptingRequests;
         this.acceptingRequests = true;
-        removeSong(song);
+        songQueue.remove(song);
         song.likeSong(client);
-        addSong(song);
+        songQueue.add(song);
         if (!accepting) {
             this.acceptingRequests = true;
         }
@@ -83,16 +87,31 @@ public class RequestQueue {
     public void dislikeSong(SongRequest song, String client) {
         boolean accepting = this.acceptingRequests;
         this.acceptingRequests = true;
-        removeSong(song);
+        songQueue.remove(song);
         song.dislikeSong(client);
-        addSong(song);
+        songQueue.add(song);
         if (!accepting) {
             this.acceptingRequests = true;
         }
     }
 
-    public boolean removeSong(SongRequest song) {
-        return songQueue.remove(song);
+    public boolean removeSong(SongRequest song, String client) {
+        if (client.equals(song.clientIp) && !song.playing) {
+            boolean ret = songQueue.remove(song);
+            if (isEmpty()) {
+                this.autoDJ = true;
+            }
+            return ret;
+        }
+        else {
+            if (song.playing) {
+                System.out.println("You can not remove a song that is playing");
+            }
+            else {
+                System.out.println("You can only remove your own song");
+            }
+            return false;
+        }
     }
 
     public SongRequest viewNextSong() {
@@ -100,11 +119,16 @@ public class RequestQueue {
     }
 
     public SongRequest playNextSong() {
-        return songQueue.poll();
+        SongRequest ret = songQueue.poll();
+        if (isEmpty()) {
+            this.autoDJ = true;
+        }
+        return ret;
     }
 
     public void clear() {
         songQueue.clear();
+        this.autoDJ = true;
     }
 
     public boolean isEmpty() {
@@ -150,7 +174,7 @@ public class RequestQueue {
         queue.addSong(new SongRequest(5, "album", "name", "artist", "Pop", "clientIp"));
 
         System.out.println("Removing one song...");
-        queue.removeSong(song4);
+        queue.removeSong(song4, "clientIp");
         display.populateQueue(queue.songQueue);
 
         System.out.println("Adding duplicate song...");
