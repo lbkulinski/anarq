@@ -131,7 +131,6 @@ public class RequestQueue {
         musicChooser.addValidGenre("Pop");
         System.out.println("Creating queue with max 5 and valid genre Pop...");
         RequestQueue queue = new RequestQueue(musicChooser, 5, true);
-        queue.printQueue();
 
         System.out.println("Attempting to add invalid genre...");
         queue.addSong(new SongRequest(4, "album", "name", "artist", "Rock", "clientIp"));
@@ -144,26 +143,19 @@ public class RequestQueue {
         queue.addSong(song3);
         queue.addSong(song4);
 
-        new QueueUI(queue.songQueue);
-
-        System.out.println();
-        queue.printQueue();
-        System.out.println();
+        QueueUI display = new QueueUI();
+        display.populateQueue(queue.songQueue);
 
         System.out.println("Adding one more song...");
         queue.addSong(new SongRequest(5, "album", "name", "artist", "Pop", "clientIp"));
 
         System.out.println("Removing one song...");
         queue.removeSong(song4);
-        System.out.println();
-        queue.printQueue();
-        System.out.println();
+        display.populateQueue(queue.songQueue);
 
         System.out.println("Adding duplicate song...");
         queue.addSong(new SongRequest(2, "album", "name2", "artist", "Pop", "clientIp"));
-        System.out.println();
-        queue.printQueue();
-        System.out.println();
+        display.populateQueue(queue.songQueue);
 
         queue.acceptingRequests = false;
         System.out.println("No longer accepting songs/add a song...");
@@ -189,6 +181,19 @@ public class RequestQueue {
         System.out.println("song2: " + song2.votes);
         System.out.println("song3: " + song3.votes);
         System.out.println("song4: " + song4.votes);
+        display.populateQueue(queue.songQueue);
+
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println("\n");
+
+        for (SongRequest song : queue.songQueue) {
+            System.out.println(song.name);
+        }
+
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println("\n");
 
         System.out.println("Play all songs...");
         while (!queue.isEmpty()) {
