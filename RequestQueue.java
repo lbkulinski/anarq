@@ -144,6 +144,8 @@ public class RequestQueue {
         queue.addSong(song3);
         queue.addSong(song4);
 
+        new QueueUI(queue.songQueue);
+
         System.out.println();
         queue.printQueue();
         System.out.println();
