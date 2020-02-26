@@ -1,3 +1,7 @@
+import java.security.SecureRandom;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.SecretKey;
 import org.junit.BeforeClass;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
@@ -16,13 +20,52 @@ import org.junit.Assert;
  * A set of test cases for the {@code UpdateUsernameImpl} class.
  *
  * @author Logan Kulinski, lbk@purdue.edu
- * @version February 25, 2020
+ * @version February 26, 2020
  */
 public final class UpdateUsernameImplTest {
+    private static final class HashedPassword {
+        byte[] passwordHash;
+        byte[] salt;
+
+        HashedPassword(byte[] passwordHash, byte[] salt) {
+            this.passwordHash = passwordHash;
+            this.salt = salt;
+        } //HashedPassword
+    } //HashedPassword
+
     private static String databaseUsername;
     private static String databasePassword;
     private static String testName;
     private static String testUsername;
+
+    private static HashedPassword hash(String password) throws Exception {
+        final int saltLength = 16;
+        byte[] salt;
+        SecureRandom random;
+        SecretKeyFactory factory;
+        final String algorithm = "PBKDF2WithHmacSHA1";
+        PBEKeySpec keySpec;
+        final int iterationCount = 65_535;
+        final int keyLength = 256;
+        SecretKey secretKey;
+        byte[] passwordHash;
+
+        salt = new byte[saltLength];
+
+        random = new SecureRandom();
+
+        random.nextBytes(salt);
+
+        factory = SecretKeyFactory.getInstance(algorithm);
+
+        keySpec = new PBEKeySpec(password.toCharArray(), salt, iterationCount, keyLength);
+
+        secretKey = factory.generateSecret(keySpec);
+
+        passwordHash = secretKey.getEncoded();
+
+        return new HashedPassword(passwordHash, salt);
+    } //hash
 
     @BeforeClass
     public static void setUpBeforeClass() {
@@ -35,6 +78,7 @@ public final class UpdateUsernameImplTest {
         String name;
         String username;
         String password;
+        HashedPassword hashedPassword;
         Map<String, Object> entry;
         Document insertDocument;
 
@@ -67,7 +111,18 @@ public final class UpdateUsernameImplTest {
         password = UUID.randomUUID()
                        .toString();
 
-        entry = Map.of("name", name, "username", username, "password", password);
+        try {
+            hashedPassword = hash(password);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.exit(1);
+
+            return;
+        } //end try catch
+
+        entry = Map.of("name", name, "username", username, "password-hash", hashedPassword.passwordHash,
+                       "salt", hashedPassword.salt);
 
         insertDocument = new Document(entry);
 

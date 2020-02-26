@@ -3,15 +3,15 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
 /**
- * A runner for the {@code UpdateUsernameImplTest} class.
+ * A runner for the update username and update password test cases.
  *
  * @author Logan Kulinski, lbk@purdue.edu
- * @version February 25, 2020
+ * @version February 26, 2020
  */
-public final class UpdateUsernameImplRunner {
+public final class TestCaseRunner {
     public static void main(String[] args) {
         JUnitCore jUnitCore;
-        Result result;
+        Result updateUsernameResult;
 
         assert args.length == 2;
 
@@ -21,12 +21,12 @@ public final class UpdateUsernameImplRunner {
 
         jUnitCore = new JUnitCore();
 
-        result = jUnitCore.run(UpdateUsernameImplTest.class);
+        updateUsernameResult = jUnitCore.run(UpdateUsernameImplTest.class);
 
-        for (Failure failure : result.getFailures()) {
+        for (Failure failure : updateUsernameResult.getFailures()) {
             System.out.println(failure.getTrace());
         } //end for
 
-        System.out.printf("Tests cases successful: %b%n", result.wasSuccessful());
+        System.out.printf("Update username test cases successful: %b%n", updateUsernameResult.wasSuccessful());
     } //main
 }
