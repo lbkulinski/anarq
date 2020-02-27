@@ -8,7 +8,7 @@
 </head>
 <body>
 	<img src="./AnarQLogo.png" width="500px"/>
-    <form action="#" th:action="@{/login}" th:object="${loginInfo}" method="post">
+    <form action="#" th:action="@{/validate}" th:object="${loginInfo}" method="post">
     	<input type="text" th:field="*{ip}" placeholder="Enter Key" />
 		<br/>
 		<input type="text" th:field="*{username}" placeholder="Enter Username" />

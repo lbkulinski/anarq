@@ -4,37 +4,86 @@ package com.example.handlingformsubmission;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import java.util.*;
 
 
-@Controller
+@RestController
 public class RequestListController {
 
-	SongRequest[] songRequests;
+	List<SongRequest> songRequests = new ArrayList<SongRequest>();
   
-  @GetMapping("/clienthome")
-  public String clienthome(Model model) {
+	public RequestListController() {
 	
-	System.out.println("Logged in!");
+		songRequests.add(new SongRequest("Smells Like Teen Spirit", "Nirvana", "pcrowne"));
+		songRequests.add(new SongRequest("Money Machine", "100 Gecs", "pcrowne"));
+		songRequests.add(new SongRequest("My Boy", "Car Seat Headrest", "pcrowne"));
+		songRequests.add(new SongRequest("You Shook Me", "Led Zeppelin", "pcrowne"));
+		songRequests.add(new SongRequest("Paranoid Android", "Radiohead", "pcrowne"));
+		
+	}
 	
-	songRequests = new SongRequest[5];
-	songRequests[0] = new SongRequest("Smells Like Teen Spirit", "Nirvana");
-	songRequests[1] = new SongRequest("Money Machine", "100 Gecs");
-	songRequests[2] = new SongRequest("My Boy", "Car Seat Headrest");
-	songRequests[3] = new SongRequest("You Shook Me", "Led Zeppelin");
-	songRequests[4] = new SongRequest("Paranoid Android", "Radiohead");
+	@GetMapping("/song-requests")
+	public List<SongRequest> getSongRequests() {
+		
+		Collections.sort(songRequests, new Comparator<SongRequest>() {
+			@Override
+			public int compare(SongRequest a, SongRequest b) {
+				if (a.getScore() < b.getScore())
+					return 1;
+				if (a.getScore() > b.getScore())
+					return -1;
+				return 0;
+			}
+		});
+		
+		return songRequests;
+	}
 	
-	model.addAttribute("loginInfo", new LoginInfo());
-	model.addAttribute("title", "Is this thing on?");
-    model.addAttribute("songRequests", songRequests);
+	@PutMapping("/add-score/{id}")
+	public SongRequest addScoreToRequest(@PathVariable long id) {
+		
+		for (int i = 0; i < songRequests.size(); i++) {
+			
+			if(songRequests.get(i).getId() == id) {
+				
+				songRequests.get(i).adjustScore(1);
+				
+				return songRequests.get(i);
+				
+			}
+			
+		}
+		
+		return songRequests.get(0);
+		
+	}
 	
-    return "clienthome";
-	
-  }
+	@PutMapping("/sub-score/{id}")
+	public SongRequest subScoreToRequest(@PathVariable long id) {
+		
+		for (int i = 0; i < songRequests.size(); i++) {
+			
+			if(songRequests.get(i).getId() == id) {
+				
+				songRequests.get(i).adjustScore(-1);
+				
+				return songRequests.get(i);
+				
+			}
+			
+		}
+		
+		return songRequests.get(0);
+		
+	}
 
 }

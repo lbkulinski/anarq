@@ -35,13 +35,45 @@
 		<div class="column">
 			<div class="component">
 				<h2>Current Playlist</h2>
-				<div class="songRequest" v-for="song in songRequests">
+				<div class="songRequest">
 					<img src="./unknown.png" width="128px" height="128px" align="left"/>
-					<h2> {{ song.songName }} </h2>
-					<h3> {{ song.bandName }} </h3>
-					<h4> {{ song.requesterId }} </h4>
-					<h4> {{ song.score }} </h4>
-					<input type="button" @click="addScore(song.id)" value="Like" /> <input type="button" @click="subScore(song.id)" value="Dislike" />
+					<h2> song.songName </h2>
+					<h3> song.bandName </h3>
+					<h4> song.requesterId </h4>
+					<h4> song.id </h4>
+					<input type="button" value="Like" /> <input type="button" value="Dislike" />
+				</div>
+				<div class="songRequest">
+					<img src="./unknown.png" width="128px" height="128px" align="left"/>
+					<h2> song.songName </h2>
+					<h3> song.bandName </h3>
+					<h4> song.requesterId </h4>
+					<h4> song.id </h4>
+					<input type="button" value="Like" /> <input type="button" value="Dislike" />
+				</div>
+				<div class="songRequest">
+					<img src="./unknown.png" width="128px" height="128px" align="left"/>
+					<h2> song.songName </h2>
+					<h3> song.bandName </h3>
+					<h4> song.requesterId </h4>
+					<h4> song.id </h4>
+					<input type="button" value="Like" /> <input type="button" value="Dislike" />
+				</div>
+				<div class="songRequest">
+					<img src="./unknown.png" width="128px" height="128px" align="left"/>
+					<h2> song.songName </h2>
+					<h3> song.bandName </h3>
+					<h4> song.requesterId </h4>
+					<h4> song.id </h4>
+					<input type="button" value="Like" /> <input type="button" value="Dislike" />
+				</div>
+				<div class="songRequest">
+					<img src="./unknown.png" width="128px" height="128px" align="left"/>
+					<h2> song.songName </h2>
+					<h3> song.bandName </h3>
+					<h4> song.requesterId </h4>
+					<h4> song.id </h4>
+					<input type="button" value="Like" /> <input type="button" value="Dislike" />
 				</div>
 			</div>
 		</div>
@@ -70,26 +102,16 @@
 			
 			methods: {
 			
-				deleteRequest: function(index) {
+				deleteEvent: function(index) {
 				  this.songRequests.splice(index, 1);
 				},
 				
-				addScore: function(id) {
-				
-					axios.put('/add-score/' + id)
-				
-				},
-				
-				subScore: function(id) {
-				
-					axios.put('/sub-score/' + id)
-				
-				},
-				
 				fetchSongs() {
+				
 					axios.get('/song-requests')
 					.then(resp => this.songRequests = resp.data)
 					.catch(err => console.log(err))
+				
 				}
 				
 			}

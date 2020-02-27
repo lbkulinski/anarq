@@ -11,18 +11,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
 @Controller
 public class LoginController {
 
-  @GetMapping("/login")
-  public String greetingForm(Model model) {
-    model.addAttribute("loginInfo", new LoginInfo());
+	public static LoginInfo globalLoginInfo = new LoginInfo();
+
+  @GetMapping("/")
+  public String onPageLoad(Model model) {
+    model.addAttribute("loginInfo", globalLoginInfo);
+	
     return "login";
   }
 
-  @PostMapping("/login")
-  public String greetingSubmit(@ModelAttribute LoginInfo loginInfo) {
+  @PostMapping("/validate")
+  public String onPageSubmit(@ModelAttribute LoginInfo loginInfo) {
 	  
 	  if (loginInfo.getIp().equals("SERVERTEST0")) {
 	  
@@ -30,7 +32,7 @@ public class LoginController {
 	  
 	  }
     
-	return "error";
+	return "login";
 	
   }
 

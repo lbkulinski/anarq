@@ -10,7 +10,7 @@ body {
 	
 	color: #FFFFFF;
 	background-color: #362e2e;
-	
+	border-radius: 25px;
 	font-family: Bahnschrift Regular;
 	font-size:20px;
 	
@@ -19,7 +19,7 @@ body {
 div.column {
 	
 	background-color: #111111;
-	
+	border-radius: 25px;
 	margin:1%;
 	float:left;
 	width:48%;
@@ -33,26 +33,33 @@ div.component {
 }
 
 div.songRequest {
-	
-	padding:1%;
-	margin:1%;
+	border-radius: 25px;
+	padding:5px;
+	margin:5px;
 	background-color: #010101;
-	text-align:center;
-	
+	text-align:right;
 }
-
+div.songRequest h4 {
+	padding:5px;
+	margin:5px;
+}
+div.songRequest h3 {
+	padding:5px;
+	margin:5px;
+}
+div.songRequest h2 {
+	padding:5px;
+	margin:5px;
+}
 div.songRequest img {
-	
-	padding:1%;
-	margin:1%;
-	
+	border-radius: 25px;
+	padding:5px;
+	margin:5px;
 }
-
 div.songRequest input {
-	
+	border-radius: 25px;
 	width:25%;
 	font-size:15px;
-	
 }
 
 input {
