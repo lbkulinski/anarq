@@ -19,6 +19,7 @@ import java.util.*;
 @RestController
 public class RequestListController {
 
+	SongRequest currentSong = new SongRequest("Revolution 9", "The Beatles", "pcrowne");
 	List<SongRequest> songRequests = new ArrayList<SongRequest>();
   
 	public RequestListController() {
@@ -46,6 +47,11 @@ public class RequestListController {
 		});
 		
 		return songRequests;
+	}
+	
+	@GetMapping("/current-song")
+	public SongRequest getCurrentSong() {
+		return currentSong;
 	}
 	
 	@PutMapping("/add-score/{id}")

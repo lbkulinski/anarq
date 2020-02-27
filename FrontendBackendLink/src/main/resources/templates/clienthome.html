@@ -25,10 +25,10 @@
 			<h2>Currently Playing...</h2>	
 			<br>
 			<img src="./unknown.png" width="256px" height="256px" align="left"/>
-			<h1>song.songName</h1>
-			<h2>song.bandName</h2>
-			<h3>Requested by song.requesterId</h3>
-			<h3>Karma: song.score</h3>
+			<h1> {{ currentSong.songName }} </h1>
+			<h2> {{ currentSong.bandName }} </h2>
+			<h3>Requested by  {{ currentSong.requesterId }}  </h3>
+			<input type="button" value="Vote to Skip" />
 		</div>
 		
 		<div class="column">
@@ -72,7 +72,8 @@
 			data: {
 				host : "defualt-host",
 				username : "defualt-username",
-				songRequests: []
+				songRequests: [],
+				currentSong: []
 			},
 			
 			mounted() {
@@ -90,20 +91,27 @@
 				addScore: function(id) {
 				
 					axios.put('/add-score/' + id),
-					fetchSongs()
+					this.fetchSongs()
 				
 				},
 				
 				subScore: function(id) {
 				
 					axios.put('/sub-score/' + id),
-					fetchSongs()
+					this.fetchSongs()
 				
 				},
 				
 				fetchSongs() {
 					axios.get('/song-requests')
 					.then(resp => this.songRequests = resp.data)
+					.catch(err => console.log(err)),
+					this.fetchCurrentSong()
+				},
+				
+				fetchCurrentSong() {
+					axios.get('/current-song')
+					.then(resp => this.currentSong = resp.data)
 					.catch(err => console.log(err))
 				}
 				
