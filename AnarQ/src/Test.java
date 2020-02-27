@@ -60,6 +60,8 @@ public class Test extends ClientCredentialsExample{
         }
         queue.printQueue();
 
+        authorizationCodeUri_Sync();
+        authorizationCode_Sync();
 
 
     }

@@ -1,11 +1,16 @@
 //package authorization.client_credentials;
 
 import com.wrapper.spotify.SpotifyApi;
+import com.wrapper.spotify.SpotifyHttpManager;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
+import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
+import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
 import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Scanner;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
@@ -22,13 +27,44 @@ public class ClientCredentialsExample {
      */
     private static String clientId = "ad002d4ba9fa4766b6a6ad03fd440d46"; // This is the Client ID for our Spotify Application
     private static String clientSecret = "e1e7830578254628af9d7b10dca9341e"; // This is the Client Secret for our Spotify Application
+    private static URI redirectUri = SpotifyHttpManager.makeUri("http://localhost:8888/yeet");
+    private static String code = "AQAqCglp1ifArPNZBjSkbFCRVsG1uSUYNu4_rKWNtQypQ7QQnO2RawUwN18xO-mNPKmAnRmVr9yHCAcY7jTSgXU8JXKiTnrIun4XM2rtOv_Pr0ZYYuRBsk6qBape2STy7vqrnY4lfRiI-t4DrtMUljK5JvFCknZyZaHHLlmNfOvWJ4eRTxYeK8LiB5sSPxi5";
 
     public static final SpotifyApi spotifyApi = new SpotifyApi.Builder() // Creating the Spotifty API object spotifyApi
             .setClientId(clientId) //setting our client ID
             .setClientSecret(clientSecret) // setting our client secret
+            .setRedirectUri(redirectUri)
             .build(); //build parameter
     private static final ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials() // This created the request object for the client credential
             .build(); // build parameter
+    private static final AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodeUri()
+//          .state("x4xkmn9pu3j6ukrs8n")
+//          .scope("user-read-birthdate,user-read-email")
+//          .show_dialog(true)
+            .build();
+
+    private static final AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code)
+            .build();
+
+    public static void authorizationCode_Sync() {
+        try {
+            final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
+
+            // Set access and refresh token for further "spotifyApi" object usage
+            spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+            spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+
+            System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
+        } catch (IOException | SpotifyWebApiException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+
+    public static void authorizationCodeUri_Sync() {
+        final URI uri = authorizationCodeUriRequest.execute();
+        System.out.println("URI: " + uri.toString());
+    }
 
 
     public static void clientCredentials_Sync() {
