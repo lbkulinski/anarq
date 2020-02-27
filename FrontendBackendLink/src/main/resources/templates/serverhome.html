@@ -15,12 +15,19 @@
 	
 	<div id="app">
 		
-		<!-- Left Column -->
+		
 		
 		<center>
 			<img src="./AnarQLogo.png" width="500px"/>
 		</center>
 		
+		<div class="component">
+			<h3>You are Hosting!</h3>	
+			<p>Give people this code to connect:</p>
+			<h1> {{ host }} </h1>
+			<a href="/">End Session</a>
+		</div>
+		<br>
 		<div class="component">
 			<h2>Currently Playing...</h2>	
 			<br>
@@ -31,14 +38,9 @@
 			<input type="button" value="Skip Song" />
 		</div>
 		
+		<!-- Left Column -->
+		
 		<div class="column">
-			<div class="component">
-				<h1>You are Hosting!</h1>	
-				<p>Give people this code to connect:</p>
-				<h1> {{ host }} </h1>
-				<a href="/">End Session</a>
-			</div>
-			<br>
 			<div class="component">
 				<h2>Connected Users</h2>
 				<div class="songRequest" v-for="user in connectedUsers">
@@ -74,7 +76,7 @@
 		new Vue({
 			el: '#app',
 			data: {
-				host : "defualt-host",
+				host : "123456",
 				username : "defualt-username",
 				songRequests: [],
 				currentSong: [],
@@ -83,42 +85,52 @@
 			
 			mounted() {
 			
-				this.interval = setInterval(() => this.fetchUsers(), 1000);
+				axios.get('/get-server-info')
+					.then(resp => this.host = resp.data)
+					.catch(err => console.log(err)),
+		
+				this.interval = setInterval(() => this.fetchInfo(), 1000)
 
 			},
 			
 			methods: {
 				
+				fetchInfo() {
+				
+					this.fetchSongs(),
+					this.fetchUsers(),
+					this.fetchCurrentSong()
+				
+				},
+				
 				kickUser: function(id) {
 				
-					axios.put('/add-score/' + id),
+					axios.put('/' + this.host + '/add-score/' + id),
 					this.fetchSongs()
 				
 				},
 				
 				removeSong: function(id) {
 				
-					axios.put('/sub-score/' + id),
+					axios.put('/' + this.host + '/sub-score/' + id),
 					this.fetchSongs()
 				
 				},
 				
 				fetchUsers() {
-					axios.get('/connected-users')
+					axios.get('/' + this.host + '/connected-users')
 					.then(resp => this.connectedUsers = resp.data)
-					.catch(err => console.log(err)),
-					this.fetchSongs()
+					.catch(err => console.log(err))
 				},
 				
 				fetchSongs() {
-					axios.get('/song-requests')
+					axios.get('/' + this.host + '/song-requests')
 					.then(resp => this.songRequests = resp.data)
-					.catch(err => console.log(err)),
-					this.fetchCurrentSong()
+					.catch(err => console.log(err))
 				},
 				
 				fetchCurrentSong() {
-					axios.get('/current-song')
+					axios.get('/' + this.host + '/current-song')
 					.then(resp => this.currentSong = resp.data)
 					.catch(err => console.log(err))
 				}
