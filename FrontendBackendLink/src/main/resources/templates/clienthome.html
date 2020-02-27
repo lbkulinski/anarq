@@ -14,12 +14,22 @@
 <body>
 	
 	<div id="app">
-	
-		<h1></h1>
-		
-		<a href="/clienthome">Refresh</a>
 		
 		<!-- Left Column -->
+		
+		<center>
+			<img src="./AnarQLogo.png" width="500px"/>
+		</center>
+		
+		<div class="component">
+			<h2>Currently Playing...</h2>	
+			<br>
+			<img src="./unknown.png" width="256px" height="256px" align="left"/>
+			<h1>song.songName</h1>
+			<h2>song.bandName</h2>
+			<h3>Requested by song.requesterId</h3>
+			<h3>Karma: song.score</h3>
+		</div>
 		
 		<div class="column">
 			<div class="component">
@@ -27,6 +37,13 @@
 				<p>Successfully connected to {{ host }}</p>
 				<p>With the username {{ username }}</p>
 				<a href="/">Leave Lobby</a>
+			</div>
+			<br>
+			<div class="component">
+				<h2>Request a Song</h2>
+				<input type="text"  placeholder="Enter Song Name Here..."/>
+				<input type="button" value="Search" />
+				
 			</div>
 		</div>
 		
@@ -39,8 +56,8 @@
 					<img src="./unknown.png" width="128px" height="128px" align="left"/>
 					<h2> {{ song.songName }} </h2>
 					<h3> {{ song.bandName }} </h3>
-					<h4> {{ song.requesterId }} </h4>
-					<h4> {{ song.score }} </h4>
+					<h4> Requested by {{ song.requesterId }} </h4>
+					<h4> Karma: {{ song.score }} </h4>
 					<input type="button" @click="addScore(song.id)" value="Like" /> <input type="button" @click="subScore(song.id)" value="Dislike" />
 				</div>
 			</div>
@@ -49,8 +66,6 @@
 	</div>
 	
 	<script>
-		
-		
 		
 		new Vue({
 			el: '#app',
@@ -63,9 +78,7 @@
 			mounted() {
 			
 				this.interval = setInterval(() => this.fetchSongs(), 1000);
-			
-				
-			
+
 			},
 			
 			methods: {
@@ -76,13 +89,15 @@
 				
 				addScore: function(id) {
 				
-					axios.put('/add-score/' + id)
+					axios.put('/add-score/' + id),
+					fetchSongs()
 				
 				},
 				
 				subScore: function(id) {
 				
-					axios.put('/sub-score/' + id)
+					axios.put('/sub-score/' + id),
+					fetchSongs()
 				
 				},
 				
@@ -97,7 +112,7 @@
 		
 		});
 		
-		</script>
+	</script>
 	
 </body>
 </html>

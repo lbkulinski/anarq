@@ -5,6 +5,7 @@ package com.example.handlingformsubmission;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,8 +24,10 @@ public class LoginController {
     return "login";
   }
 
-  @PostMapping("/validate")
-  public String onPageSubmit(@ModelAttribute LoginInfo loginInfo) {
+  @PostMapping("/")
+  public String loginClient(@ModelAttribute LoginInfo loginInfo) {
+	  
+	  System.out.println(loginInfo.getIp());
 	  
 	  if (loginInfo.getIp().equals("SERVERTEST0")) {
 	  
@@ -35,5 +38,18 @@ public class LoginController {
 	return "login";
 	
   }
+  
+  /*@PostMapping("/login-server")
+  public String loginServer(@RequestBody LoginInfo loginInfo) {
+	  
+	  if (loginInfo.getIp().equals("SERVERTEST0")) {
+	  
+		return "clienthome";
+	  
+	  }
+    
+	return "login";
+	
+  }*/
 
 }
