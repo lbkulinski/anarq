@@ -42,10 +42,13 @@ public class RequestQueue {
     }
 
     public boolean addSong(SongRequest song) {
+        /*
         if (!musicChooser.isValidGenre(song.genre)) {
             System.out.println("Request Failed: Genre (" + song.genre + ") is not accepted in the queue");
             return false;
         }
+        */
+
         if (songQueue.contains(song)) {
             System.out.println("Request Failed: Queue already contains " + song.name);
             return false;
@@ -114,7 +117,7 @@ public class RequestQueue {
     public void printQueue() {
         System.out.println("Queue <");
         for (SongRequest song : songQueue) {
-            System.out.println("    " + song.name);
+            System.out.println("    " + song.name + " - " + song.artist);
         }
         System.out.println(">");
     }

@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7b7f42d5-04b1-47b0-a36e-fa5fd56dad36" name="Default Changelist" comment="" />
+    <list default="true" id="7b7f42d5-04b1-47b0-a36e-fa5fd56dad36" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AnarQ/ClientCredentialsExample.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AnarQ/ClientCredentialsExample.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AnarQ/META-INF/AnarQ.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AnarQ/SearchArtistsExample.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AnarQ/SearchArtistsExample.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ClientCredentialsExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ClientCredentialsExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RequestQueue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RequestQueue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SearchArtistsExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SearchArtistsExample.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,12 +24,17 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="ProjectId" id="1XlWtQVJlOaK3Z2L1LC5QItESlg" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.Annotations" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -45,9 +59,23 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.ClientCredentialsExample">
+  <component name="RunManager" selected="Application.Test">
     <configuration name="ClientCredentialsExample" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ClientCredentialsExample" />
+      <module name="AnarQ" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RequestQueue" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="RequestQueue" />
+      <module name="AnarQ" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Test" />
       <module name="AnarQ" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -89,8 +117,15 @@
       </MavenSettings>
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Application.RequestQueue" />
+      <item itemvalue="Application.ClientCredentialsExample" />
+      <item itemvalue="Application.test" />
+      <item itemvalue="Application.Test" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Test" />
         <item itemvalue="Application.ClientCredentialsExample" />
         <item itemvalue="Application.test" />
       </list>
@@ -108,11 +143,23 @@
       <updated>1581621375208</updated>
       <workItem from="1581621379502" duration="4609000" />
       <workItem from="1582393196213" duration="10135000" />
+      <workItem from="1582746450394" duration="18123000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

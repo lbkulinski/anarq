@@ -20,15 +20,16 @@ public class ClientCredentialsExample {
      * information for an album, searching for artists/albums, etc.
      * NOTE: This does not return a refresh token
      */
-    private static final String clientId = "ad002d4ba9fa4766b6a6ad03fd440d46"; // This is the Client ID for our Spotify Application
-    private static final String clientSecret = "e1e7830578254628af9d7b10dca9341e"; // This is the Client Secret for our Spotify Application
+    private static String clientId = "ad002d4ba9fa4766b6a6ad03fd440d46"; // This is the Client ID for our Spotify Application
+    private static String clientSecret = "e1e7830578254628af9d7b10dca9341e"; // This is the Client Secret for our Spotify Application
 
-    private static final SpotifyApi spotifyApi = new SpotifyApi.Builder() // Creating the Spotifty API object spotifyApi
+    public static final SpotifyApi spotifyApi = new SpotifyApi.Builder() // Creating the Spotifty API object spotifyApi
             .setClientId(clientId) //setting our client ID
             .setClientSecret(clientSecret) // setting our client secret
             .build(); //build parameter
     private static final ClientCredentialsRequest clientCredentialsRequest = spotifyApi.clientCredentials() // This created the request object for the client credential
             .build(); // build parameter
+
 
     public static void clientCredentials_Sync() {
         /*
@@ -77,18 +78,4 @@ public class ClientCredentialsExample {
         }
     }
 
-    public static void main(String[] args) {
-        clientCredentials_Sync();
-        Scanner input = new Scanner(System.in);
-        String artist = "";
-        while(true) {
-            System.out.print("What would you like to search for? ");
-            artist = input.nextLine();
-            if(artist.equals("exit")) {
-                break;
-            }
-            SearchArtistsExample search = new SearchArtistsExample(spotifyApi, artist);
-            search.search();
-        }
-    }
 }
