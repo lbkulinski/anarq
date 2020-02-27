@@ -168,30 +168,38 @@ public class RequestQueue {
         queue.addSong(song4);
 
         QueueUI display = new QueueUI();
-        display.populateQueue(queue.songQueue);
+        //display.populateQueue(queue.songQueue);
 
-        System.out.println("Adding one more song...");
+        System.out.println("Adding one more song...\n");
         queue.addSong(new SongRequest(5, "album", "name", "artist", "Pop", "clientIp"));
 
-        System.out.println("Removing one song...");
+        System.out.println("\nRemoving one song...\n");
         queue.removeSong(song4, "clientIp");
-        display.populateQueue(queue.songQueue);
 
-        System.out.println("Adding duplicate song...");
+        System.out.println("\nRemoving a song that is playing...\n");
+        song4.playing = true;
+        queue.removeSong(song4, "clientIp");
+
+        System.out.println("\nRemoving someone else's song...\n");
+        queue.removeSong(song4, "yolo");
+        //display.populateQueue(queue.songQueue);
+
+        System.out.println("Adding duplicate song...\n");
         queue.addSong(new SongRequest(2, "album", "name2", "artist", "Pop", "clientIp"));
-        display.populateQueue(queue.songQueue);
+        //display.populateQueue(queue.songQueue);
 
         queue.acceptingRequests = false;
-        System.out.println("No longer accepting songs/add a song...");
+        System.out.println("\nNo longer accepting songs/add a song...\n");
         queue.addSong(new SongRequest(7, "album", "name7", "artist", "Pop", "clientIp"));
         System.out.println();
 
-        System.out.println("Like some songs...");
+        System.out.println("\nLike some songs...");
         queue.likeSong(song1, "yolo");
         queue.likeSong(song2, "yolo");
         queue.likeSong(song3, "yolo");
         queue.likeSong(song1, "yolo");
         queue.likeSong(song1, "yolo");
+        queue.dislikeSong(song0, "yolo");
         System.out.println("song0: " + song0.votes);
         System.out.println("song1: " + song1.votes);
         System.out.println("song2: " + song2.votes);
@@ -206,18 +214,6 @@ public class RequestQueue {
         System.out.println("song3: " + song3.votes);
         System.out.println("song4: " + song4.votes);
         display.populateQueue(queue.songQueue);
-
-        System.out.println("\n");
-        System.out.println("\n");
-        System.out.println("\n");
-
-        for (SongRequest song : queue.songQueue) {
-            System.out.println(song.name);
-        }
-
-        System.out.println("\n");
-        System.out.println("\n");
-        System.out.println("\n");
 
         System.out.println("Play all songs...");
         while (!queue.isEmpty()) {
