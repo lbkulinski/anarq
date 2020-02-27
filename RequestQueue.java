@@ -80,7 +80,7 @@ public class RequestQueue {
         song.likeSong(client);
         songQueue.add(song);
         if (!accepting) {
-            this.acceptingRequests = true;
+            this.acceptingRequests = false;
         }
     }
 
@@ -91,7 +91,7 @@ public class RequestQueue {
         song.dislikeSong(client);
         songQueue.add(song);
         if (!accepting) {
-            this.acceptingRequests = true;
+            this.acceptingRequests = false;
         }
     }
 
