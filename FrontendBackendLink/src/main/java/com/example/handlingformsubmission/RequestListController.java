@@ -21,6 +21,7 @@ public class RequestListController {
 
 	SongRequest currentSong = new SongRequest("Revolution 9", "The Beatles", "pcrowne");
 	List<SongRequest> songRequests = new ArrayList<SongRequest>();
+	List<ConnectedUser> connectedUsers = new ArrayList<ConnectedUser>();
   
 	public RequestListController() {
 	
@@ -29,6 +30,8 @@ public class RequestListController {
 		songRequests.add(new SongRequest("My Boy", "Car Seat Headrest", "pcrowne"));
 		songRequests.add(new SongRequest("You Shook Me", "Led Zeppelin", "pcrowne"));
 		songRequests.add(new SongRequest("Paranoid Android", "Radiohead", "pcrowne"));
+		
+		connectedUsers.add(new ConnectedUser("pcrowne"));
 		
 	}
 	
@@ -49,10 +52,16 @@ public class RequestListController {
 		return songRequests;
 	}
 	
+	@GetMapping("/connected-users")
+	public List<ConnectedUser> getConnectedUsers() {
+		return connectedUsers;
+	}
+	
 	@GetMapping("/current-song")
 	public SongRequest getCurrentSong() {
 		return currentSong;
 	}
+	
 	
 	@PutMapping("/add-score/{id}")
 	public SongRequest addScoreToRequest(@PathVariable long id) {

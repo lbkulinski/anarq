@@ -24,7 +24,7 @@ public class LoginController {
     return "login";
   }
 
-  @PostMapping("/")
+  @PostMapping("/client")
   public String loginClient(@ModelAttribute LoginInfo loginInfo) {
 	  
 	  System.out.println(loginInfo.getIp());
@@ -36,6 +36,13 @@ public class LoginController {
 	  }
     
 	return "login";
+	
+  }
+  
+  @PostMapping("/server")
+  public String loginServer(@ModelAttribute LoginInfo loginInfo) {
+	  
+		return "serverhome";
 	
   }
   
