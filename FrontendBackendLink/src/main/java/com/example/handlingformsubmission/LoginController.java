@@ -18,7 +18,7 @@ public class LoginController {
 	public static LoginInfo globalLoginInfo = new LoginInfo();
 
 	public static String lastHost;
-	public static String lastUsername;
+	public static ConnectedUser lastClientInfo;
 
   @GetMapping("/")
   public String onPageLoad(Model model) {
@@ -36,11 +36,13 @@ public class LoginController {
 	  
 	  if (session != null) {
 	  
-		session.addClient(new ConnectedUser(loginInfo.getUsername()));
+		ConnectedUser newCU = new ConnectedUser(loginInfo.getUsername());
+	  
+		session.addClient(newCU);
 	  
 		if (loginInfo.getIp() != null)
 			lastHost = loginInfo.getIp();
-			lastUsername = loginInfo.getUsername();
+			lastClientInfo = newCU;
 	  
 		return "clienthome";
 	  

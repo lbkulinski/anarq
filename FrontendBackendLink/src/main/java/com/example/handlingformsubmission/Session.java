@@ -62,6 +62,34 @@ public class Session {
 		this.id = id;
 	}
 
+	public void removeSongRequestForId(long id) {
+		
+		for (int i = 0; i < songRequests.size(); i++) {
+			
+			if(songRequests.get(i).getId() == id) {
+				
+				songRequests.remove(i);
+				
+			}
+			
+		}
+		
+	}
+	
+	public void kickUserForId(long id) {
+		
+		for (int i = 0; i < connectedUsers.size(); i++) {
+			
+			if(connectedUsers.get(i).getId() == id) {
+				
+				connectedUsers.remove(i);
+				
+			}
+			
+		}
+		
+	}
+
 	public SongRequest getSongRequestForId(long id) {
 		
 		for (int i = 0; i < songRequests.size(); i++) {

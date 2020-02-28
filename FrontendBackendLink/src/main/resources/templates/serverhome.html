@@ -25,7 +25,7 @@
 			<h3>You are Hosting!</h3>	
 			<p>Give people this code to connect:</p>
 			<h1> {{ host }} </h1>
-			<a href="/">End Session</a>
+			<a href="/" @click="endSession()">End Session</a>
 		</div>
 		<br>
 		<div class="component">
@@ -103,17 +103,24 @@
 				
 				},
 				
-				kickUser: function(id) {
+				endSession: function() {
 				
-					axios.put('/' + this.host + '/add-score/' + id),
+					axios.put('/' + this.host + '/end-session'),
 					this.fetchSongs()
 				
 				},
 				
 				removeSong: function(id) {
 				
-					axios.put('/' + this.host + '/sub-score/' + id),
+					axios.put('/' + this.host + '/remove-request/' + id),
 					this.fetchSongs()
+				
+				},
+				
+				kickUser: function(id) {
+				
+					axios.put('/' + this.host + '/kick-user/' + id),
+					this.fetchUsers()
 				
 				},
 				

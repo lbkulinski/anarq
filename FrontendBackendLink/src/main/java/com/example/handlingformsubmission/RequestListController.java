@@ -46,6 +46,31 @@ public class RequestListController {
 		
 	}
 	
+	@GetMapping("/{sessionId}/end-session")
+	public static void endSession(@PathVariable long sessionId) {
+		
+		for (int i = 0; i < sessions.size(); i++) {
+			
+			if(sessions.get(i).getId() == sessionId) {
+				
+				sessions.remove(i);
+				
+			}
+			
+		}
+		
+		
+	}
+	
+	@GetMapping("/{sessionId}/leave-session/{id}")
+	public static void endSession(@PathVariable long sessionId, @PathVariable long id) {
+		
+		Session currentSession = getSessionForId(sessionId);
+		
+		currentSession.kickUserForId(id);
+		
+	}
+	
 	@GetMapping("/{sessionId}/song-requests")
 	public static List<SongRequest> getSongRequests(@PathVariable long sessionId) {
 		
@@ -103,6 +128,31 @@ public class RequestListController {
 		
 	}
 	
+	@PutMapping("/{sessionId}/remove-request/{id}")
+	public static void addRemoveRequest(@PathVariable long sessionId, @PathVariable long id) {
+		
+		Session currentSession = getSessionForId(sessionId);
+		
+		if (currentSession != null) {
+		
+			currentSession.removeSongRequestForId(id);
+		
+		}
+		
+	}
+	
+	@PutMapping("/{sessionId}/kick-user/{id}")
+	public static void addKickUser(@PathVariable long sessionId, @PathVariable long id) {
+		
+		Session currentSession = getSessionForId(sessionId);
+		
+		if (currentSession != null) {
+		
+			currentSession.kickUserForId(id);
+		
+		}
+		
+	}
 	
 	@PutMapping("/{sessionId}/add-score/{id}")
 	public static SongRequest addScoreToRequest(@PathVariable long sessionId, @PathVariable long id) {
@@ -163,8 +213,8 @@ public class RequestListController {
 	}
 
 	@GetMapping("/get-client-info")
-	public String getUsernameInfo() {
-	  return LoginController.lastUsername;
+	public ConnectedUser getClientInfo() {
+	  return LoginController.lastClientInfo;
 	}
 
 }
