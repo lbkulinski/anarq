@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+	<head>
+		<title>Update Username</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	</head>
+
+	<body>
+		<h1>Update Username</h1>
+		<p th:text="'Username: ' + ${userInformation.username}"></p>
+		<p th:text="'Password: ' + ${userInformation.password}"></p>
+		<p th:text="'New username: ' + ${userInformation.newValue}"></p>
+		<a href="/updateUsername">Submit another update</a>
+	</body>
+</html>
