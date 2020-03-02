@@ -1,4 +1,4 @@
-package com.anarq.update.username;
+package com.anarq.update;
 
 import java.util.Objects;
 
