@@ -1,11 +1,13 @@
+import java.time.LocalTime;
+
 public class QueueTests {
     RequestQueue queue;
-
-    SongRequest song0 = new SongRequest(0, "album", "name" + 0, "artist", "Pop", "clientIp");
-    SongRequest song1 = new SongRequest(1, "album", "name" + 1, "artist", "Pop", "clientIp");
-    SongRequest song2 = new SongRequest(2, "album", "name" + 2, "artist", "Pop", "clientIp");
-    SongRequest song3 = new SongRequest(3, "album", "name" + 3, "artist", "Pop", "clientIp");
-    SongRequest song4 = new SongRequest(4, "album", "name" + 4, "artist", "Pop", "clientIp");
+    ConnectedClient jammer = new ConnectedClient("Nick", "clientIp", Permission.JAMMER, LocalTime.now());
+    SongRequest song0 = new SongRequest(0, "album", "name" + 0, "artist", "Pop", jammer.ipAddress);
+    SongRequest song1 = new SongRequest(1, "album", "name" + 1, "artist", "Pop", jammer.ipAddress);
+    SongRequest song2 = new SongRequest(2, "album", "name" + 2, "artist", "Pop", jammer.ipAddress);
+    SongRequest song3 = new SongRequest(3, "album", "name" + 3, "artist", "Pop", jammer.ipAddress);
+    SongRequest song4 = new SongRequest(4, "album", "name" + 4, "artist", "Pop", jammer.ipAddress);
 
     public void addSongs() {
         MusicChooser musicChooser = new MusicChooser();
@@ -52,7 +54,7 @@ public class QueueTests {
     public void removeOneSong() {
         addSongs();
         System.out.println("\nRemoving one song...\n");
-        queue.removeSong(song4, "clientIp");
+        queue.removeSong(song4, jammer);
 
         displayQueue();
     }
@@ -60,14 +62,15 @@ public class QueueTests {
     public boolean removeNotYourSong() {
         addSongs();
         System.out.println("\nRemoving someone else's song...\n");
-        return queue.removeSong(song4, "yolo");
+        ConnectedClient otherUser = new ConnectedClient("Nick", "clientIp", Permission.JAMMER, LocalTime.now());
+        return queue.removeSong(song4, otherUser);
     }
 
     public boolean removePlayingSong() {
         addSongs();
         System.out.println("\nRemoving a song that is playing...\n");
         song4.playing = true;
-        return queue.removeSong(song4, "clientIp");
+        return queue.removeSong(song4, jammer);
     }
 
     public boolean addDuplicateSong() {
