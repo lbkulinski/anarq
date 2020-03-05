@@ -3,10 +3,6 @@ import java.time.LocalTime;
 public class ConnectedClient {
     String name;
     String ipAddress;
-    public enum Permission 
-    { 
-        DJ, JAMMER; 
-    } 
     Permission permissionLevel;
     LocalTime lastActive;
 

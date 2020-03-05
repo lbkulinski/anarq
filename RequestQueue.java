@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.Comparator; 
-import java.util.PriorityQueue; 
+import java.util.PriorityQueue;
   
 class VotesComparator implements Comparator<SongRequest> { 
     @Override
@@ -95,8 +95,8 @@ public class RequestQueue {
         }
     }
 
-    public boolean removeSong(SongRequest song, String client) {
-        if (client.equals(song.clientIp) && !song.playing) {
+    public boolean removeSong(SongRequest song, ConnectedClient client) {
+        if ((client.ipAddress.equals(song.clientIp) || (client.permissionLevel == Permission.DJ)) && !song.playing) {
             boolean ret = songQueue.remove(song);
             if (isEmpty()) {
                 this.autoDJ = true;
@@ -145,5 +145,6 @@ public class RequestQueue {
 
     public static void main(String[] args) {
         QueueTests tester = new QueueTests();
+        tester.fillQueue();
     }
 }
