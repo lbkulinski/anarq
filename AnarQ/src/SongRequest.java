@@ -66,8 +66,8 @@ public class SongRequest {
         return (o.getClass() == this.getClass() && this.id == ((SongRequest) o).id);
     }
 
-    public void printSongInfo() {
-        System.out.println(getName() + ": id(" + getId() + ") artist(" + getArtist() +") album(" + getAlbum() + ") genre(" + getGenre() + ") clientIp(" +
+    public String printSongInfo() {
+        return (getName() + ": id(" + getId() + ") artist(" + getArtist() +") album(" + getAlbum() + ") genre(" + getGenre() + ") clientIp(" +
                 getClientIp() + ") voteScore(" + getVotes() + ")");
     }
 }

@@ -2,13 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7b7f42d5-04b1-47b0-a36e-fa5fd56dad36" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/AuthorizationCode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/music_attributes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/music_attributes.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AnarQ/ClientCredentialsExample.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AnarQ/ClientCredentialsExample.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AnarQ/SearchArtistsExample.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AnarQ/SearchArtistsExample.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AnarQ/SongRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AnarQ/SongRequest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/AnarQ/Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/AnarQ/Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/AnarQ/music_attributes.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ClientCredentialsExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ClientCredentialsExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SearchArtistsExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SearchArtistsExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SongRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SongRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_search_failure.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test_search_failure.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/music_attributes.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_same_song.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test_same_song.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -63,6 +70,12 @@
     <configuration name="ClientCredentialsExample" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ClientCredentialsExample" />
       <module name="AnarQ" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DatabaseDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="DatabaseDemo" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -122,10 +135,12 @@
       <item itemvalue="Application.ClientCredentialsExample" />
       <item itemvalue="Application.test" />
       <item itemvalue="Application.Test" />
+      <item itemvalue="Application.DatabaseDemo" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Test" />
+        <item itemvalue="Application.DatabaseDemo" />
         <item itemvalue="Application.ClientCredentialsExample" />
         <item itemvalue="Application.test" />
       </list>
@@ -143,7 +158,9 @@
       <updated>1581621375208</updated>
       <workItem from="1581621379502" duration="4609000" />
       <workItem from="1582393196213" duration="10135000" />
-      <workItem from="1582746450394" duration="24392000" />
+      <workItem from="1582746450394" duration="64245000" />
+      <workItem from="1583342650780" duration="1269000" />
+      <workItem from="1583693879232" duration="5040000" />
     </task>
     <servers />
   </component>
@@ -155,7 +172,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
