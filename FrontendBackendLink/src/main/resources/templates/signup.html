@@ -8,16 +8,17 @@
 </head>
 <body>
 	<img src="./AnarQLogo.png" width="500px"/>
+	<h3> Sign Up for a new account:</h3>
     <form action="#" th:action="@{/client}" th:object="${loginInfo}" method="post">
-    	<input type="text" th:field="*{ip}" placeholder="Enter Key" />
+    	<input type="text" th:field="*{username}" placeholder="Enter Username" />
 		<br/>
-		<input type="text" th:field="*{username}" placeholder="Enter Username" />
+		<input type="password" th:field="*{password}" placeholder="Enter Password" />
 		<br/>
         <input type="submit" value="Connect" />
 	</form>
 	<h3> Or </h3>
-	<form action="#" th:action="@{/server}" th:object="${loginInfo}" method="post">
-		<input type="submit" value="Host a new Session" />
+	<form action="#" th:action="@{/login}" th:object="${loginInfo}" method="post">
+		<input type="submit" value="Login to an existing account" />
     </form>
 </body>
 </html>
