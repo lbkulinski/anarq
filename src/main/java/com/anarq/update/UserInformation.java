@@ -2,41 +2,97 @@ package com.anarq.update;
 
 import java.util.Objects;
 
+/**
+ * A user's information for the AnarQ application.
+ *
+ * @author Logan Kulinski, lbk@purdue.edu
+ * @version March 8, 2020
+ */
 public final class UserInformation {
+    /**
+     * The username of this user information.
+     */
     private String username;
+
+    /**
+     * The password of this user information.
+     */
     private String password;
+
+    /**
+     * The new value of this user information.
+     */
     private String newValue;
 
+    /**
+     * Constructs a newly allocated {@code UserInformation} object with the specified username, password, and new
+     * value.
+     */
     public UserInformation() {
         this.username = null;
         this.password = null;
         this.newValue = null;
     } //UserInformation
 
+    /**
+     * Returns the username of this user information.
+     *
+     * @return the username of this user information
+     */
     public String getUsername() {
         return this.username;
     } //getUsername
 
+    /**
+     * Returns the password of this user information.
+     *
+     * @return the password of this user information
+     */
     public String getPassword() {
         return this.password;
     } //getPassword
 
+    /**
+     * Returns the new value of this user information.
+     *
+     * @return the new value of this user information
+     */
     public String getNewValue() {
         return this.newValue;
     } //getNewUsername
 
+    /**
+     * Updates the username of this user information with the specified username.
+     *
+     * @param username the username to be used in the update
+     */
     public void setUsername(String username) {
         this.username = username;
     } //setUsername
 
+    /**
+     * Updates the password of this user information with the specified password.
+     *
+     * @param password the password to be used in the update
+     */
     public void setPassword(String password) {
         this.password = password;
     } //setPassword
 
+    /**
+     * Updates the new value of this user information with the specified new value.
+     *
+     * @param newValue the new value to be used in the update
+     */
     public void setNewValue(String newValue) {
         this.newValue = newValue;
     } //setNewUsername
 
+    /**
+     * Returns the hash code of this user information.
+     *
+     * @return the hash code of this user information
+     */
     @Override
     public int hashCode() {
         int result = 23;
@@ -51,6 +107,14 @@ public final class UserInformation {
         return result;
     } //hashCode
 
+    /**
+     * Determines whether or not the specified object is equal to this user information. {@code true} is returned if
+     * and only if the specified object is an instance of {@code UserInformation} and its username, password, and new
+     * value are equal to this user information's. Comparisons are case-sensitive.
+     *
+     * @param object the object to be used in the comparisons
+     * @return {@code true}, if the specified object is equal to this user information and {@code false} otherwise
+     */
     @Override
     public boolean equals(Object object) {
         if (this == object) {
@@ -70,6 +134,13 @@ public final class UserInformation {
         } //end if
     } //equals
 
+    /**
+     * Returns the {@code String} representation of this user information. The returned {@code String} consists of a
+     * comma separated list of this user information's username, password, and new value surrounded by this class' name
+     * and square brackets ("[]").
+     *
+     * @return the {@code String} representation of this user information
+     */
     @Override
     public String toString() {
         String format = "UserInformation[%s, %s, %s]";
