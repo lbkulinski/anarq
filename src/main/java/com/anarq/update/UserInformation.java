@@ -10,6 +10,11 @@ import java.util.Objects;
  */
 public final class UserInformation {
     /**
+     * The user type of this user information.
+     */
+    private UserType userType;
+
+    /**
      * The username of this user information.
      */
     private String username;
@@ -25,14 +30,24 @@ public final class UserInformation {
     private String newValue;
 
     /**
-     * Constructs a newly allocated {@code UserInformation} object with the specified username, password, and new
-     * value.
+     * Constructs a newly allocated {@code UserInformation} object with a default user type, username, password, and
+     * new value of {@code null}.
      */
     public UserInformation() {
+        this.userType = null;
         this.username = null;
         this.password = null;
         this.newValue = null;
     } //UserInformation
+
+    /**
+     * Returns the user type of this user information.
+     *
+     * @return the user type of this user information
+     */
+    public UserType getUserType() {
+        return this.userType;
+    } //getUserType
 
     /**
      * Returns the username of this user information.
@@ -60,6 +75,15 @@ public final class UserInformation {
     public String getNewValue() {
         return this.newValue;
     } //getNewUsername
+
+    /**
+     * Updates the user type of this user information with the specified user type.
+     *
+     * @param userType the user type to be used in the update
+     */
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    } //setUserType
 
     /**
      * Updates the username of this user information with the specified username.
@@ -98,6 +122,8 @@ public final class UserInformation {
         int result = 23;
         int prime = 31;
 
+        result = prime * result + Objects.hashCode(this.userType);
+
         result = prime * result + Objects.hashCode(this.username);
 
         result = prime * result + Objects.hashCode(this.password);
@@ -109,8 +135,9 @@ public final class UserInformation {
 
     /**
      * Determines whether or not the specified object is equal to this user information. {@code true} is returned if
-     * and only if the specified object is an instance of {@code UserInformation} and its username, password, and new
-     * value are equal to this user information's. Comparisons are case-sensitive.
+     * and only if the specified object is an instance of {@code UserInformation} and its user type, username,
+     * password, and new value are equal to this user information's. Username, password, and new value comparisons are
+     * case-sensitive.
      *
      * @param object the object to be used in the comparisons
      * @return {@code true}, if the specified object is equal to this user information and {@code false} otherwise
@@ -122,7 +149,9 @@ public final class UserInformation {
         } else if (object instanceof UserInformation) {
             boolean equal;
 
-            equal = Objects.equals(this.username, ((UserInformation) object).username);
+            equal = Objects.equals(this.userType, ((UserInformation) object).userType);
+
+            equal &= Objects.equals(this.username, ((UserInformation) object).username);
 
             equal &= Objects.equals(this.password, ((UserInformation) object).password);
 
@@ -136,15 +165,15 @@ public final class UserInformation {
 
     /**
      * Returns the {@code String} representation of this user information. The returned {@code String} consists of a
-     * comma separated list of this user information's username, password, and new value surrounded by this class' name
-     * and square brackets ("[]").
+     * comma separated list of this user information's user type, username, password, and new value surrounded by this
+     * class' name and square brackets ("[]").
      *
      * @return the {@code String} representation of this user information
      */
     @Override
     public String toString() {
-        String format = "UserInformation[%s, %s, %s]";
+        String format = "UserInformation[%s, %s, %s, %s]";
 
-        return String.format(format, this.username, this.password, this.newValue);
+        return String.format(format, this.userType, this.username, this.password, this.newValue);
     } //toString
 }

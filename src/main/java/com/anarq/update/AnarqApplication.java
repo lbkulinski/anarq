@@ -17,6 +17,12 @@ public class AnarqApplication {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        assert args.length == 2;
+
+        System.setProperty("database-username", args[0]);
+
+        System.setProperty("database-password", args[1]);
+
         SpringApplication.run(AnarqApplication.class, args);
     } //main
 }
