@@ -11,17 +11,12 @@ import java.util.Objects;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.FindIterable;
-import java.security.SecureRandom;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.SecretKey;
-import org.bson.types.Binary;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 import com.anarq.update.UserInformation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import java.util.Arrays;
 
 /**
  * A controller for updating a user's username.
@@ -93,44 +88,6 @@ public final class UpdateUsernameController {
     } //presentInDatabase
 
     /**
-     * Hashes the specified password.
-     *
-     * @param salt the salt to be used in the operation
-     * @param password the password to be used in the operation
-     * @return the password hash and salt
-     * @throws NullPointerException if the specified salt or password is {@code null}
-     * @throws Exception if an exception occurs during the hashing computation
-     */
-    private byte[] hash(byte[] salt, String password) throws Exception {
-        SecureRandom random;
-        SecretKeyFactory factory;
-        final String algorithm = "PBKDF2WithHmacSHA1";
-        PBEKeySpec keySpec;
-        final int iterationCount = 65_535;
-        final int keyLength = 256;
-        SecretKey secretKey;
-        byte[] passwordHash;
-
-        Objects.requireNonNull(salt, "the specified salt is null");
-
-        Objects.requireNonNull(password, "the specified password is null");
-
-        random = new SecureRandom();
-
-        random.nextBytes(salt);
-
-        factory = SecretKeyFactory.getInstance(algorithm);
-
-        keySpec = new PBEKeySpec(password.toCharArray(), salt, iterationCount, keyLength);
-
-        secretKey = factory.generateSecret(keySpec);
-
-        passwordHash = secretKey.getEncoded();
-
-        return passwordHash;
-    } //hash
-
-    /**
      * Returns whether or not a user with the specified username entered the correct password.
      *
      * @param userType the user type to be used in the operation
@@ -153,11 +110,7 @@ public final class UpdateUsernameController {
         final String fieldName = "username";
         FindIterable<Document> results;
         Document result;
-        Binary readPasswordHashBinary;
-        Binary readSaltBinary;
-        byte[] readPasswordHash;
-        byte[] readSalt;
-        byte[] passwordHash;
+        String readPasswordHash;
 
         Objects.requireNonNull(userType, "the specified user type is null");
 
@@ -198,27 +151,11 @@ public final class UpdateUsernameController {
             throw new IllegalStateException("the user with the specified username is not present in the database");
         } //end if
 
-        readPasswordHashBinary = result.get("password-hash", Binary.class);
-
-        readSaltBinary = result.get("salt", Binary.class);
-
-        readPasswordHash = readPasswordHashBinary.getData();
-
-        readSalt = readSaltBinary.getData();
+        readPasswordHash = result.get("password-hash", String.class);
 
         client.close();
 
-        try {
-            passwordHash = hash(readSalt, password);
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        } //end try catch
-
-        System.out.println(Arrays.toString(readPasswordHash));
-
-        System.out.println(Arrays.toString(passwordHash));
-
-        return Arrays.equals(passwordHash, readPasswordHash);
+        return BCrypt.checkpw(password, readPasswordHash);
     } //correctPassword
 
     /**
