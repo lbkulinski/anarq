@@ -18,11 +18,6 @@ public class Session {
 		songRequests.add(new SongRequest("My Boy", "Car Seat Headrest", "pcrowne"));
 		songRequests.add(new SongRequest("You Shook Me", "Led Zeppelin", "pcrowne"));
 		songRequests.add(new SongRequest("Paranoid Android", "Radiohead", "pcrowne"));
-		
-		//connectedUsers.add(new ConnectedUser("pcrowne"));
-		//connectedUsers.add(new ConnectedUser("jonesbbq223"));
-		//connectedUsers.add(new ConnectedUser("weliveinasociety12"));
-		//connectedUsers.add(new ConnectedUser("thecodemaster"));
 	  
 	}
 
@@ -69,6 +64,20 @@ public class Session {
 			if(songRequests.get(i).getId() == id) {
 				
 				songRequests.remove(i);
+				
+			}
+			
+		}
+		
+	}
+	
+	public void kickUserForUsername(String name) {
+		
+		for (int i = 0; i < connectedUsers.size(); i++) {
+			
+			if(connectedUsers.get(i).getUsername().equals(name)) {
+				
+				connectedUsers.remove(i);
 				
 			}
 			

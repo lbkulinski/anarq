@@ -46,8 +46,10 @@ public class RequestListController {
 		
 	}
 	
-	@GetMapping("/{sessionId}/end-session")
+	@PutMapping("/{sessionId}/end-session")
 	public static void endSession(@PathVariable long sessionId) {
+		
+		System.out.println(sessionId + "> Terminating Session... ");
 		
 		for (int i = 0; i < sessions.size(); i++) {
 			
@@ -62,12 +64,13 @@ public class RequestListController {
 		
 	}
 	
-	@GetMapping("/{sessionId}/leave-session/{id}")
-	public static void endSession(@PathVariable long sessionId, @PathVariable long id) {
+	@PutMapping("/{sessionId}/leave-session/{id}")
+	public static void endSession(@PathVariable long sessionId, @PathVariable String id) {
+		
+		System.out.println(sessionId + "> User Disconnected: " + id);
 		
 		Session currentSession = getSessionForId(sessionId);
-		
-		currentSession.kickUserForId(id);
+		currentSession.kickUserForUsername(id);
 		
 	}
 	
@@ -131,6 +134,8 @@ public class RequestListController {
 	@PutMapping("/{sessionId}/remove-request/{id}")
 	public static void addRemoveRequest(@PathVariable long sessionId, @PathVariable long id) {
 		
+		System.out.println(sessionId + "> Removing song request " + id);
+		
 		Session currentSession = getSessionForId(sessionId);
 		
 		if (currentSession != null) {
@@ -143,6 +148,8 @@ public class RequestListController {
 	
 	@PutMapping("/{sessionId}/kick-user/{id}")
 	public static void addKickUser(@PathVariable long sessionId, @PathVariable long id) {
+		
+		System.out.println(sessionId + "> Kicking User: " + id);
 		
 		Session currentSession = getSessionForId(sessionId);
 		
@@ -208,7 +215,6 @@ public class RequestListController {
 
 	@GetMapping("/get-server-info")
 	public String getServerInfo() {
-		System.out.println(LoginController.lastHost);
 	  return LoginController.lastHost;
 	}
 
