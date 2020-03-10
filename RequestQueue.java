@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.Comparator; 
-import java.util.PriorityQueue; 
+import java.util.PriorityQueue;
   
 class VotesComparator implements Comparator<SongRequest> { 
     @Override
@@ -95,8 +95,8 @@ public class RequestQueue {
         }
     }
 
-    public boolean removeSong(SongRequest song, String client) {
-        if (client.equals(song.clientIp) && !song.playing) {
+    public boolean removeSong(SongRequest song, ConnectedClient client) {
+        if ((client.ipAddress.equals(song.clientIp) || (client.permissionLevel == Permission.DJ)) && !song.playing) {
             boolean ret = songQueue.remove(song);
             if (isEmpty()) {
                 this.autoDJ = true;
@@ -144,83 +144,7 @@ public class RequestQueue {
     }
 
     public static void main(String[] args) {
-        SongRequest song0 = new SongRequest(0, "album", "name" + 0, "artist", "Pop", "clientIp");
-        SongRequest song1 = new SongRequest(1, "album", "name" + 1, "artist", "Pop", "clientIp");
-        SongRequest song2 = new SongRequest(2, "album", "name" + 2, "artist", "Pop", "clientIp");
-        SongRequest song3 = new SongRequest(3, "album", "name" + 3, "artist", "Pop", "clientIp");
-        SongRequest song4 = new SongRequest(4, "album", "name" + 4, "artist", "Pop", "clientIp");
-
-
-        MusicChooser musicChooser = new MusicChooser();
-        musicChooser.addValidGenre("Pop");
-        System.out.println("Creating queue with max 5 and valid genre Pop...");
-        RequestQueue queue = new RequestQueue(musicChooser, 5, true);
-
-        System.out.println("Attempting to add invalid genre...");
-        queue.addSong(new SongRequest(4, "album", "name", "artist", "Rock", "clientIp"));
-        System.out.println();
-
-        System.out.println("Adding 5 songs...");
-        queue.addSong(song0);
-        queue.addSong(song1);
-        queue.addSong(song2);
-        queue.addSong(song3);
-        queue.addSong(song4);
-
-        QueueUI display = new QueueUI();
-        //display.populateQueue(queue.songQueue);
-
-        System.out.println("Adding one more song...\n");
-        queue.addSong(new SongRequest(5, "album", "name", "artist", "Pop", "clientIp"));
-
-        System.out.println("\nRemoving one song...\n");
-        queue.removeSong(song4, "clientIp");
-
-        System.out.println("\nRemoving a song that is playing...\n");
-        song4.playing = true;
-        queue.removeSong(song4, "clientIp");
-
-        System.out.println("\nRemoving someone else's song...\n");
-        queue.removeSong(song4, "yolo");
-        //display.populateQueue(queue.songQueue);
-
-        System.out.println("Adding duplicate song...\n");
-        queue.addSong(new SongRequest(2, "album", "name2", "artist", "Pop", "clientIp"));
-        //display.populateQueue(queue.songQueue);
-
-        queue.acceptingRequests = false;
-        System.out.println("\nNo longer accepting songs/add a song...\n");
-        queue.addSong(new SongRequest(7, "album", "name7", "artist", "Pop", "clientIp"));
-        System.out.println();
-
-        System.out.println("\nLike some songs...");
-        queue.likeSong(song1, "yolo");
-        queue.likeSong(song2, "yolo");
-        queue.likeSong(song3, "yolo");
-        queue.likeSong(song1, "yolo");
-        queue.likeSong(song1, "yolo");
-        queue.dislikeSong(song0, "yolo");
-        System.out.println("song0: " + song0.votes);
-        System.out.println("song1: " + song1.votes);
-        System.out.println("song2: " + song2.votes);
-        System.out.println("song3: " + song3.votes);
-        System.out.println("song4: " + song4.votes);
-
-        System.out.println("Like my own song...");
-        song1.likeSong("clientIp");
-        System.out.println("song0: " + song0.votes);
-        System.out.println("song1: " + song1.votes);
-        System.out.println("song2: " + song2.votes);
-        System.out.println("song3: " + song3.votes);
-        System.out.println("song4: " + song4.votes);
-        display.populateQueue(queue.songQueue);
-
-        System.out.println("Play all songs...");
-        while (!queue.isEmpty()) {
-            SongRequest playSong = queue.playNextSong();
-            System.out.println("Playing: " + playSong.votes + " Name: " + playSong.name);
-        }
-        System.out.println("Printing empty queue...");
-        System.out.println();
+        QueueTests tester = new QueueTests();
+        tester.fillQueue();
     }
 }
