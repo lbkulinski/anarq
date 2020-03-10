@@ -13,7 +13,24 @@ public class Test extends ClientCredentialsExample{
     public static void main(String[] args) {
         /* Search for song; top choice will be added to queue */
         clientCredentials_Sync();
-        SearchArtistsExample search = new SearchArtistsExample(spotifyApi, "love");
+        /**
+        authorizationCode_Sync();
+        authorizationCodeUri_Sync();
+        **/
+        while(true) {
+            //check for search input
+                //if search_request_token.txt has value "1"
+                    //commence search for string in search_request_field.txt
+                    //after searching, return all relevant info to search_result.txt
+                    //wait for user's choice, frontend will put 'album' or 'track' or 'playlist' or 'artist' followed by a space and the index number in search_choice.txt
+                    //delete contents of file search_request_token.txt and search_request_field.txt
+                //if search_request_token.txt has no contents, do nothing
+
+
+
+
+            SearchArtistsExample search = new SearchArtistsExample(spotifyApi, "love");
+        }
         //search object contains all search information to be stored in any way desired
 
         /**
@@ -76,7 +93,7 @@ public class Test extends ClientCredentialsExample{
 
         //Display contents of music_attributes
         //add them to the queue
-        addToQueue();
+        //addToQueue();
 
         //Search for and find a playlist
 
@@ -167,7 +184,7 @@ public class Test extends ClientCredentialsExample{
         }
         out.close();
     }
-
+/*
     public static void addToQueue() {
         ArrayList<SongRequest> songs = new ArrayList<SongRequest>();
         try {
@@ -192,7 +209,7 @@ public class Test extends ClientCredentialsExample{
         }
         queue.printQueue();
     }
-
+*/
     public static void test_file(String filename) {
         try {
             BufferedReader in = new BufferedReader(new FileReader(filename));
