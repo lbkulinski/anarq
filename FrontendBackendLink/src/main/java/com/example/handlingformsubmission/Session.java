@@ -5,19 +5,20 @@ import java.util.*;
 public class Session {
 
 	private long id;
-	private SongRequest currentSong = new SongRequest("Revolution 9", "The Beatles", "pcrowne");
+	private SongRequest currentSong = new SongRequest(0, "Nevermind", "Smells Like Teen Spirit", "Nirvana", "Grunge", "1");
 	private List<SongRequest> songRequests = new ArrayList<SongRequest>();
-	private List<ConnectedUser> connectedUsers = new ArrayList<ConnectedUser>();
+	private List<ConnectedClient> connectedClients = new ArrayList<ConnectedClient>();
 
 	public Session () {
 	  
 		setId((long) (Math.random() * 1000000));
 	  
-		songRequests.add(new SongRequest("Smells Like Teen Spirit", "Nirvana", "pcrowne"));
-		songRequests.add(new SongRequest("Money Machine", "100 Gecs", "pcrowne"));
-		songRequests.add(new SongRequest("My Boy", "Car Seat Headrest", "pcrowne"));
-		songRequests.add(new SongRequest("You Shook Me", "Led Zeppelin", "pcrowne"));
-		songRequests.add(new SongRequest("Paranoid Android", "Radiohead", "pcrowne"));
+		songRequests.add(new SongRequest(1, "Nevermind", "In Bloom", "Nirvana", "Grunge", "2"));
+		songRequests.add(new SongRequest(2, "Nevermind", "In Bloom", "Nirvana", "Grunge", "3"));
+		songRequests.add(new SongRequest(3, "Nevermind", "In Bloom", "Nirvana", "Grunge", "4"));
+		songRequests.add(new SongRequest(4, "Nevermind", "In Bloom", "Nirvana", "Grunge", "5"));
+		songRequests.add(new SongRequest(5, "Nevermind", "In Bloom", "Nirvana", "Grunge", "6"));
+		songRequests.add(new SongRequest(6, "Nevermind", "In Bloom", "Nirvana", "Grunge", "7"));
 	  
 	}
 
@@ -37,16 +38,16 @@ public class Session {
 		return songRequests;
 	}
 
-	public void setConnectedUsers(List<ConnectedUser> connectedUsers) {
-		this.connectedUsers = connectedUsers;
+	public void setConnectedClients(List<ConnectedClient> connectedClients) {
+		this.connectedClients = connectedClients;
 	}
 	
-	public List<ConnectedUser> getConnectedUsers() {
-		return connectedUsers;
+	public List<ConnectedClient> getConnectedClients() {
+		return connectedClients;
 	}
 	
-	public void addClient(ConnectedUser user) {
-		connectedUsers.add(user);	
+	public void addClient(ConnectedClient user) {
+		connectedClients.add(user);	
 	}
 	
 	public long getId() {
@@ -73,11 +74,11 @@ public class Session {
 	
 	public void kickUserForUsername(String name) {
 		
-		for (int i = 0; i < connectedUsers.size(); i++) {
+		for (int i = 0; i < connectedClients.size(); i++) {
 			
-			if(connectedUsers.get(i).getUsername().equals(name)) {
+			if(connectedClients.get(i).getName().equals(name)) {
 				
-				connectedUsers.remove(i);
+				connectedClients.remove(i);
 				
 			}
 			
@@ -85,13 +86,13 @@ public class Session {
 		
 	}
 	
-	public void kickUserForId(long id) {
+	public void kickUserForId(String id) {
 		
-		for (int i = 0; i < connectedUsers.size(); i++) {
+		for (int i = 0; i < connectedClients.size(); i++) {
 			
-			if(connectedUsers.get(i).getId() == id) {
+			if(connectedClients.get(i).getIpAddress().equals(id)) {
 				
-				connectedUsers.remove(i);
+				connectedClients.remove(i);
 				
 			}
 			

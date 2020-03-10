@@ -1,78 +1,75 @@
 package com.example.handlingformsubmission;
 
-import java.util.Objects;
-
 public class SongRequest {
+    int id;
+    String album;
+    String name;
+    String artist;
+    String genre;
+    String clientIp;
+    boolean playing;
+    int votes;
 
-	private String songName;
-	private String bandName;
-	private String requesterId;
-	private long id;
-	private int score = 0;
+    public SongRequest(int id, String album, String name, String artist, String genre, String clientIp) {
+        this.id = id;
+        this.album = album;
+        this.name = name;
+        this.artist = artist;
+        this.genre = genre;
+        this.votes = 0;
+        this.clientIp = clientIp;
+        this.playing = false;
+    }
 
-	public SongRequest(String song, String band, String requester) {
-	  
-		setBandName(band);
-		setSongName(song);
-		setRequesterId(requester);
-		setId((long) (Math.random() * 1000000));
-	  
-	}
+    public void likeSong(String clientIp) {
+        if (clientIp != getClientIp() && !playing) {
+            this.votes++;
+        }
+        //updateQueue()
+    }
 
-	public String getSongName() {
-		return songName;
-	}
+    public void dislikeSong(String clientIp) {
+        if (clientIp != getClientIp() && !playing) {
+            this.votes--;
+        }
+        //updateQueue()
+    }
+    
+    public int getId() {
+        return this.id;
+    }
 
-	public void setSongName(String songName) {
-		this.songName = songName;
-	}
+    public String getAlbum() {
+        return this.album;
+    }
 
-	public String getBandName() {
-		return bandName;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public void setBandName(String bandName) {
-		this.bandName = bandName;
-	}
-	
-	public String getRequesterId() {
-		return requesterId;
-	}
+    public String getArtist() {
+        return this.artist;
+    }
 
-	public void setRequesterId(String requesterId) {
-		this.requesterId = requesterId;
-	}
-	
-	public long getId() {
-		return id;
-	}
+    public String getGenre() {
+        return this.genre;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
-	
-	public int getScore() {
-		return score;
-	}
+    public int getVotes() {
+        return this.votes;
+    }
 
-	public void setScore(int score) {
-		this.score = score;
-	}
-	
-	public void adjustScore(int score) {
-		this.score += score;
-	}
+    public String getClientIp() {
+        return this.clientIp;
+    }
 
-	@Override
-	public String toString() {
-		return
-		"{" + 
-		"songName='" + songName + "'" +
-		"bandName='" + bandName + "'" +
-		"requesterId='" + requesterId + "'" +
-		"id='" + id + "'" +
-		"score='" + score + "'" +
-		"}";
-	}
+    @Override
+    public boolean equals(Object o) {
+        return (o.getClass() == this.getClass() && this.id == ((SongRequest) o).id);
+    }
 
+    public String printSongInfo() {
+        return (getName() + ": id(" + getId() + ") artist(" + getArtist() +") album(" + getAlbum() + ") genre(" + getGenre() + ") clientIp(" +
+                getClientIp() + ") voteScore(" + getVotes() + ")");
+    }
 }

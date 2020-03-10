@@ -1,3 +1,5 @@
+package com.example.handlingformsubmission;
+
 import java.util.ArrayList;
 import java.util.Comparator; 
 import java.util.PriorityQueue;
@@ -141,10 +143,5 @@ public class RequestQueue {
             System.out.println("    " + song.name);
         }
         System.out.println(">");
-    }
-
-    public static void main(String[] args) {
-        QueueTests tester = new QueueTests();
-        tester.fillQueue();
     }
 }

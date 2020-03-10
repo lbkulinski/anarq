@@ -32,9 +32,10 @@
 			<h2>Currently Playing...</h2>	
 			<br>
 			<img src="./unknown.png" width="256px" height="256px" align="left"/>
-			<h1> {{ currentSong.songName }} </h1>
-			<h2> {{ currentSong.bandName }} </h2>
-			<h3>Requested by  {{ currentSong.requesterId }}  </h3>
+			<h1> {{ currentSong.name }} </h1>
+			<h2> {{ currentSong.album }} </h2>
+			<h2> {{ currentSong.artist }} </h2>
+			<h3>Requested by  {{ currentSong.clientIp }}  </h3>
 			<input type="button" value="Vote to Skip" />
 		</div>
 		
@@ -54,10 +55,11 @@
 				<h2>Current Playlist</h2>
 				<div class="songRequest" v-for="song in songRequests">
 					<img src="./unknown.png" width="128px" height="128px" align="left"/>
-					<h2> {{ song.songName }} </h2>
-					<h3> {{ song.bandName }} </h3>
-					<h4> Requested by {{ song.requesterId }} </h4>
-					<h4> Karma: {{ song.score }} </h4>
+					<h2> {{ song.name }} </h2>
+					<h3> {{ song.album }} </h3>
+					<h3> {{ song.artist }} </h3>
+					<h4> Requested by {{ song.clientIp }} </h4>
+					<h4> Karma: {{ song.votes }} </h4>
 					<input type="button" @click="addScore(song.id)" value="Like" /> <input type="button" @click="subScore(song.id)" value="Dislike" />
 				</div>
 			</div>

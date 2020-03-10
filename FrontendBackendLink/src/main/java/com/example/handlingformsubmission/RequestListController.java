@@ -84,9 +84,9 @@ public class RequestListController {
 			Collections.sort(currentSession.getSongRequests(), new Comparator<SongRequest>() {
 				@Override
 				public int compare(SongRequest a, SongRequest b) {
-					if (a.getScore() < b.getScore())
+					if (a.getVotes() < b.getVotes())
 						return 1;
-					if (a.getScore() > b.getScore())
+					if (a.getVotes() > b.getVotes())
 						return -1;
 					return 0;
 				}
@@ -101,13 +101,13 @@ public class RequestListController {
 	}
 	
 	@GetMapping("/{sessionId}/connected-users")
-	public static List<ConnectedUser> getConnectedUsers(@PathVariable long sessionId) {
+	public static List<ConnectedClient> getConnectedClients(@PathVariable long sessionId) {
 		
 		Session currentSession = getSessionForId(sessionId);
 		
 		if (currentSession != null) {
 		
-			return currentSession.getConnectedUsers();
+			return currentSession.getConnectedClients();
 		
 		}
 		
@@ -147,7 +147,7 @@ public class RequestListController {
 	}
 	
 	@PutMapping("/{sessionId}/kick-user/{id}")
-	public static void addKickUser(@PathVariable long sessionId, @PathVariable long id) {
+	public static void addKickUser(@PathVariable long sessionId, @PathVariable String id) {
 		
 		System.out.println(sessionId + "> Kicking User: " + id);
 		
@@ -172,7 +172,7 @@ public class RequestListController {
 		
 			if (sr != null) {
 
-				sr.adjustScore(1);
+				sr.likeSong("0");
 				
 				return sr;
 				
@@ -198,7 +198,7 @@ public class RequestListController {
 		
 			if (sr != null) {
 
-				sr.adjustScore(-1);
+				sr.dislikeSong("0");
 				
 				return sr;
 				
@@ -219,7 +219,7 @@ public class RequestListController {
 	}
 
 	@GetMapping("/get-client-info")
-	public ConnectedUser getClientInfo() {
+	public ConnectedClient getClientInfo() {
 	  return LoginController.lastClientInfo;
 	}
 
