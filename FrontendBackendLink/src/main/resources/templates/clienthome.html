@@ -22,6 +22,13 @@
 		</center>
 		
 		<div class="component">
+			<h1>Welcome!</h1>	
+			<p>Successfully connected to {{ host }}</p>
+			<p>With the username {{ username }}</p>
+			<a href="/" @click="leaveSession(id)">Leave Lobby</a>
+		</div>
+		<br>
+		<div class="component">
 			<h2>Currently Playing...</h2>	
 			<br>
 			<img src="./unknown.png" width="256px" height="256px" align="left"/>
@@ -32,13 +39,6 @@
 		</div>
 		
 		<div class="column">
-			<div class="component">
-				<h1>Welcome!</h1>	
-				<p>Successfully connected to {{ host }}</p>
-				<p>With the username {{ username }}</p>
-				<a href="/">Leave Lobby</a>
-			</div>
-			<br>
 			<div class="component">
 				<h2>Request a Song</h2>
 				<input type="text"  placeholder="Enter Song Name Here..."/>
@@ -70,47 +70,68 @@
 		new Vue({
 			el: '#app',
 			data: {
-				host : "defualt-host",
+				host : "123456",
 				username : "defualt-username",
+				id : "-1",
 				songRequests: [],
 				currentSong: []
 			},
 			
 			mounted() {
 			
-				this.interval = setInterval(() => this.fetchSongs(), 1000);
+				axios.get('/get-server-info')
+					.then(resp => this.host = resp.data)
+					.catch(err => console.log(err)),
+				axios.get('/get-client-info')
+					.then(resp => this.username = resp.data.username)
+					.catch(err => console.log(err)),
+			
+				this.fetchInfo(),
+				this.interval = setInterval(() => this.fetchInfo(), 1000)
 
 			},
 			
 			methods: {
 			
+				fetchInfo() {
+				
+					this.fetchSongs(),
+					this.fetchCurrentSong()
+				
+				},
+			
 				deleteRequest: function(index) {
 				  this.songRequests.splice(index, 1);
 				},
 				
+				leaveSession: function(id) {
+				
+					axios.put('/' + this.host + '/leave-session/' + this.username)
+				
+				},
+				
 				addScore: function(id) {
 				
-					axios.put('/add-score/' + id),
+					axios.put('/' + this.host + '/add-score/' + id),
 					this.fetchSongs()
 				
 				},
 				
 				subScore: function(id) {
 				
-					axios.put('/sub-score/' + id),
+					axios.put('/' + this.host + '/sub-score/' + id),
 					this.fetchSongs()
 				
 				},
 				
 				fetchSongs() {
-					axios.get('/song-requests')
+					axios.get('/' + this.host + '/song-requests')
 					.then(resp => this.songRequests = resp.data)
-					.catch(err => console.log(err)),
-					this.fetchCurrentSong()
+					.catch(err => console.log(err))
 				},
 				
 				fetchCurrentSong() {
-					axios.get('/current-song')
+					axios.get('/' + this.host + '/current-song')
 					.then(resp => this.currentSong = resp.data)
 					.catch(err => console.log(err))
 				}

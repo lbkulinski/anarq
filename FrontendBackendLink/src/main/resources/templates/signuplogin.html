@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>AnarQ Portal</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link href="./style_login.css" type="text/css" rel="stylesheet"/>
+	<link rel="icon" href="./AnarQIcon.png"/>
+</head>
+<body>
+	<h3> Sign In... </h3>
+	<img src="./AnarQLogo.png" width="500px"/>
+    <form action="#" th:action="@{/client}" th:object="${loginInfo}" method="post">
+    	<input type="text" th:field="*{ip}" placeholder="Enter Key" />
+		<br/>
+		<input type="text" th:field="*{username}" placeholder="Enter Username" />
+		<br/>
+        <input type="submit" value="Connect" />
+	</form>
+	<h3> Or </h3>
+	<form action="#" th:action="@{/server}" th:object="${loginInfo}" method="post">
+		<input type="submit" value="Host a new Session" />
+    </form>
+</body>
+</html>

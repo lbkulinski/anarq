@@ -17,6 +17,9 @@ public class LoginController {
 
 	public static LoginInfo globalLoginInfo = new LoginInfo();
 
+	public static String lastHost;
+	public static ConnectedUser lastClientInfo;
+
   @GetMapping("/")
   public String onPageLoad(Model model) {
     model.addAttribute("loginInfo", globalLoginInfo);
@@ -29,7 +32,17 @@ public class LoginController {
 	  
 	  System.out.println(loginInfo.getIp());
 	  
-	  if (loginInfo.getIp().equals("SERVERTEST0")) {
+	  Session session = RequestListController.getSessionForId(loginInfo.getIp());
+	  
+	  if (session != null) {
+	  
+		ConnectedUser newCU = new ConnectedUser(loginInfo.getUsername());
+	  
+		session.addClient(newCU);
+	  
+		if (loginInfo.getIp() != null)
+			lastHost = loginInfo.getIp();
+			lastClientInfo = newCU;
 	  
 		return "clienthome";
 	  
@@ -42,21 +55,16 @@ public class LoginController {
   @PostMapping("/server")
   public String loginServer(@ModelAttribute LoginInfo loginInfo) {
 	  
+		
+		Session newSession = new Session();
+		RequestListController.sessions.add(newSession);
+		System.out.println(newSession.getId());
+	  
+		lastHost = (String) (newSession.getId() + "");
+	  
 		return "serverhome";
 	
   }
-  
-  /*@PostMapping("/login-server")
-  public String loginServer(@RequestBody LoginInfo loginInfo) {
-	  
-	  if (loginInfo.getIp().equals("SERVERTEST0")) {
-	  
-		return "clienthome";
-	  
-	  }
-    
-	return "login";
-	
-  }*/
+
 
 }
