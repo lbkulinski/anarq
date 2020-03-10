@@ -25,6 +25,7 @@ public class RequestQueue {
     boolean acceptingRequests;
     boolean autoDJ;
     MusicChooser musicChooser;
+	SongRequest currentSong = null;
     ArrayList<SongRequest> songs = new ArrayList<SongRequest>();
     PriorityQueue<SongRequest> songQueue = new PriorityQueue<SongRequest>(new VotesComparator());
 
@@ -125,6 +126,7 @@ public class RequestQueue {
         if (isEmpty()) {
             this.autoDJ = true;
         }
+		currentSong = ret;
         return ret;
     }
 

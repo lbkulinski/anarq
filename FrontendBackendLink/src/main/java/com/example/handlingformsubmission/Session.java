@@ -5,37 +5,28 @@ import java.util.*;
 public class Session {
 
 	private long id;
-	private SongRequest currentSong = new SongRequest(0, "Nevermind", "Smells Like Teen Spirit", "Nirvana", "Grunge", "1");
-	private List<SongRequest> songRequests = new ArrayList<SongRequest>();
+	private RequestQueue songRequestQueue = new RequestQueue();
 	private List<ConnectedClient> connectedClients = new ArrayList<ConnectedClient>();
 
 	public Session () {
 	  
 		setId((long) (Math.random() * 1000000));
 	  
-		songRequests.add(new SongRequest(1, "Nevermind", "In Bloom", "Nirvana", "Grunge", "2"));
-		songRequests.add(new SongRequest(2, "Nevermind", "In Bloom", "Nirvana", "Grunge", "3"));
-		songRequests.add(new SongRequest(3, "Nevermind", "In Bloom", "Nirvana", "Grunge", "4"));
-		songRequests.add(new SongRequest(4, "Nevermind", "In Bloom", "Nirvana", "Grunge", "5"));
-		songRequests.add(new SongRequest(5, "Nevermind", "In Bloom", "Nirvana", "Grunge", "6"));
-		songRequests.add(new SongRequest(6, "Nevermind", "In Bloom", "Nirvana", "Grunge", "7"));
+		songRequestQueue.addSong(new SongRequest(1, "Nevermind", "In Bloom", "Nirvana", "Grunge", "2"));
+		songRequestQueue.addSong(new SongRequest(2, "Nevermind", "In Bloom", "Nirvana", "Grunge", "3"));
+		songRequestQueue.addSong(new SongRequest(3, "Nevermind", "In Bloom", "Nirvana", "Grunge", "4"));
+		songRequestQueue.addSong(new SongRequest(4, "Nevermind", "In Bloom", "Nirvana", "Grunge", "5"));
+		songRequestQueue.addSong(new SongRequest(5, "Nevermind", "In Bloom", "Nirvana", "Grunge", "6"));
+		songRequestQueue.addSong(new SongRequest(6, "Nevermind", "In Bloom", "Nirvana", "Grunge", "7"));
 	  
-	}
-
-	public void setCurrentSong(SongRequest currentSong) {
-		this.currentSong = currentSong;
 	}
 	
 	public SongRequest getCurrentSong() {
-		return currentSong;
-	}
-	
-	public void setSongRequests(List<SongRequest> songRequests) {
-		this.songRequests = songRequests;
+		return songRequestQueue.currentSong;
 	}
 	
 	public List<SongRequest> getSongRequests() {
-		return songRequests;
+		return new ArrayList<SongRequest>(songRequestQueue.songQueue);
 	}
 
 	public void setConnectedClients(List<ConnectedClient> connectedClients) {
@@ -60,15 +51,7 @@ public class Session {
 
 	public void removeSongRequestForId(long id) {
 		
-		for (int i = 0; i < songRequests.size(); i++) {
-			
-			if(songRequests.get(i).getId() == id) {
-				
-				songRequests.remove(i);
-				
-			}
-			
-		}
+		songRequestQueue.removeSong(getSongRequestForId(id), null);
 		
 	}
 	
@@ -102,11 +85,11 @@ public class Session {
 
 	public SongRequest getSongRequestForId(long id) {
 		
-		for (int i = 0; i < songRequests.size(); i++) {
+		for (int i = 0; i < getSongRequests().size(); i++) {
 			
-			if(songRequests.get(i).getId() == id) {
+			if(getSongRequests().get(i).getId() == id) {
 				
-				return songRequests.get(i);
+				return getSongRequests().get(i);
 				
 			}
 			

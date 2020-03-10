@@ -14,6 +14,6 @@ public class MusicChooser {
     }
 
     public boolean isValidGenre(String genre) {
-        return validGenres.contains(genre);
+        return !validGenres.contains(genre);
     }
 }
