@@ -34,7 +34,7 @@ public final class UpdateUsernameController {
      * @return {@code true}, if a user with the specified username and user type is present in the database and
      * {@code false} otherwise
      */
-    private boolean presentInDatabase(UserType userType, String username) {
+    private boolean userPresent(UserType userType, String username) {
         final String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
         String databaseUsername;
         String databasePassword;
@@ -96,7 +96,7 @@ public final class UpdateUsernameController {
      * @return {@code true}, if a user with the specified username entered the correct password and {@code false}
      * otherwise
      */
-    private boolean correctPassword(UserType userType, String username, String password) {
+    private boolean passwordCorrect(UserType userType, String username, String password) {
         final String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
         String databaseUsername;
         String databasePassword;
@@ -182,13 +182,16 @@ public final class UpdateUsernameController {
         UserType userType = userInformation.getUserType();
         String username = userInformation.getUsername();
         String password = userInformation.getPassword();
+        String newUsername = userInformation.getNewValue();
 
-        if (!presentInDatabase(userType, username)) {
+        if (!userPresent(userType, username)) {
             return "updateUsernameNotFoundResult";
-        } else if (!correctPassword(userType, username, password)) {
+        } else if (!passwordCorrect(userType, username, password)) {
             return "updateUsernameIncorrectPasswordResult";
+        } else if (userPresent(userType, newUsername)) {
+            return "updateUsernameNewUsernameTakenResult";
+        } else {
+            return "updateUsernameResult";
         } //end if
-
-        return "updateUsernameResult";
     } //updatePasswordSubmit
 }
