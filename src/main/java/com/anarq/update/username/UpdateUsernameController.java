@@ -11,14 +11,13 @@ import java.util.Objects;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.FindIterable;
-
-import java.io.BufferedReader;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.concurrent.ThreadLocalRandom;
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-
 import com.mongodb.client.result.UpdateResult;
 import com.mongodb.client.model.Updates;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -171,6 +170,86 @@ public final class UpdateUsernameController {
     } //correctPassword
 
     /**
+     * Returns a set of alternative usernames that are available and based on the specified username.
+     *
+     * @param userType the user type to be used in the operation
+     * @param username the username to be used in the operation
+     * @return a set of alternative usernames that are available and based on the specified username
+     * @throws NullPointerException if the specified user type, username, or password is {@code null}
+     */
+    private Set<String> getAltUsernames(UserType userType, String username) {
+        int randomNumber;
+        int bound = 1_000;
+        String altUsername0;
+        boolean exists;
+        int iterationCount = 0;
+        int maxIterations = 1_000;
+        String altUsername1;
+        String altUsername2;
+
+        Objects.requireNonNull(userType, "the specified user type is null");
+
+        Objects.requireNonNull(username, "the specified username is null");
+
+        do {
+            if (iterationCount == maxIterations) {
+                return Set.of();
+            } //end if
+
+            randomNumber = ThreadLocalRandom.current()
+                                            .nextInt(bound);
+
+            altUsername0 = String.format("%s%d", username, randomNumber);
+
+            exists = userPresent(userType, altUsername0);
+
+            iterationCount++;
+        } while (exists);
+
+        iterationCount = 0;
+
+        do {
+            if (iterationCount == maxIterations) {
+                return Set.of();
+            } //end if
+
+            randomNumber = ThreadLocalRandom.current()
+                                            .nextInt(bound);
+
+            altUsername1 = String.format("%s%d", username, randomNumber);
+
+            exists = Objects.equals(altUsername1, altUsername0);
+
+            exists |= userPresent(userType, altUsername1);
+
+            iterationCount++;
+        } while (exists);
+
+        iterationCount = 0;
+
+        do {
+            if (iterationCount == maxIterations) {
+                return Set.of();
+            } //end if
+
+            randomNumber = ThreadLocalRandom.current()
+                                            .nextInt(bound);
+
+            altUsername2 = String.format("%s%d", username, randomNumber);
+
+            exists = Objects.equals(altUsername2, altUsername0);
+
+            exists |= Objects.equals(altUsername2, altUsername1);
+
+            exists |= userPresent(userType, altUsername2);
+
+            iterationCount++;
+        } while (exists);
+
+        return Set.of(altUsername0, altUsername1, altUsername2);
+    } //getAltUsernames
+
+    /**
      * Returns whether or not the specified new username is valid. A username is valid if it does not contain any
      * "bad words".
      *
@@ -305,7 +384,7 @@ public final class UpdateUsernameController {
      * @return the HTML code for the username update result
      */
     @PostMapping("/updateUsername")
-    public String updateUsernameSubmit(@ModelAttribute UserInformation userInformation) {
+    public String updateUsernameSubmit(@ModelAttribute UserInformation userInformation, Model model) {
         UserType userType = userInformation.getUserType();
         String currentUsername = userInformation.getUsername();
         String password = userInformation.getPassword();
@@ -322,6 +401,10 @@ public final class UpdateUsernameController {
         } else if (Objects.equals(currentUsername, newUsername)) {
             return "updateUsernameSameResult";
         } else if (this.userPresent(userType, newUsername)) {
+            Set<String> altUsernames = this.getAltUsernames(userType, newUsername);
+
+            model.addAttribute("altUsernames", altUsernames);
+
             return "updateUsernameNewUsernameTakenResult";
         } else if (!this.newUsernameValid(newUsername)) {
             return "updateUsernameInvalidNewUsernameResult";

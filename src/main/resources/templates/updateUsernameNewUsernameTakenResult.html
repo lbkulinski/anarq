@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:th="https://www.thymeleaf.org">
     <head>
         <title>Update Username</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -7,7 +7,12 @@
 
     <body>
         <h1>Update Username</h1>
-        <p>The specified username is already taken!</p>
+        <p>The specified username is already taken! Some alternatives are:</p>
+        <ul>
+            <th:block th:each="altUsername: ${altUsernames}">
+                <li th:text="${altUsername}"></li>
+            </th:block>
+        </ul>
         <a href="/updateUsername">Make another update</a>
     </body>
 </html>
