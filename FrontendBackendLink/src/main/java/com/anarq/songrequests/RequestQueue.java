@@ -11,6 +11,7 @@ import com.anarq.core.*;
 	
 	Author(s):
 		Nick
+		Patrick
 */
 class VotesComparator implements Comparator<SongRequest> { 
 
@@ -18,10 +19,10 @@ class VotesComparator implements Comparator<SongRequest> {
     @Override
     public int compare(SongRequest song1, SongRequest song2) 
     { 
-        if (song1.votes < song2.votes) {
+        if (song1.getVotes() < song2.getVotes()) {
             return 1; 
         }
-        else if (song1.votes > song2.votes) {
+        else if (song1.getVotes() > song2.getVotes()) {
             return -1; 
         }
         else {
@@ -72,12 +73,12 @@ public class RequestQueue {
 
 	/* Adds a song to the request queue */
     public boolean addSong(SongRequest song) {
-        if (!musicChooser.isValidGenre(song.genre)) {
-            System.out.println("Request Failed: Genre (" + song.genre + ") is not accepted in the queue");
+        if (!musicChooser.isValidGenre(song.getGenre())) {
+            System.out.println("Request Failed: Genre (" + song.getGenre() + ") is not accepted in the queue");
             return false;
         }
         if (songQueue.contains(song)) {
-            System.out.println("Request Failed: Queue already contains " + song.name);
+            System.out.println("Request Failed: Queue already contains " + song.getName());
             return false;
         }
 
@@ -127,7 +128,7 @@ public class RequestQueue {
 
 	/* Attempt to remove a song */
     public boolean removeSong(SongRequest song, ConnectedClient client) {
-        if ((client.ipAddress.equals(song.clientIp) || (client.permissionLevel == Permission.DJ)) && !song.playing) {
+        if ((client.getIpAddress().equals(song.getClientIp()) || (client.getPermissionLevel() == Permission.DJ)) && !song.isPlaying()) {
             boolean ret = songQueue.remove(song);
             if (isEmpty()) {
                 this.autoDJ = true;
@@ -135,7 +136,7 @@ public class RequestQueue {
             return ret;
         }
         else {
-            if (song.playing) {
+            if (song.isPlaying()) {
                 System.out.println("You can not remove a song that is playing");
             }
             else {
@@ -171,11 +172,21 @@ public class RequestQueue {
         return songQueue.isEmpty();
     }
 
+	/* Returns the song currently being played */
+	public SongRequest getCurrentSong() {
+		return currentSong;
+	}
+	
+	/* Returns the queue of songs to being played */
+	public PriorityQueue<SongRequest> getSongQueue() {
+		return songQueue;
+	}
+
 	/* Print a representation of the queue out into the console */
     public void printQueue() {
         System.out.println("Queue <");
         for (SongRequest song : songQueue) {
-            System.out.println("    " + song.name);
+            System.out.println("    " + song.getName());
         }
         System.out.println(">");
     }

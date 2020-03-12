@@ -20,7 +20,7 @@ public class Session {
 	/* Initalizes a new session */
 	public Session () {
 	  
-		setId((long) (Math.random() * 1000000));
+		id = ((long) (Math.random() * 1000000));
 	  
 		/* DUMMY CODE, FOR TESTING PURPOESES ONLY */
 		/* TODO: REMOVE DUMMY CODE */
@@ -36,12 +36,12 @@ public class Session {
 	
 	/* Returns the current song being played */
 	public SongRequest getCurrentSong() {
-		return songRequestQueue.currentSong;
+		return songRequestQueue.getCurrentSong();
 	}
 	
 	/* Returns the list of songs currently in the queue */
 	public List<SongRequest> getSongRequests() {
-		return new ArrayList<SongRequest>(songRequestQueue.songQueue);
+		return new ArrayList<SongRequest>(songRequestQueue.getSongQueue());
 	}
 	
 	/* Returns a list of connected clients */

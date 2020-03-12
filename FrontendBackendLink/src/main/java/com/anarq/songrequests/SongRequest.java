@@ -84,6 +84,11 @@ public class SongRequest {
     public String getClientIp() {
         return clientIp;
     }
+	
+	/* Returns if the music is playing */
+    public boolean isPlaying() {
+        return playing;
+    }
 
 	/* Compare two song requests */
     @Override
