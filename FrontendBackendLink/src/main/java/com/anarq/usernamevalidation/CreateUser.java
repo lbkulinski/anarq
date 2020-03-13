@@ -1,3 +1,5 @@
+package com.anarq.usernamevalidation;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.BulkWriteOperation;
 import com.mongodb.BulkWriteResult;
@@ -9,14 +11,20 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.ParallelScanOptions;
 import com.mongodb.ServerAddress;
-
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Set;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-public class createUser {
+/* 
+	CreateUser
+		Master class for handling User Creation for database activities.
+	
+	Author(s):
+		Siddarth
+*/
+public class CreateUser {
 
     protected String firstName;
     protected String lastName;
@@ -26,7 +34,7 @@ public class createUser {
     protected int birthMonth;
     protected int birthYear;
 
-    public createUser(String firstName, String lastName, String username, int birthDay, int birthMonth, int birthYear) {
+    public CreateUser(String firstName, String lastName, String username, int birthDay, int birthMonth, int birthYear) {
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -43,7 +51,7 @@ public class createUser {
      * @return 1 if the user was successfully added or 0 if the user was not added to the database
      */
     public int addUser() {
-
+		
         try {
             MongoClient mongoClient = new MongoClient();
 
@@ -57,9 +65,9 @@ public class createUser {
 
 
             DB userDatabase = mongoClient.getDB("Insert name of  DB here");
-            DBCollection collection = database.getCollection("Insert name of Collections here");
-        <p > collection.insert(newUser);
-        } catch (UnknownHostException e) {
+            DBCollection collection = userDatabase.getCollection("Insert name of Collections here");
+			collection.insert(newUser);
+        } catch (Exception e) {
             return 0;
         }
         return 1;

@@ -1,8 +1,22 @@
+package com.anarq.usernamevalidation;
+
+import java.io.*;
+
+/* 
+	PasswordValidation
+		Master class for Password Validation activity.
+	
+	Author(s):
+		Siddarth
+		Patrick
+*/
 public class PasswordValidation {
 
+	// Private Variables
     private final static String salt = "ANARQ";
     private String password;
 
+	/* Constructs a new PasswordValidation Class */
     public PasswordValidation (String pswrd) {
         password = pswrd;
     }
@@ -11,7 +25,6 @@ public class PasswordValidation {
      * Driver function to check if the password meets our requirements
      * @return True if it meets our requirements and false if it doesn't
      */
-
     public boolean validatePassword(){
 
 
@@ -37,7 +50,6 @@ public class PasswordValidation {
      * Helper function to check if the password contains any numbers
      * @return True if the password contains a digit and false if it doesn't
      */
-
     public boolean containsNumbers() {
 
         for (int i = 0; i < password.length(); i++) {
@@ -52,7 +64,6 @@ public class PasswordValidation {
      * Helper function to check if the password contains any special characters
      * @return True if the password contains a special character and false if it doesn't
      */
-
     public boolean containsSpecialCharacters() {
 
         for (int i = 0; i < password.length(); i++) {
@@ -77,7 +88,6 @@ public class PasswordValidation {
      * Helper function to check if the password contains any upper case Letters
      * @return True if the password contains a upper case character and false if it doesn't
      */
-
     public boolean containsUpperCaseCharacters() {
 
         for (int i = 0; i < password.length(); i++) {
@@ -92,7 +102,6 @@ public class PasswordValidation {
      * Helper function to check if the password contains any upper case Letters
      * @return True if the password contains a upper case character and false if it doesn't
      */
-
     public boolean containsLowerCaseCharacters() {
 
         for (int i = 0; i < password.length(); i++) {

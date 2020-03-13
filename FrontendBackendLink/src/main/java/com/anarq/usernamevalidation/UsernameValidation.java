@@ -1,9 +1,21 @@
+package com.anarq.usernamevalidation;
+
 import java.io.*;
 
+/* 
+	UsernameValidation
+		Master class for Username Validation activity.
+	
+	Author(s):
+		Siddarth
+		Patrick
+*/
 public class UsernameValidation {
 
-    String username;
+	// Private Variables
+    private String username;
 
+	/* Constructs a new UsernameValidation Class */
     public UsernameValidation(String name) {
         username = name;
     }
@@ -14,13 +26,11 @@ public class UsernameValidation {
      * @return True if there is a 'bad word' in the username
      * @throws IOException
      */
-
     public boolean hasBadWords () throws IOException{
 
         BufferedReader br = null;
         try {
             File f = new File("./BadWords.txt");
-//            File f = new File("/Users/sidmad/Desktop/Projects Folder/Purdue/Spring 2020/CS 307/src/BadWords.txt");
             br = new BufferedReader(new FileReader(f));
         } catch (FileNotFoundException f) {
             System.out.println("\n\n FILE NOT FOUND \n\n");

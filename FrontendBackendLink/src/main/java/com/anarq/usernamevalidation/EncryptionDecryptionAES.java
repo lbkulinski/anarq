@@ -1,19 +1,27 @@
+package com.anarq.usernamevalidation;
+
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-public class EncryptionDecryptionAES {
-
-    static Cipher cipher;
-
-    /*
-        Code derived from:
+/* 
+	EncryptionDecryptionAES
+		Handles Encryption and Decryption of data for Anarq
+	
+	Author(s):
+		Siddarth
+		
+	Code derived from:
             https://stackoverflow.com/questions/10303767/encrypt-and-decrypt-in-java
             https://javapapers.com/java/java-symmetric-aes-encryption-decryption-using-jce/
-     */
+		
+*/
+public class EncryptionDecryptionAES {
 
+	// Private Variables
+    private static Cipher cipher;
 
     /**
      * Function to accept a plain text, encrypt it and save the new encrypted Password
