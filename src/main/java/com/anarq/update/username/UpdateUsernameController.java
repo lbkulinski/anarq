@@ -5,7 +5,7 @@ import java.util.Set;
 import com.anarq.update.UserType;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
-import com.anarq.update.UpdateUtils;
+import com.anarq.update.ValidationUtils;
 import java.io.BufferedReader;
 import java.util.HashSet;
 import java.io.FileReader;
@@ -66,7 +66,7 @@ public final class UpdateUsernameController {
 
             altUsername0 = String.format("%s%d", username, randomNumber);
 
-            exists = UpdateUtils.userPresent(userType, altUsername0);
+            exists = ValidationUtils.userPresent(userType, altUsername0);
 
             iterationCount++;
         } while (exists);
@@ -85,7 +85,7 @@ public final class UpdateUsernameController {
 
             exists = Objects.equals(altUsername1, altUsername0);
 
-            exists |= UpdateUtils.userPresent(userType, altUsername1);
+            exists |= ValidationUtils.userPresent(userType, altUsername1);
 
             iterationCount++;
         } while (exists);
@@ -106,7 +106,7 @@ public final class UpdateUsernameController {
 
             exists |= Objects.equals(altUsername2, altUsername1);
 
-            exists |= UpdateUtils.userPresent(userType, altUsername2);
+            exists |= ValidationUtils.userPresent(userType, altUsername2);
 
             iterationCount++;
         } while (exists);
@@ -259,13 +259,13 @@ public final class UpdateUsernameController {
 
         newUsername = newUsername.toLowerCase();
 
-        if (!UpdateUtils.userPresent(userType, currentUsername)) {
+        if (!ValidationUtils.userPresent(userType, currentUsername)) {
             return "updateUsernameUserNotFoundResult";
-        } else if (!UpdateUtils.passwordCorrect(userType, currentUsername, password)) {
+        } else if (!ValidationUtils.passwordCorrect(userType, currentUsername, password)) {
             return "updateUsernameIncorrectPasswordResult";
         } else if (Objects.equals(currentUsername, newUsername)) {
             return "updateUsernameNoChangeResult";
-        } else if (UpdateUtils.userPresent(userType, newUsername)) {
+        } else if (ValidationUtils.userPresent(userType, newUsername)) {
             Set<String> altUsernames = this.getAltUsernames(userType, newUsername);
 
             model.addAttribute("altUsernames", altUsernames);

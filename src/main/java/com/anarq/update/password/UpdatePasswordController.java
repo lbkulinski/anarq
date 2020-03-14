@@ -18,7 +18,7 @@ import org.springframework.ui.Model;
 import com.anarq.update.UserInformation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import com.anarq.update.UpdateUtils;
+import com.anarq.update.ValidationUtils;
 
 /**
  * A controller for updating a user's password.
@@ -149,9 +149,9 @@ public class UpdatePasswordController {
 
         username = username.toLowerCase();
 
-        if (!UpdateUtils.userPresent(userType, username)) {
+        if (!ValidationUtils.userPresent(userType, username)) {
             return "updatePasswordUserNotFoundResult";
-        } else if (!UpdateUtils.passwordCorrect(userType, username, password)) {
+        } else if (!ValidationUtils.passwordCorrect(userType, username, password)) {
             return "updatePasswordIncorrectPasswordResult";
         } else if (Objects.equals(password, newPassword)) {
             return "updatePasswordNoChangeResult";

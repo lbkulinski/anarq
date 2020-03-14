@@ -12,19 +12,19 @@ import com.mongodb.client.model.Filters;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 /**
- * A set of utility methods used by account updates.
+ * A set of validation utility methods used by account operations.
  *
  * @author Logan Kulinski, lbk@purdue.edu
- * @version March 13, 2020
+ * @version March 14, 2020
  */
-public final class UpdateUtils {
+public final class ValidationUtils {
     /**
-     * Constructs a newly allocated {@code UpdateUtils} objects.
+     * Constructs a newly allocated {@code ValidationUtils} objects.
      *
-     * @throws UnsupportedOperationException if an {@code UpdateUtils} object is attempting to be created
+     * @throws UnsupportedOperationException if an {@code ValidationUtils} object is attempting to be created
      */
-    private UpdateUtils() {
-        throw new UnsupportedOperationException("an UpdateUtils object is attempting to be created");
+    private ValidationUtils() {
+        throw new UnsupportedOperationException("an ValidationUtils object is attempting to be created");
     } //UpdateUtils
 
     /**
