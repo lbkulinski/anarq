@@ -239,7 +239,7 @@ public final class UpdateUsernameController {
     public String updateUsernameForm(Model model) {
         model.addAttribute("userInformation", new UserInformation());
 
-        return "updateUsername";
+        return "updateUsernameForm";
     } //updatePasswordForm
 
     /**
@@ -260,11 +260,11 @@ public final class UpdateUsernameController {
         newUsername = newUsername.toLowerCase();
 
         if (!UpdateUtils.userPresent(userType, currentUsername)) {
-            return "updateUsernameNotFoundResult";
+            return "updateUsernameUserNotFoundResult";
         } else if (!UpdateUtils.passwordCorrect(userType, currentUsername, password)) {
             return "updateUsernameIncorrectPasswordResult";
         } else if (Objects.equals(currentUsername, newUsername)) {
-            return "updateUsernameSameResult";
+            return "updateUsernameNoChangeResult";
         } else if (UpdateUtils.userPresent(userType, newUsername)) {
             Set<String> altUsernames = this.getAltUsernames(userType, newUsername);
 
