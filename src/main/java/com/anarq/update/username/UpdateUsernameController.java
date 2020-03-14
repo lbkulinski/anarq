@@ -1,26 +1,25 @@
 package com.anarq.update.username;
 
-import com.anarq.update.UserType;
 import org.springframework.stereotype.Controller;
+import java.util.Set;
+import com.anarq.update.UserType;
+import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
+import com.anarq.update.UpdateUtils;
+import java.io.BufferedReader;
+import java.util.HashSet;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import java.util.Objects;
+import com.mongodb.client.result.UpdateResult;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.FindIterable;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.concurrent.ThreadLocalRandom;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import com.mongodb.client.result.UpdateResult;
 import com.mongodb.client.model.Updates;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 import com.anarq.update.UserInformation;
@@ -31,144 +30,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
  * A controller for updating a user's username.
  *
  * @author Logan Kulinski, lbk@purdue.edu
- * @version March 11, 2020
+ * @version March 13, 2020
  */
 @Controller
 public final class UpdateUsernameController {
-    /**
-     * Returns whether or not a user with the specified username and user type is present in the database.
-     *
-     * @param userType the user type to be used in the operation
-     * @param username the username to be used in the operation
-     * @return {@code true}, if a user with the specified username and user type is present in the database and
-     * {@code false} otherwise
-     * @throws NullPointerException if the specified user type or username is {@code null}
-     */
-    private boolean userPresent(UserType userType, String username) {
-        String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
-        String databaseUsername;
-        String databasePassword;
-        String uri;
-        MongoClient client;
-        String databaseName = "user-database";
-        MongoDatabase userDatabase;
-        String collectionName;
-        MongoCollection<Document> collection;
-        Bson filter;
-        String fieldName = "username";
-        FindIterable<Document> results;
-        boolean present;
-
-        Objects.requireNonNull(userType, "the specified user type is null");
-
-        Objects.requireNonNull(username, "the specified username is null");
-
-        databaseUsername = System.getProperty("database-username");
-
-        databasePassword = System.getProperty("database-password");
-
-        uri = String.format(format, databaseUsername, databasePassword);
-
-        client = MongoClients.create(uri);
-
-        userDatabase = client.getDatabase(databaseName);
-
-        switch (userType) {
-            case DJ:
-                collectionName = "djs";
-                break;
-            case JAMMER:
-                collectionName = "jammers";
-                break;
-            default:
-                throw new IllegalStateException(String.format("unexpected user type: %s", userType));
-        } //end switch
-
-        collection = userDatabase.getCollection(collectionName);
-
-        filter = Filters.eq(fieldName, username);
-
-        results = collection.find(filter);
-
-        present = results.first() != null;
-
-        client.close();
-
-        return present;
-    } //presentInDatabase
-
-    /**
-     * Returns whether or not a user with the specified username entered the correct password.
-     *
-     * @param userType the user type to be used in the operation
-     * @param username the username to be used in the operation
-     * @param password the password to be used in the operation
-     * @return {@code true}, if a user with the specified username entered the correct password and {@code false}
-     * otherwise
-     * @throws NullPointerException if the specified user type, username, or password is {@code null}
-     */
-    private boolean passwordCorrect(UserType userType, String username, String password) {
-        String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
-        String databaseUsername;
-        String databasePassword;
-        String uri;
-        MongoClient client;
-        String databaseName = "user-database";
-        MongoDatabase userDatabase;
-        String collectionName;
-        MongoCollection<Document> collection;
-        Bson filter;
-        String fieldName = "username";
-        FindIterable<Document> results;
-        Document result;
-        String readPasswordHash;
-
-        Objects.requireNonNull(userType, "the specified user type is null");
-
-        Objects.requireNonNull(username, "the specified username is null");
-
-        Objects.requireNonNull(password, "the specified password is null");
-
-        databaseUsername = System.getProperty("database-username");
-
-        databasePassword = System.getProperty("database-password");
-
-        uri = String.format(format, databaseUsername, databasePassword);
-
-        client = MongoClients.create(uri);
-
-        userDatabase = client.getDatabase(databaseName);
-
-        switch (userType) {
-            case DJ:
-                collectionName = "djs";
-                break;
-            case JAMMER:
-                collectionName = "jammers";
-                break;
-            default:
-                throw new IllegalStateException(String.format("unexpected user type: %s", userType));
-        } //end switch
-
-        collection = userDatabase.getCollection(collectionName);
-
-        filter = Filters.eq(fieldName, username);
-
-        results = collection.find(filter);
-
-        result = results.first();
-
-        if (result == null) {
-            throw new IllegalStateException("the user with the specified username is not present in the database");
-        } //end if
-
-        readPasswordHash = result.get("password-hash", String.class);
-
-        client.close();
-
-        return BCrypt.checkpw(password, readPasswordHash);
-    } //correctPassword
-
     /**
      * Returns a set of alternative usernames that are available and based on the specified username.
      *
@@ -201,7 +66,7 @@ public final class UpdateUsernameController {
 
             altUsername0 = String.format("%s%d", username, randomNumber);
 
-            exists = userPresent(userType, altUsername0);
+            exists = UpdateUtils.userPresent(userType, altUsername0);
 
             iterationCount++;
         } while (exists);
@@ -220,7 +85,7 @@ public final class UpdateUsernameController {
 
             exists = Objects.equals(altUsername1, altUsername0);
 
-            exists |= userPresent(userType, altUsername1);
+            exists |= UpdateUtils.userPresent(userType, altUsername1);
 
             iterationCount++;
         } while (exists);
@@ -241,7 +106,7 @@ public final class UpdateUsernameController {
 
             exists |= Objects.equals(altUsername2, altUsername1);
 
-            exists |= userPresent(userType, altUsername2);
+            exists |= UpdateUtils.userPresent(userType, altUsername2);
 
             iterationCount++;
         } while (exists);
@@ -394,13 +259,13 @@ public final class UpdateUsernameController {
 
         newUsername = newUsername.toLowerCase();
 
-        if (!this.userPresent(userType, currentUsername)) {
+        if (!UpdateUtils.userPresent(userType, currentUsername)) {
             return "updateUsernameNotFoundResult";
-        } else if (!this.passwordCorrect(userType, currentUsername, password)) {
+        } else if (!UpdateUtils.passwordCorrect(userType, currentUsername, password)) {
             return "updateUsernameIncorrectPasswordResult";
         } else if (Objects.equals(currentUsername, newUsername)) {
             return "updateUsernameSameResult";
-        } else if (this.userPresent(userType, newUsername)) {
+        } else if (UpdateUtils.userPresent(userType, newUsername)) {
             Set<String> altUsernames = this.getAltUsernames(userType, newUsername);
 
             model.addAttribute("altUsernames", altUsernames);
