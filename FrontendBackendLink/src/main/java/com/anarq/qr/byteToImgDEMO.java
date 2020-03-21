@@ -1,5 +1,8 @@
+package com.anarq.qr;
+
 import java.io.*;
 import java.util.Base64;
+
 public class byteToImgDEMO {
     public static void main(String args[]) throws Exception {
 
