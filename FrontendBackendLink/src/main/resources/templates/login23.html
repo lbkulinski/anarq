@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>AnarQ Portal</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link href="./style_login.css" type="text/css" rel="stylesheet"/>
+	<link rel="icon" href="./AnarQIcon.png"/>
+	
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+	
+</head>
+<body>
+
+	<div id="app">
+
+		<img src="./AnarQLogo.png" width="500px"/>
+		<br>
+		<input type="text" v-model="ip" placeholder="Enter Key" />
+		<br>
+		<input type="text" v-model="username" placeholder="Enter Username" />
+		<br>
+		<input type="button" @click="login()" value="Connect"/> <input type="button" value="Reset"/>
+	
+	</div>
+	
+	<script>
+		
+		new Vue({
+			el: '#app',
+			data: {
+				ip : "SERVERTEST0",
+				username : "DEFAULT",
+				connected : "false"
+			},
+			
+			methods: {
+				
+				login() {
+				
+					axios.post('/login-client', {
+						ip: this.ip,
+						username: this.username
+					})
+					.then(resp => this.connected = resp),
+					
+					console.log(this.connected),
+	
+					window.location.href = 'clienthome.html';
+					
+					
+				}
+				
+			}
+			
+		
+		});
+		
+	</script>
+	
+</body>
+</html>

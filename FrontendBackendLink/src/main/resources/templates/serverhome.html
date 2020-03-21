@@ -1,0 +1,155 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>AnarQ - Connected to Host!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+	<link href="./style.css" type="text/css" rel="stylesheet"/>
+	<link rel="icon" href="./AnarQIcon.png"/>
+	
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+	
+</head>
+<body>
+	
+	<div id="app">
+		
+		
+		
+		<center>
+			<img src="./AnarQLogo.png" width="500px"/>
+		</center>
+		
+		<div class="component">
+			<h3>You are Hosting!</h3>	
+			<p>Give people this code to connect:</p>
+			<h1> {{ host }} </h1>
+			<a href="/" @click="endSession()">End Session</a>
+		</div>
+		<br>
+		<div class="component">
+			<h2>Currently Playing...</h2>	
+			<br>
+			<img src="./unknown.png" width="256px" height="256px" align="left"/>
+			<h1> {{ currentSong.name }} </h1>
+			<h2> {{ currentSong.album }} </h2>
+			<h2> {{ currentSong.artist }} </h2>
+			<h3>Requested by  {{ currentSong.clientId }}  </h3>
+			<input type="button" value="Skip Song" />
+		</div>
+		
+		<!-- Left Column -->
+		
+		<div class="column">
+			<div class="component">
+				<h2>Connected Users</h2>
+				<div class="songRequest" v-for="user in connectedUsers">
+					<img src="./unknown.png" width="128px" height="128px" align="left"/>
+					<h2> {{ user.name }} </h2>
+					<h3> {{ user.ip }} </h3>
+					<h4> Request count: {{ user.requestCount }} </h4>
+					<input type="button" @click="kickUser(user.id)" value="Kick User" />
+				</div>
+			</div>
+		</div>
+		
+		<!-- Right Column -->
+		
+		<div class="column">
+			<div class="component">
+				<h2>Current Playlist</h2>
+				<div class="songRequest" v-for="song in songRequests">
+					<img src="./unknown.png" width="128px" height="128px" align="left"/>
+					<h2> {{ song.name }} </h2>
+					<h3> {{ song.album }} </h3>
+					<h3> {{ song.artist }} </h3>
+					<h4> Requested by {{ song.clientId }} </h4>
+					<h4> Karma: {{ song.votes }} </h4>
+					<input type="button" @click="removeSong(song.id)" value="Remove Song" />
+				</div>
+			</div>
+		</div>
+	
+	</div>
+	
+	<script>
+		
+		new Vue({
+			el: '#app',
+			data: {
+				host : "123456",
+				username : "defualt-username",
+				songRequests: [],
+				currentSong: [],
+				connectedUsers: []
+			},
+			
+			mounted() {
+			
+				axios.get('/get-server-info')
+					.then(resp => this.host = resp.data)
+					.catch(err => console.log(err)),
+		
+				this.interval = setInterval(() => this.fetchInfo(), 1000)
+
+			},
+			
+			methods: {
+				
+				fetchInfo() {
+				
+					this.fetchSongs(),
+					this.fetchUsers(),
+					this.fetchCurrentSong()
+				
+				},
+				
+				endSession: function() {
+				
+					axios.put('/' + this.host + '/end-session'),
+					this.fetchSongs()
+				
+				},
+				
+				removeSong: function(id) {
+				
+					axios.put('/' + this.host + '/remove-request/' + id),
+					this.fetchSongs()
+				
+				},
+				
+				kickUser: function(id) {
+				
+					axios.put('/' + this.host + '/kick-user/' + id),
+					this.fetchUsers()
+				
+				},
+				
+				fetchUsers() {
+					axios.get('/' + this.host + '/connected-users')
+					.then(resp => this.connectedUsers = resp.data)
+					.catch(err => console.log(err))
+				},
+				
+				fetchSongs() {
+					axios.get('/' + this.host + '/song-requests')
+					.then(resp => this.songRequests = resp.data)
+					.catch(err => console.log(err))
+				},
+				
+				fetchCurrentSong() {
+					axios.get('/' + this.host + '/current-song')
+					.then(resp => this.currentSong = resp.data)
+					.catch(err => console.log(err))
+				}
+				
+			}
+			
+		
+		});
+		
+	</script>
+	
+</body>
+</html>

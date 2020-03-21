@@ -1,0 +1,148 @@
+/* Font Definitions*/
+@font-face {
+	font-family: 'Bahnschrift Regular';
+	font-style: normal;
+	font-weight: normal;
+	src: local('Bahnschrift Regular'), url('Fonts/BAHNSCHRIFT.woff') format('woff');
+}
+
+body {
+	
+	color: #FFFFFF;
+	background: url(background.png);
+	background-size:100% 100%;
+	
+	border-radius: 25px;
+	border-color: #000000;
+	border-width: 2px;
+	
+	font-family: Bahnschrift Regular;
+	font-size:20px;
+	
+}
+
+div.column {
+	
+	
+	margin:1%;
+	float:left;
+	width:48%;
+	
+}
+
+div.component {
+	
+	text-align:center;
+	background-color: #111111;
+	border-radius: 25px;
+	
+}
+div.component img {
+	border-radius: 25px;
+	padding:5px;
+	margin:5px;
+}
+
+div.songRequest {
+	border-radius: 25px;
+	padding:5px;
+	margin:5px;
+	
+	background-color: #010101;
+	background: url(container.png);
+	background-size:100% 100%;
+	
+	text-align:right;
+}
+div h4 {
+	padding:5px;
+	margin:5px;
+}
+div h3 {
+	padding:5px;
+	margin:5px;
+}
+div h2 {
+	padding:5px;
+	margin:5px;
+}
+div h1 {
+	padding:5px;
+	margin:5px;
+}
+div.songRequest img {
+	border-radius: 25px;
+	padding:5px;
+	margin:5px;
+}
+div.songRequest input {
+	border-radius: 25px;
+	width:25%;
+	font-size:15px;
+}
+
+input {
+	
+	margin: 10px 0;
+	
+	font-family: Bahnschrift Regular;
+	font-size:25px;
+	text-align:center;
+	border-radius: 25px;
+	
+	color: #FFFFFF;
+	
+	background: #261e1e;
+	border-color: #160e0e;
+	
+}
+
+input [type="text"] {
+	
+	
+	text-align:center;
+	font-family: Bahnschrift Regular;
+	font-size:25px;
+	
+	background: #261e1e;
+	border-color: #160e0e;
+	
+}
+
+input[type="text"], textarea {
+
+  background-color : #261e1e; 
+
+}
+
+h1 {
+	
+	font-size:100px;
+	
+}
+
+h2 {
+	
+	font-size:30px;
+	
+}
+
+
+a:link {
+  color: #DDDDDD;
+}
+
+/* visited link */
+a:visited {
+  color: #AAAAAA;
+}
+
+/* mouse over link */
+a:hover {
+  color: #FFFFFF;
+}
+
+/* selected link */
+a:active {
+  color: #AAAAAA;
+}
