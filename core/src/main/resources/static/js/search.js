@@ -58,5 +58,14 @@ function generateSongHTML(song) {
 function requestSong(songId) {
 	
 	console.log(songId);
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/request-song?sessionId=' + getCurrentSessionId() + '&songId=' + songId;
+	searchRequest.open('PUT', searchPath);
+	searchRequest.onload = function() {
+		
+		// If it's successful, response goes here
+		
+	};
+	searchRequest.send();
 	
 }
