@@ -24,7 +24,7 @@ public class SearchController {
 	}
 	
 	@PutMapping("/request-song")
-	public boolean searchForSongsWithQuery(
+	public boolean addSongRequest(
 	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
 	@RequestParam(value="songId", defaultValue="no_song_id")String songId) {
 		
@@ -33,7 +33,7 @@ public class SearchController {
 		if (session == null) {
 			System.err.println("Error: Request for non-existant session was created!\n ID: "
 				+ sessionId);
-			return null;
+			return false;
 		}
 		
 		// TODO: Song request added to server
