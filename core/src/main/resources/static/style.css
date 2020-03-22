@@ -1,14 +1,16 @@
 body {
 	
 	font-family: Arial;
-	font-size: 3vh;
+	font-size: 20px;
 	color: white;
 	text-align: center;
 	
 	background-image: url("images/background.png");
 	background-repeat: no-repeat;
-	background-size: 100%, 100%;
+	background-size: cover;
 	background-attachment: fixed;
+	margin:auto;
+	max-width: 700px;
 	
 }
 
@@ -35,17 +37,19 @@ body p {
 body input {
 	
 	border-radius: 30px;
-	margin: 0;
-	height: 4vh;
-	font-size: 2vh;
+	margin-top: 0;
+	margin-bottom: 0;
+	height: 50px;
+	font-size: 30px;
+	text-align:center;
 	
 }
 body button {
 	
 	border-radius: 30px;
 	margin: 10px;
-	height: 4vh;
-	font-size: 3vh;
+	height: 40px;
+	font-size: 20px;
 	text-align: center;
 	
 }
@@ -56,16 +60,19 @@ body button {
 }
 .centered-in-frame {
 	
-	padding: 20vh 0;
+	margin: 0;
 	
 }
+
 .column {
 	
+	min-height: 500px;
 	width: 48%;
 	float: right;
 	background-color: rgba(30, 30, 30, 0.8);
 	border-radius: 30px;
 	margin: 1%;
+	overflow:hidden;
 	
 }
 .song-div {
@@ -73,12 +80,25 @@ body button {
 	background-color: rgba(10, 10, 10, 0.8);
 	border-radius: 30px;
 	margin: 1%;
+	font-size: 24px;
 	
 }
+
 .client-div {
 	
 	background-color: rgba(10, 10, 10, 0.8);
 	border-radius: 30px;
 	margin: 1%;
+	font-size: 24px;
+	
+}
+
+.signin button {
+	
+	border-radius: 30px;
+	margin-top: 0;
+	margin-bottom: 0;
+	height: 25px;
+	font-size: 15px;
 	
 }

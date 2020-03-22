@@ -37,6 +37,12 @@ function renderUsersToHTML(clientArray) {
 		
 	}
 	
+	if (clientArray.length == 0) {
+		
+		connectedClientContainer.insertAdjacentHTML('beforeend', "<h2>No Connected Jammers...</h2>");
+		
+	}
+	
 	connectedClientContainer.insertAdjacentHTML('beforeend', "</ul>");
 	
 }

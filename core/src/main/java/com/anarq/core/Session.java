@@ -22,7 +22,7 @@ public class Session {
 	public Session() {
 		
 		// Generate a Session ID 
-		sessionId = String.format("%06x", (int) ((float)Math.random() * 10000000.0f));
+		sessionId = String.format("%06X", (int) ((float)Math.random() * 10000000.0f));
 		System.out.println("New Session created with ID " + sessionId + ".");
 		
 		musicChooser = new MusicChooser();

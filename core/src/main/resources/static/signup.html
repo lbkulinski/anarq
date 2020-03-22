@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Sign Up for a new AnarQ account</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<header>
+		<div class="centered-in-frame">
+			
+			<image src="images/AnarQLogo.png" width="100%"></image>
+			<br>
+			<h2>Sign Up for a new Account</h2>
+			<div id="error-message"></div>
+			<br>
+			<p>Username: </p>
+			<input id="username" type="text" size="25"></input>
+			<br>
+			<p>Email: </p>
+			<input id="email" type="text" size="25"></input>
+			<br>
+			<p>Password:</p>
+			<input id="password" type="password" size="25"></input>
+			<br>
+			<p>Confirm Password:</p>
+			<input id="password-confirm" type="password" size="25"></input>
+			<br>
+			<button id="signin" type="button">Sign Up</button>
+			<br>
+			<br>
+			<br>
+			<button id="back" type="button" onclick="location.href = '/connect.html'">Return to Connect Page</button>
+		</div>
+	</header>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/cryptojs/3.1.2/rollups/aes.js"></script> 
+	<script type="text/javascript" src="js/currentsession.js"></script>
+</body>
+</html>
