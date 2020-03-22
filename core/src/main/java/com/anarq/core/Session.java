@@ -1,5 +1,6 @@
 package com.anarq.core;
 
+import java.util.*;
 import com.anarq.songrequests.*;
 
 /* 
@@ -15,6 +16,7 @@ public class Session {
 	private final String sessionId;
 	private MusicChooser musicChooser;
 	private RequestQueue requestQueue;
+	private List<ConnectedClient> connectedClients;
 	
 	/* Constructor */
 	public Session() {
@@ -25,14 +27,14 @@ public class Session {
 		
 		musicChooser = new MusicChooser();
 		requestQueue = new RequestQueue();
+		connectedClients = new ArrayList<ConnectedClient>();
 		
 	}
 	
 	/* Requests a new song for the RequestQueue */
 	public void requestSong(Song song, String requesterId) {
 		
-		SongRequest newSongRequest = new SongRequest(
-		(int)((float)Math.random() * 10000.0f), song, requesterId);
+		SongRequest newSongRequest = new SongRequest(song.getSongId(), song, requesterId);
 		
 		requestQueue.addSong(newSongRequest);
 		
@@ -56,6 +58,33 @@ public class Session {
 	public RequestQueue getRequestQueue() {
 		
 		return requestQueue;
+		
+	}
+	
+	public void addClient(ConnectedClient c) {
+		
+		connectedClients.add(c);
+		
+	}
+	
+	public void removeClient(ConnectedClient c) {
+		
+		
+	}
+	
+	/* Returns a reference to the current music queue of this session */
+	public ConnectedClient[] getConnectedClients() {
+		
+		ConnectedClient[] output = new ConnectedClient[connectedClients.size()];
+		Object[] array = connectedClients.toArray();
+		
+		for (int i = 0; i < connectedClients.size(); i++) {
+			
+			output[i] = (ConnectedClient) array[i];
+			
+		}
+		
+		return output;
 		
 	}
 	

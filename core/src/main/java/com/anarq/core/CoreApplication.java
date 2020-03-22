@@ -15,8 +15,6 @@ public class CoreApplication {
 		
 		SpringApplication.run(CoreApplication.class, args);
 		
-		SpotifyInteraction.searchTracks("Stairway To Heaven");
-		
 	}
 	
 	/* Creates a new Session and returns the created Session's ID */

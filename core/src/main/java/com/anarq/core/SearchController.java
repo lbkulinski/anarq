@@ -38,6 +38,7 @@ public class SearchController {
 		}
 		
 		// TODO: Song request added to server
+		session.requestSong(SpotifyGateway.getSongForSongId(songId), "default_user");
 		
 		return true;
 		

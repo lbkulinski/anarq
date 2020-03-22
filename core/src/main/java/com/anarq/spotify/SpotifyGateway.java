@@ -1,16 +1,72 @@
+package com.anarq.spotify;
+
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.miscellaneous.PlaylistTracksInformation;
 import com.wrapper.spotify.model_objects.specification.*;
+import com.wrapper.spotify.requests.data.tracks.*;
 import com.wrapper.spotify.requests.data.playlists.CreatePlaylistRequest;
 import com.wrapper.spotify.requests.data.playlists.GetPlaylistsTracksRequest;
 import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
+
+import com.anarq.core.*;
+import com.anarq.songrequests.*;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Test extends ClientCredentialsExample{
-    public static void main(String[] args) {
+public class SpotifyGateway extends ClientCredentialsExample{
+	
+	/* Searches for a list of songs that contain the query */
+	public static Song[] searchForSongs(String query) {
+		
+		clientCredentials_Sync();
+		SearchArtistsExample search = new SearchArtistsExample(spotifyApi, query);
+		
+		Song[] foundSongs = new Song[search.tracks.length];
+		for(int i = 0; i < search.tracks.length; i++) {
+		
+			foundSongs[i] = new Song(
+			search.tracks[i].getName(),
+			search.tracks[i].getAlbum().getName(),
+			search.tracks[i].getArtists()[0].getName(),
+			search.tracks[i].getId(),
+			search.tracks[i].getDurationMs()/1000,
+			search.tracks[i].getIsExplicit()
+			);
+			
+		}
+		
+		return foundSongs;
+		
+	}
+	
+	/* Returns a song based on it's ID */
+	public static Song getSongForSongId(String songId) {
+		
+		Track output = null;
+		
+		try {
+		
+			GetTrackRequest track = spotifyApi.getTrack(songId).build();
+			output = track.execute();
+		
+		} catch (SpotifyWebApiException | IOException e) {
+            System.out.println("Error: Spotify Error");
+        }
+		
+		Song newSong = new Song(output.getName(),
+			output.getAlbum().getName(),
+			output.getArtists()[0].getName(),
+			output.getId(),
+			output.getDurationMs()/1000,
+			output.getIsExplicit());
+		
+		return newSong;
+		
+	}
+	
+    public SpotifyGateway() {
         /* Search for song; top choice will be added to queue */
         clientCredentials_Sync();
         /**
@@ -29,8 +85,9 @@ public class Test extends ClientCredentialsExample{
 
 
 
-            SearchArtistsExample search = new SearchArtistsExample(spotifyApi, "love");
+			SearchArtistsExample search = new SearchArtistsExample(spotifyApi, "love");
         }
+		 
         //search object contains all search information to be stored in any way desired
 
         /**

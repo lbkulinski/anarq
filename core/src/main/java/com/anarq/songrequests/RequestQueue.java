@@ -178,7 +178,17 @@ public class RequestQueue {
 	
 	/* Returns the queue of songs to being played */
 	public SongRequest[] getSongQueue() {
-		return (SongRequest[]) songQueue.toArray();
+		
+		SongRequest[] output = new SongRequest[songQueue.size()];
+		Object[] array = songQueue.toArray();
+		
+		for (int i = 0; i < songQueue.size(); i++) {
+			
+			output[i] = (SongRequest) array[i];
+			
+		}
+		
+		return output;
 	}
 
 	/* Print a representation of the queue out into the console */

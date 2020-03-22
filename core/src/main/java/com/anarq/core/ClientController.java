@@ -1,5 +1,6 @@
 package com.anarq.core;
 
+import com.anarq.songrequests.*;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -58,6 +59,7 @@ public class ClientController {
 		}
 		
 		// TODO: Add client to Session
+		session.addClient(new ConnectedClient(username, username, Permission.JAMMER, null));
 		
 		// Redirect
 		return true;

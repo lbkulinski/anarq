@@ -13,14 +13,14 @@ import com.anarq.core.*;
 public class SongRequest {
 	
 	// Private Variables
-    private int id;
+    private String id;
 	private int votes;
 	private boolean playing;
     private Song songInfo;
     private String clientIp;
     
 	/* Initalizes a new SongRequest */
-    public SongRequest(int id, Song songInfo, String clientIp) {
+    public SongRequest(String id, Song songInfo, String clientIp) {
         this.id = id;
         this.votes = 0;
 		this.playing = false;
@@ -46,7 +46,7 @@ public class SongRequest {
     }
     
 	/* Returns the ID of the song request */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -92,7 +92,7 @@ public class SongRequest {
     }
 
 	/* Print the info pertaining to a song request */
-    public String printSongInfo() {
+    public String toString() {
         return (getName() + ": id(" + getId() + ") artist(" + getArtist() +") album(" + getAlbum() + ") genre(" + getGenre() + ") clientIp(" +
                 getClientIp() + ") voteScore(" + getVotes() + ")");
     }
