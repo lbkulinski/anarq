@@ -41,14 +41,14 @@ function generateSongHTML(song) {
 	
 	var htmlString = "";
 	
-	htmlString += "<li><div id=\"search-result\">";
+	htmlString += "<li><div class=\"song-div\"><div class=\"column\">";
 	htmlString += "<h1>" + song.songName + "</h1>";
 	htmlString += "<h2>on " + song.albumName + "</h2>";
 	htmlString += "<h3>by " + song.artistName + "</h3>";
 	htmlString += "<p>Duration: " + song.duration + "</p>";
 	htmlString += "<p>Explicit: " + song.isExplicit + "</p>";
 	htmlString += "<button type=\"button\" onclick=\"requestSong('" + song.songId + "')\">Request this Song</button>";
-	htmlString += "</div></li>";
+	htmlString += "</div></div><div class=\"column\"></div></li>";
 	
 	return htmlString;
 	

@@ -67,8 +67,16 @@ public class Session {
 		
 	}
 	
-	public void removeClient(ConnectedClient c) {
+	public void removeClient(String username) {
 		
+		for (int i = 0; i < connectedClients.size(); i++) {
+			
+			if (connectedClients.get(i).getName().equals(username)) {
+				connectedClients.remove(i);
+				break;
+			}
+			
+		}
 		
 	}
 	
@@ -79,9 +87,7 @@ public class Session {
 		Object[] array = connectedClients.toArray();
 		
 		for (int i = 0; i < connectedClients.size(); i++) {
-			
 			output[i] = (ConnectedClient) array[i];
-			
 		}
 		
 		return output;

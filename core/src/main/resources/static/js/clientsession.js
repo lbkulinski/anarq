@@ -44,12 +44,12 @@ function generateSongHTML(song) {
 	
 	var htmlString = "";
 	
-	htmlString += "<li><div id=\"search-result\">";
+	htmlString += "<div class=\"song-div\">";
 	htmlString += "<h1>" + song.name + "</h1>";
-	htmlString += "<h2>on " + song.album + "</h2>";
-	htmlString += "<h3>by " + song.artist + "</h3>";
-	htmlString += "<p>Duration: " + song.id + "</p>";
-	htmlString += "</div></li>";
+	htmlString += "<h2> " + song.album + "</h2>";
+	htmlString += "<h3> " + song.artist + "</h3>";
+	htmlString += "<p>ID: " + song.id + "</p>";
+	htmlString += "</div>";
 	
 	return htmlString;
 	

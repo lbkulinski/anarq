@@ -20,6 +20,7 @@ public class ClientController {
 		}
 		
 		// TODO: Add client to Session
+		session.addClient(new ConnectedClient(username, username, Permission.JAMMER, null));
 		
 		// Redirect
 		return true;
@@ -40,6 +41,7 @@ public class ClientController {
 		}
 		
 		// TODO: Remove client from Session
+		session.removeClient(username);
 		
 		// Redirect
 		return true;
@@ -57,9 +59,6 @@ public class ClientController {
 			System.err.println("Error: Auth Failed.");
 			return false;
 		}
-		
-		// TODO: Add client to Session
-		session.addClient(new ConnectedClient(username, username, Permission.JAMMER, null));
 		
 		// Redirect
 		return true;

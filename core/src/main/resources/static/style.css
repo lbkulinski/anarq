@@ -1,0 +1,84 @@
+body {
+	
+	font-family: Arial;
+	font-size: 3vh;
+	color: white;
+	text-align: center;
+	
+	background-image: url("images/background.png");
+	background-repeat: no-repeat;
+	background-size: 100%, 100%;
+	background-attachment: fixed;
+	
+}
+
+body h1 {
+	
+	margin: 10px;
+	
+}
+body h2 {
+	
+	margin: 10px;
+	
+}
+body h3 {
+	
+	margin: 10px;
+	
+}
+body p {
+	
+	margin: 10px;
+	
+}
+body input {
+	
+	border-radius: 30px;
+	margin: 0;
+	height: 4vh;
+	font-size: 2vh;
+	
+}
+body button {
+	
+	border-radius: 30px;
+	margin: 10px;
+	height: 4vh;
+	font-size: 3vh;
+	text-align: center;
+	
+}
+.bigtext {
+	
+	font-size: 400%;
+	
+}
+.centered-in-frame {
+	
+	padding: 20vh 0;
+	
+}
+.column {
+	
+	width: 48%;
+	float: right;
+	background-color: rgba(30, 30, 30, 0.8);
+	border-radius: 30px;
+	margin: 1%;
+	
+}
+.song-div {
+	
+	background-color: rgba(10, 10, 10, 0.8);
+	border-radius: 30px;
+	margin: 1%;
+	
+}
+.client-div {
+	
+	background-color: rgba(10, 10, 10, 0.8);
+	border-radius: 30px;
+	margin: 1%;
+	
+}

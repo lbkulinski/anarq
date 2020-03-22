@@ -48,11 +48,11 @@ function generateUserHTML(client) {
 	
 	console.log(client);
 	
-	htmlString += "<li><div id=\"result\">";
+	htmlString += "<div class=\"client-div\">";
 	htmlString += "<h2>" + client.name + "</h2>";
 	htmlString += "<p>" + client.permissionLevel + "</p>";
-	htmlString += "<button type=\"button\">Delete Request</button>";
-	htmlString += "</div></li>";
+	htmlString += "<button type=\"button\">Kick User</button>";
+	htmlString += "</div>";
 	
 	return htmlString;
 	
@@ -96,12 +96,13 @@ function generateSongHTML(song) {
 	
 	var htmlString = "";
 	
-	htmlString += "<li><div id=\"search-result\">";
+	htmlString += "<div class=\"song-div\">";
 	htmlString += "<h1>" + song.name + "</h1>";
-	htmlString += "<h2>on " + song.album + "</h2>";
-	htmlString += "<h3>by " + song.artist + "</h3>";
-	htmlString += "<p>Duration: " + song.id + "</p>";
-	htmlString += "</div></li>";
+	htmlString += "<h2> " + song.album + "</h2>";
+	htmlString += "<h3> " + song.artist + "</h3>";
+	htmlString += "<p>ID: " + song.id + "</p>";
+	htmlString += "<button type=\"button\">Delete Request</button>";
+	htmlString += "</div>";
 	
 	return htmlString;
 	

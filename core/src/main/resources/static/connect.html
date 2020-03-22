@@ -3,16 +3,24 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Connect to an AnarQ Session</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 	<header>
-		<h1>Join or Host a Session</h1>
-		<p>Enter session ID:</p>
-		<input id="sessionId" type="text" size="15"></input>
-		<input id="username" type="text" size="15"></input>
-		<button id="connect" type="button">Connect</button>
-		<br>
-		<button id="host" type="button">Host a new Session</button>
+		<div class="centered-in-frame">
+		<image src="images/AnarQLogo.png" width="50%"></image>
+			<h1>Join or Host a Session</h1>
+			<p>Session ID:</p>
+			<input id="sessionId" type="text" size="15"></input>
+			<br>
+			<p>Username:</p>
+			<input id="username" type="text" size="15"></input>
+			<br>
+			<button id="connect" type="button">Connect</button>
+			<br>
+			<p>Or</p>
+			<button id="host" type="button">Host Session</button>
+		</div>
 	</header>
 	
 	<script type="text/javascript" src="js/currentsession.js"></script>

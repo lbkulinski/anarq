@@ -3,12 +3,15 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Session Expired</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 	<header>
-		<h1>Session doesn't exist or has expired.</h1>
-		<p>Please return to the connect page and try again.</p>
-		<button id="back" type="button" onclick="location.href = '/connect.html'">Return to Connect Page</button>
+		<div class="centered-in-frame">
+			<h1>Session doesn't exist or has expired.</h1>
+			<p>Please return to the connect page and try again.</p>
+			<button id="back" type="button" onclick="location.href = '/connect.html'">Return to Connect Page</button>
+		</div>
 	</header>
 	
 	<script type="text/javascript" src="js/currentsession.js"></script>
