@@ -10,5 +10,5 @@ package com.anarq.songrequests;
 */
 public enum Permission 
 { 
-    DJ, JAMMER, BANNED, MUTED; 
+    DJ, JAMMER, ADMIN, MUTED; 
 }

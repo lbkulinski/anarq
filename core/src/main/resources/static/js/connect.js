@@ -47,17 +47,21 @@ hostButton.addEventListener("click", function(){
 		// Check if the connection was successful
 		var result = searchRequest.responseText;
 		
-		console.log(result);
-		
-		if (result != "true") {
+		if (result != null) {
 			
-			setCurrentHostSessionId(result);
+			var data = JSON.parse(searchRequest.responseText);
+			
+			setUsername(data.name);
+			setUserId(data.id);
+			setCurrentSessionId(data.hostSessionId);
+			setCurrentHostSessionId(data.hostSessionId);
+			
 			window.location.href="/sessionhost.html";
 		
 		}
 		else {
 			
-			// TODO: show alert to say session doesn't exist
+			// TODO: show alert to say session couldn't be created
 			
 		}
 		

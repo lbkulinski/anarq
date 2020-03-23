@@ -19,12 +19,26 @@ public class ConnectedClient {
 	private final boolean isRegistered;
     private final Permission permissionLevel;
     private LocalTime lastActive;
+	// Reserved for Host client
+	private final String hostSessionId;
 
 	/* Initalizes a new ConnectedClient*/
     public ConnectedClient(String name, boolean isRegistered, Permission permissionLevel) {
         this.name = name;
 		this.isRegistered = isRegistered;
         this.permissionLevel = permissionLevel;
+		this.hostSessionId = "NOT_HOST";
+		
+		id = generateId();
+		System.out.println(id);
+    }
+	
+	/* Initalizes a new ConnectedClient as a host*/
+    public ConnectedClient(String name, boolean isRegistered, String hostSessionId) {
+        this.name = name;
+		this.isRegistered = isRegistered;
+        this.permissionLevel = Permission.DJ;
+		this.hostSessionId = hostSessionId;
 		
 		id = generateId();
 		System.out.println(id);
@@ -54,4 +68,10 @@ public class ConnectedClient {
     public LocalTime getLastActive() {
         return this.lastActive;
     }
+	
+	/* Returns the Host ID of the client (If it's been initalized as a host) */
+    public String getHostSessionId() {
+        return this.hostSessionId;
+    }
+	
 }

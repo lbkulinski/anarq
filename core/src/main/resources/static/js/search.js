@@ -1,6 +1,22 @@
+var backButton = document.getElementById("back-button");
 var resultsContainer = document.getElementById("search-results");
 var searchButton = document.getElementById("search");
 var searchQuery = document.getElementById("query");
+
+
+setBackButton();
+
+// Generates a back button depending on if it's a host or a client
+function setBackButton() {
+
+	if(getCurrentSessionId() == getCurrentHostSessionId()) {
+		backButton.insertAdjacentHTML('beforeend', "<button id=\"back-to-home\" type=\"button\" onclick=\"location.href = '/sessionhost.html'\">Back to Session</button>");
+	}
+	else {
+		backButton.insertAdjacentHTML('beforeend', "<button id=\"back-to-home\" type=\"button\" onclick=\"location.href = '/session.html'\">Back to Session</button>");
+	}
+
+}
 
 // When the search button is clicked, send a request for songs on the server side.
 searchButton.addEventListener("click", function(){

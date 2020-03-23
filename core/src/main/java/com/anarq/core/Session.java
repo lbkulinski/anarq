@@ -17,6 +17,7 @@ public class Session {
 	private MusicChooser musicChooser;
 	private RequestQueue requestQueue;
 	private List<ConnectedClient> connectedClients;
+	private ConnectedClient hostClient;
 	
 	/* Constructor */
 	public Session() {
@@ -28,6 +29,10 @@ public class Session {
 		musicChooser = new MusicChooser();
 		requestQueue = new RequestQueue();
 		connectedClients = new ArrayList<ConnectedClient>();
+		
+		// Create a master client for the host
+		hostClient = new ConnectedClient("HOST", true, sessionId);
+		connectedClients.add(hostClient);
 		
 	}
 	
@@ -43,7 +48,7 @@ public class Session {
 	/* Removes a song request from the request queue */
 	public boolean deleteSongRequest(String songRequestId) {
 		
-		return requestQueue.removeSong(requestQueue.getSongFromQueue(songRequestId), new ConnectedClient("HOST", false, Permission.DJ));
+		return requestQueue.removeSong(requestQueue.getSongFromQueue(songRequestId), hostClient);
 		
 	}
 	
@@ -68,23 +73,32 @@ public class Session {
 		
 	}
 	
+	/* Returns a reference to the current music queue of this session */
+	public ConnectedClient getHostClient() {
+		
+		return hostClient;
+		
+	}
+	
 	public void addClient(ConnectedClient c) {
 		
 		connectedClients.add(c);
 		
 	}
 	
-	public void removeClient(String userId) {
+	public boolean removeClient(String userId) {
 		
 		for (int i = 0; i < connectedClients.size(); i++) {
 			
 			if (connectedClients.get(i).getId().equals(userId)) {
 				System.out.println("Session: Removed user with ID " + userId);
 				connectedClients.remove(i);
-				break;
+				return true;
 			}
 			
 		}
+		
+		return false;
 		
 	}
 	

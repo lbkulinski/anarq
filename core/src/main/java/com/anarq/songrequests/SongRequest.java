@@ -29,7 +29,7 @@ public class SongRequest {
 
 	/* Adds one to the score of the request if the clientIP is ok */
     public void likeSong(String clientIp) {
-        if (clientIp != getClientIp() && !playing) {
+        if (!clientIp.equals(getClientIp()) && !playing) {
             this.votes++;
         }
         //updateQueue()
@@ -37,7 +37,7 @@ public class SongRequest {
 
 	/* Removes one from the score of the request if the clientIP is ok */
     public void dislikeSong(String clientIp) {
-        if (clientIp != getClientIp() && !playing) {
+        if (!clientIp.equals(getClientIp()) && !playing) {
             this.votes--;
         }
         //updateQueue()

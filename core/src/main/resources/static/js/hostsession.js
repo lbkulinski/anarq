@@ -5,22 +5,75 @@ var quitSession = document.getElementById("quit-session");
 
 sessionHeader.innerHTML = getCurrentHostSessionId();
 
-loadCurrentUsers();
-loadCurrentSongQueue();
-
+// Loads all the users currently connected
 function loadCurrentUsers() {
 
 	var clientListRequest = new XMLHttpRequest();
-	var clientListPath = '/current-connected-users?sessionId=' + getCurrentHostSessionId();
+	var clientListPath = '/current-connected-users?sessionId=' + getCurrentHostSessionId() + '&userId=' + getUserId();
 	clientListRequest.open('GET', clientListPath);
 	clientListRequest.onload = function() {
-			
-		var clientArray = JSON.parse(clientListRequest.responseText);
-		renderUsersToHTML(clientArray);
+		
+		if(clientListRequest.responseText.length > 3) {
+		
+			var clientArray = JSON.parse(clientListRequest.responseText);
+			renderUsersToHTML(clientArray);
+		
+		}
 			
 	};
 	clientListRequest.send();
 
+}
+
+// Loads the current list of songs 
+function loadCurrentSongQueue() {
+
+	var songQueueRequest = new XMLHttpRequest();
+	var songQueuePath = '/current-requests?sessionId=' + getCurrentHostSessionId() + '&userId=' + getUserId();
+	songQueueRequest.open('GET', songQueuePath);
+	songQueueRequest.onload = function() {
+		
+		if(songQueueRequest.responseText.length > 3) {
+		
+			var songArray = JSON.parse(songQueueRequest.responseText);
+			renderSongsToHTML(songArray);
+		
+		}
+			
+	};
+	songQueueRequest.send();
+
+}
+
+// Delets a song request
+function deleteRequest(songId) {
+	
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/delete-request?sessionId=' + getCurrentSessionId() + '&songId=' + songId;
+	searchRequest.open('PUT', searchPath);
+	searchRequest.onload = function() {
+		
+		// If it's successful, response goes here
+		
+	};
+	searchRequest.send();
+	
+}
+
+// Delets a song request
+function kickUser(userId) {
+	
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/kick-user?sessionId=' + getCurrentSessionId() + '&userId=' + userId;
+	searchRequest.open('PUT', searchPath);
+	searchRequest.onload = function() {
+		
+		// If it's successful, response goes here
+		console.log("kicking user " + userId);
+		
+	};
+	searchRequest.send();
+	
 }
 
 // Takes an array of song objects and renders them to the screen
@@ -52,31 +105,16 @@ function generateUserHTML(client) {
 	
 	var htmlString = "";
 	
-	console.log(client);
-	
 	htmlString += "<div class=\"client-div\">";
 	htmlString += "<h2>" + client.name + "</h2>";
 	htmlString += "<p>" + client.permissionLevel + "</p>";
-	htmlString += "<button type=\"button\">Kick User</button>";
+	if (client.permissionLevel != "DJ") {
+		htmlString += "<button type=\"button\" onclick=\"kickUser('" + client.id + "')\">Kick User</button>";
+	}
 	htmlString += "</div>";
 	
 	return htmlString;
 	
-}
-
-function loadCurrentSongQueue() {
-
-	var songQueueRequest = new XMLHttpRequest();
-	var songQueuePath = '/current-requests?sessionId=' + getCurrentHostSessionId();
-	songQueueRequest.open('GET', songQueuePath);
-	songQueueRequest.onload = function() {
-			
-		var songArray = JSON.parse(songQueueRequest.responseText);
-		renderSongsToHTML(songArray);
-			
-	};
-	songQueueRequest.send();
-
 }
 
 // Takes an array of song objects and renders them to the screen
@@ -106,11 +144,32 @@ function generateSongHTML(song) {
 	htmlString += "<h1>" + song.name + "</h1>";
 	htmlString += "<h2> " + song.album + "</h2>";
 	htmlString += "<h3> " + song.artist + "</h3>";
-	htmlString += "<p>ID: " + song.id + "</p>";
+	htmlString += "<p>Requested By: " + song.clientIp + "</p>";
+	htmlString += "<p>Score: " + song.votes + "</p>";
 	htmlString += "<button type=\"button\" onclick=\"deleteRequest('" + song.id + "')\">Delete Request</button>";
+	htmlString += "<button type=\"button\" onclick=\"likeSong('" + song.id + "')\">Like</button>";
+	htmlString += "<button type=\"button\" onclick=\"dislikeSong('" + song.id + "')\">Dislike</button>";
 	htmlString += "</div>";
 	
 	return htmlString;
+	
+}
+
+function likeSong(songId) {
+	
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/like-song?sessionId=' + getCurrentSessionId() + '&songId=' + songId + '&userId=' + getUserId();
+	searchRequest.open('PUT', searchPath);
+	searchRequest.send();
+	
+}
+
+function dislikeSong(songId) {
+	
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/dislike-song?sessionId=' + getCurrentSessionId() + '&songId=' + songId + '&userId=' + getUserId();
+	searchRequest.open('PUT', searchPath);
+	searchRequest.send();
 	
 }
 
@@ -118,10 +177,13 @@ function generateSongHTML(song) {
 quitSession.addEventListener("click", function(){
 	
 	var searchRequest = new XMLHttpRequest();
-	var searchPath = '/terminate-session?sessionId=' + getCurrentHostSessionId();
+	var searchPath = '/terminate-session?sessionId=' + getCurrentHostSessionId() + '&userId=' + getUserId();
 	searchRequest.open('PUT', searchPath);
 	searchRequest.onload = function() {
 		
+		setUsername("");
+		setUserId("");
+		setCurrentSessionId("");
 		setCurrentHostSessionId("");
 		
 	};
@@ -130,19 +192,3 @@ quitSession.addEventListener("click", function(){
 	window.location.href="/connect.html";
 	
 });
-
-// Request a song
-function deleteRequest(songId) {
-	
-	console.log(songId);
-	var searchRequest = new XMLHttpRequest();
-	var searchPath = '/delete-request?sessionId=' + getCurrentSessionId() + '&songId=' + songId;
-	searchRequest.open('PUT', searchPath);
-	searchRequest.onload = function() {
-		
-		// If it's successful, response goes here
-		
-	};
-	searchRequest.send();
-	
-}

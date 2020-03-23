@@ -103,27 +103,49 @@ public class RequestQueue {
     }
 
 	/* Attempt to like a song */
-    public void likeSong(SongRequest song, String client) {
+    public boolean likeSong(String songId, String client) {
+		
+		SongRequest song = getSongFromQueue(songId);
+		
+		if(song == null) {
+			return false;
+		}
+		
         boolean accepting = this.acceptingRequests;
         this.acceptingRequests = true;
         songQueue.remove(song);
         song.likeSong(client);
         songQueue.add(song);
+		
         if (!accepting) {
             this.acceptingRequests = false;
         }
+		
+		return true;
+		
     }
 
 	/* Attempt to dislike a song */
-    public void dislikeSong(SongRequest song, String client) {
+    public boolean dislikeSong(String songId, String client) {
+		
+		SongRequest song = getSongFromQueue(songId);
+		
+		if(song == null) {
+			return false;
+		}
+		
         boolean accepting = this.acceptingRequests;
         this.acceptingRequests = true;
         songQueue.remove(song);
         song.dislikeSong(client);
         songQueue.add(song);
+		
         if (!accepting) {
             this.acceptingRequests = false;
         }
+		
+		return true;
+		
     }
 
 	/* Attempt to remove a song */
