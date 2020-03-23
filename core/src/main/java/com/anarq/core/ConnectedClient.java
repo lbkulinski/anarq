@@ -14,18 +14,26 @@ import com.anarq.songrequests.*;
 public class ConnectedClient {
 	
 	// Private Varaibles
-    private String name;
-    private String ipAddress;
-    private Permission permissionLevel;
+    private final String name;
+    private final String id;
+	private final boolean isRegistered;
+    private final Permission permissionLevel;
     private LocalTime lastActive;
 
 	/* Initalizes a new ConnectedClient*/
-    public ConnectedClient(String name, String ipAddress, Permission permissionLevel, LocalTime lastActive) {
+    public ConnectedClient(String name, boolean isRegistered, Permission permissionLevel) {
         this.name = name;
-        this.ipAddress = ipAddress;
+		this.isRegistered = isRegistered;
         this.permissionLevel = permissionLevel;
-        this.lastActive = lastActive;
+		
+		id = generateId();
+		System.out.println(id);
     }
+
+	/* Generates an ID number for this client */
+	private String generateId() {
+		return String.format("%08x%08x%08x", name.hashCode()*37, (isRegistered + "").hashCode()*37, permissionLevel.hashCode()*37);
+	}
 
 	/* Returns the client's name */
     public String getName() {
@@ -33,8 +41,8 @@ public class ConnectedClient {
     }
 	
 	/* Returns the IP Address of the client */
-    public String getIpAddress() {
-        return this.ipAddress;
+    public String getId() {
+        return this.id;
     }
 
 	/* Returns the Permission level of the client */

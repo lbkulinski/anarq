@@ -14,9 +14,12 @@ connectButton.addEventListener("click", function(){
 		// Check if the connection was successful
 		var result = searchRequest.responseText;
 		
-		if (result == "true") {
+		if (result != null) {
+		
+			var data = JSON.parse(searchRequest.responseText);
 		
 			setUsername(username.value);
+			setUserId(data.id);
 			setCurrentSessionId(sessionId.value);
 			
 			window.location.href="/session.html";

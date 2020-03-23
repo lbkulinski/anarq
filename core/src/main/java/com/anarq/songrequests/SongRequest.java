@@ -13,20 +13,18 @@ import com.anarq.core.*;
 public class SongRequest {
 	
 	// Private Variables
-    private String id;
 	private int votes;
 	private boolean playing;
     private Song songInfo;
     private String clientIp;
     
 	/* Initalizes a new SongRequest */
-    public SongRequest(String id, Song songInfo, String clientIp) {
-        this.id = id;
+    public SongRequest(Song songInfo, String clientIp) {
         this.votes = 0;
 		this.playing = false;
 		this.songInfo = songInfo;
         this.clientIp = clientIp;
-        
+		
     }
 
 	/* Adds one to the score of the request if the clientIP is ok */
@@ -47,7 +45,7 @@ public class SongRequest {
     
 	/* Returns the ID of the song request */
     public String getId() {
-        return id;
+        return songInfo.getSongId();
     }
 
 	/* Returns the album name of this song request */
@@ -88,7 +86,7 @@ public class SongRequest {
 	/* Compare two song requests */
     @Override
     public boolean equals(Object o) {
-        return (o.getClass() == this.getClass() && this.id == ((SongRequest) o).id);
+        return (o.getClass() == this.getClass() && this.getId() == ((SongRequest) o).getId());
     }
 
 	/* Print the info pertaining to a song request */

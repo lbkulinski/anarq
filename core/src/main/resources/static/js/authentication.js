@@ -1,5 +1,5 @@
 var authenticationRequest = new XMLHttpRequest();
-var authenticationPath = '/authenticate?sessionId=' + getCurrentSessionId() + '&username=' + getUsername();
+var authenticationPath = '/authenticate?sessionId=' + getCurrentSessionId() + '&userId=' + getUserId();
 authenticationRequest.open('GET', authenticationPath);
 authenticationRequest.onload = function() {
 		

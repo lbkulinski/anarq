@@ -59,11 +59,12 @@ function generateSongHTML(song) {
 quitSession.addEventListener("click", function(){
 	
 	var searchRequest = new XMLHttpRequest();
-	var searchPath = '/disconnect?sessionId=' + getCurrentSessionId() + '&username=' + getUsername();
+	var searchPath = '/disconnect?sessionId=' + getCurrentSessionId() + '&userId=' + getUserId();
 	searchRequest.open('PUT', searchPath);
 	searchRequest.onload = function() {
 		
 		setUsername("");
+		setUserId("");
 		setCurrentSessionId("");
 		
 	};

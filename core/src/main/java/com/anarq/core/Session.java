@@ -32,11 +32,18 @@ public class Session {
 	}
 	
 	/* Requests a new song for the RequestQueue */
-	public void requestSong(Song song, String requesterId) {
+	public boolean requestSong(Song song, String requesterId) {
 		
-		SongRequest newSongRequest = new SongRequest(song.getSongId(), song, requesterId);
+		SongRequest newSongRequest = new SongRequest(song, requesterId);
 		
-		requestQueue.addSong(newSongRequest);
+		return requestQueue.addSong(newSongRequest);
+		
+	}
+	
+	/* Removes a song request from the request queue */
+	public boolean deleteSongRequest(String songRequestId) {
+		
+		return requestQueue.removeSong(requestQueue.getSongFromQueue(songRequestId), new ConnectedClient("HOST", false, Permission.DJ));
 		
 	}
 	
@@ -67,16 +74,30 @@ public class Session {
 		
 	}
 	
-	public void removeClient(String username) {
+	public void removeClient(String userId) {
 		
 		for (int i = 0; i < connectedClients.size(); i++) {
 			
-			if (connectedClients.get(i).getName().equals(username)) {
+			if (connectedClients.get(i).getId().equals(userId)) {
+				System.out.println("Session: Removed user with ID " + userId);
 				connectedClients.remove(i);
 				break;
 			}
 			
 		}
+		
+	}
+	
+	/* Returns a reference to the current music queue of this session */
+	public boolean hasUserForId(String id) {
+		
+		for (int i = 0; i < connectedClients.size(); i++) {
+			if (connectedClients.get(i).getId().equals(id)) {
+				return true;
+			}
+		}
+		
+		return false;
 		
 	}
 	

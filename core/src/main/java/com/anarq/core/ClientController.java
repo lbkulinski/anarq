@@ -7,41 +7,41 @@ import org.springframework.web.bind.annotation.*;
 public class ClientController {
 	
 	@PutMapping("/connect")
-	public boolean attemptToConnectToSession(
+	public ConnectedClient attemptToConnectToSession(
 	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
-	@RequestParam(value="username", defaultValue="no_input_requested")String username) {
+	@RequestParam(value="username", defaultValue="no_username")String username) {
 		
 		// Attempt to obtain the given session based on the sessionId provided
 		Session session = CoreApplication.getSessionForSessionId(sessionId);
 		if (session == null) {
 			System.err.println("Error: Request for non-existant session...\n ID: "
 				+ sessionId + " Username: " + username + "...");
-			return false;
+			return null;
 		}
 		
-		// TODO: Add client to Session
-		session.addClient(new ConnectedClient(username, username, Permission.JAMMER, null));
+		ConnectedClient newConnectedClient = new ConnectedClient(username, false, Permission.JAMMER);
+		session.addClient(newConnectedClient);
 		
 		// Redirect
-		return true;
+		return newConnectedClient;
 		
 	}
 	
 	@PutMapping("/disconnect")
 	public boolean attemptToCloseConnectionToSession(
 	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
-	@RequestParam(value="username", defaultValue="no_input_requested")String username) {
+	@RequestParam(value="userId", defaultValue="no_user_id")String userId) {
 		
 		// Attempt to obtain the given session based on the sessionId provided
 		Session session = CoreApplication.getSessionForSessionId(sessionId);
 		if (session == null) {
 			System.err.println("Error: Request for non-existant session...\n ID: "
-				+ sessionId + " Username: " + username + "...");
+				+ sessionId + " UserId: " + userId + "...");
 			return false;
 		}
 		
 		// TODO: Remove client from Session
-		session.removeClient(username);
+		session.removeClient(userId);
 		
 		// Redirect
 		return true;
@@ -51,7 +51,7 @@ public class ClientController {
 	@GetMapping("/authenticate")
 	public boolean isSessionStillActive(
 	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
-	@RequestParam(value="username", defaultValue="no_input_requested")String username) {
+	@RequestParam(value="userId", defaultValue="no_user_id")String userId) {
 		
 		// Attempt to obtain the given session based on the sessionId provided
 		Session session = CoreApplication.getSessionForSessionId(sessionId);
@@ -59,7 +59,10 @@ public class ClientController {
 			System.err.println("Error: Auth Failed.");
 			return false;
 		}
-		
+		// Check if that session has that user
+		if (!session.hasUserForId(userId)) {
+			return false;
+		}			
 		// Redirect
 		return true;
 		

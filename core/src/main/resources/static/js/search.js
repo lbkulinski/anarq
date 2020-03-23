@@ -6,7 +6,7 @@ var searchQuery = document.getElementById("query");
 searchButton.addEventListener("click", function(){
 	
 	var searchRequest = new XMLHttpRequest();
-	var searchPath = '/search?sessionId=' + getCurrentSessionId() + '&query=' + searchQuery.value;
+	var searchPath = '/search?sessionId=' + getCurrentSessionId() + '&query=' + searchQuery.value + '&userId=' + getUserId();
 	searchRequest.open('GET', searchPath);
 	searchRequest.onload = function() {
 		
@@ -59,7 +59,7 @@ function requestSong(songId) {
 	
 	console.log(songId);
 	var searchRequest = new XMLHttpRequest();
-	var searchPath = '/request-song?sessionId=' + getCurrentSessionId() + '&songId=' + songId;
+	var searchPath = '/request-song?sessionId=' + getCurrentSessionId() + '&songId=' + songId + '&userId=' + getUserId();
 	searchRequest.open('PUT', searchPath);
 	searchRequest.onload = function() {
 		

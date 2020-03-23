@@ -39,10 +39,26 @@ public class HostController {
 		
 	}
 	
+	@PutMapping("/delete-request")
+	public boolean addSongRequest(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
+	@RequestParam(value="songId", defaultValue="no_song_id")String songId) {
+		
+		// Attempt to obtain the given session based on the sessionId provided
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+		if (session == null) {
+			System.err.println("Error: Request for non-existant session was created!\n ID: "
+				+ sessionId);
+			return false;
+		}
+		
+		return session.deleteSongRequest(songId);
+		
+	}
+	
 	@GetMapping("/authenticate-host")
 	public boolean isSessionStillActive(
-	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
-	@RequestParam(value="username", defaultValue="no_input_requested")String username) {
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId) {
 		
 		// Attempt to obtain the given session based on the sessionId provided
 		Session session = CoreApplication.getSessionForSessionId(sessionId);

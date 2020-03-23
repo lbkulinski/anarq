@@ -107,7 +107,7 @@ function generateSongHTML(song) {
 	htmlString += "<h2> " + song.album + "</h2>";
 	htmlString += "<h3> " + song.artist + "</h3>";
 	htmlString += "<p>ID: " + song.id + "</p>";
-	htmlString += "<button type=\"button\">Delete Request</button>";
+	htmlString += "<button type=\"button\" onclick=\"deleteRequest('" + song.id + "')\">Delete Request</button>";
 	htmlString += "</div>";
 	
 	return htmlString;
@@ -130,3 +130,19 @@ quitSession.addEventListener("click", function(){
 	window.location.href="/connect.html";
 	
 });
+
+// Request a song
+function deleteRequest(songId) {
+	
+	console.log(songId);
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/delete-request?sessionId=' + getCurrentSessionId() + '&songId=' + songId;
+	searchRequest.open('PUT', searchPath);
+	searchRequest.onload = function() {
+		
+		// If it's successful, response goes here
+		
+	};
+	searchRequest.send();
+	
+}

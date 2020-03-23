@@ -76,7 +76,7 @@ public class RequestQueue {
             System.out.println("Request Failed: Genre (" + song.getGenre() + ") is not accepted in the queue");
             return false;
         }
-        if (songQueue.contains(song)) {
+        if (isSongAlreadyInQueue(song)) {
             System.out.println("Request Failed: Queue already contains " + song.getName());
             return false;
         }
@@ -88,6 +88,7 @@ public class RequestQueue {
 
         if (songQueue.size() < getMaxRequests()) {
             this.autoDJ = false;
+			System.out.println("Song added to queue: " + song.getId());
             return songQueue.add(song);
         }
         else {
@@ -127,7 +128,7 @@ public class RequestQueue {
 
 	/* Attempt to remove a song */
     public boolean removeSong(SongRequest song, ConnectedClient client) {
-        if ((client.getIpAddress().equals(song.getClientIp()) || (client.getPermissionLevel() == Permission.DJ)) && !song.isPlaying()) {
+        if ((client.getId().equals(song.getClientIp()) || (client.getPermissionLevel() == Permission.DJ)) && !song.isPlaying()) {
             boolean ret = songQueue.remove(song);
             if (isEmpty()) {
                 this.autoDJ = true;
@@ -174,6 +175,38 @@ public class RequestQueue {
 	/* Returns the song currently being played */
 	public SongRequest getCurrentSong() {
 		return currentSong;
+	}
+	
+	/* Returns true if that song is already in the queue */
+	public boolean isSongAlreadyInQueue(SongRequest song) {
+		
+		SongRequest[] queue = getSongQueue();
+		
+		for (int i = 0; i < queue.length; i++) {
+			if(queue[i].getId().equals(song.getId())) {
+				return true;
+			}
+			
+		}
+		
+		return false;
+		
+	}
+	
+	/* Returns true if that song is already in the queue */
+	public SongRequest getSongFromQueue(String id) {
+		
+		SongRequest[] queue = getSongQueue();
+		
+		for (int i = 0; i < queue.length; i++) {
+			if(queue[i].getId().equals(id)) {
+				return queue[i];
+			}
+			
+		}
+		
+		return null;
+		
 	}
 	
 	/* Returns the queue of songs to being played */
