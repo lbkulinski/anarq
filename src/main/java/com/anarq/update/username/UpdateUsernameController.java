@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
  * A controller for updating a user's username.
  *
  * @author Logan Kulinski, lbk@purdue.edu
- * @version March 13, 2020
+ * @version March 24, 2020
  */
 @Controller
 public final class UpdateUsernameController {
@@ -240,12 +240,13 @@ public final class UpdateUsernameController {
         model.addAttribute("userInformation", new UserInformation());
 
         return "updateUsernameForm";
-    } //updatePasswordForm
+    } //updateUsernameForm
 
     /**
      * Displays the result after attempting to update the user's username.
      *
      * @param userInformation the user information to be used in the operation
+     * @param model the model to be used in the operation
      * @return the HTML code for the username update result
      */
     @PostMapping("/updateUsername")
@@ -278,5 +279,5 @@ public final class UpdateUsernameController {
 
             return success ? "updateUsernameSuccessResult" : "updateUsernameFailureResult";
         } //end if
-    } //updatePasswordSubmit
+    } //updateUsernameSubmit
 }
