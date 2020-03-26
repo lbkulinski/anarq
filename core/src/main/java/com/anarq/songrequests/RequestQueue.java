@@ -42,12 +42,17 @@ public class RequestQueue {
 	
 	// Private Varaibles
     private int maxRequests;
+    private int minBPM;
+    private int maxBPM;
     private boolean acceptingRequests;
     private boolean autoDJ;
+    private boolean explicitFilter;
+    private boolean visibility; // true = public access, false = private access
     private MusicChooser musicChooser;
 	private SongRequest currentSong = null;
     private ArrayList<SongRequest> songs = new ArrayList<SongRequest>();
     private PriorityQueue<SongRequest> songQueue = new PriorityQueue<SongRequest>(new VotesComparator());
+    private ArrayList<SongRequest> overrides = new ArrayList<SongRequest>();
 
 	/* Creates a new RequestQueue Instance */
     public RequestQueue() {
@@ -55,19 +60,49 @@ public class RequestQueue {
         this.maxRequests = 50;
         this.musicChooser = new MusicChooser();
         this.autoDJ = false;
+        this.explicitFilter = false;
+        this.minBPM = 0;
+        this.maxBPM = Integer.MAX_VALUE;
+        this.visibility = true;
     }
 
 	/* Creates a new RequestQueue Instance using the inputs */
-    public RequestQueue(MusicChooser musicChooser, int maxRequests, boolean acceptingRequests) {
+    public RequestQueue(MusicChooser musicChooser, int maxRequests, boolean acceptingRequests, boolean explicitFilter, int minBPM, int maxBPM, boolean visibility) {
         this.maxRequests = maxRequests;
         this.musicChooser = musicChooser;
         this.acceptingRequests = acceptingRequests;
         this.autoDJ = false;
+        this.explicitFilter = explicitFilter;
+        if (minBPM > maxBPM || minBPM < 0 || maxBPM < 0) {
+            this.minBPM = 0;
+            this.maxBPM = Integer.MAX_VALUE;
+        }
+        else {
+            this.minBPM = minBPM;
+            this.maxBPM = maxBPM;
+        }
+        this.visibility = visibility;
     }
 
 	/* Returns the max number of requests */
     public int getMaxRequests() {
         return this.maxRequests;
+    }
+
+    public boolean hasExplicitFilter() {
+        return this.explicitFilter;
+    }
+
+    public int getMinBPM() {
+        return this.minBPM;
+    }
+
+    public int getMaxBPM() {
+        return maxBPM;
+    }
+
+    public boolean getVisibility() {
+        return visibility;
     }
 
 	/* Adds a song to the request queue */
@@ -86,6 +121,19 @@ public class RequestQueue {
             return false;
         }
 
+        if (explicitFilter && song.songInfo.isExplicit) { //checks if song is explicit AND explicit filter is on
+            //add song to override list and return false
+            System.out.println("Request Pending: Explicit Content is not allowed ... Override request sent to host");
+            overrides.add(song);
+            return false;
+        }
+
+        if (song.songInfo.bpm > this.maxBPM || song.songInfo.bpm < this.minBPM) {
+            System.out.println("Request Pending: BPM is not in the allowed range ... Override request sent to host");
+            overrides.add(song);
+            return false;
+        }
+
         if (songQueue.size() < getMaxRequests()) {
             this.autoDJ = false;
 			System.out.println("Song added to queue: " + song.getId());
@@ -94,6 +142,22 @@ public class RequestQueue {
         else {
             System.out.println("Request Failed: Queue is full");
             return false;
+        }
+    }
+
+    public void removeOverride(int i, boolean decision) {
+        //if index i is out of bounds
+        if (i >= overrides.size() || i < 0) {
+            System.out.println("Index out of bounds!");
+            return;
+        }
+        //if decision is true, host accepted override for song at index i, add to queue and remove from override list
+        if (decision) {
+            songQueue.add(overrides.remove(i));
+        }
+        //if decision is false, host declined override for song at index i, remove from override list, do not add to queue
+        if (!decision) {
+            overrides.remove(i);
         }
     }
 

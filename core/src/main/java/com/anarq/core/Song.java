@@ -17,10 +17,12 @@ public class Song {
 	private final String songId;
 	private final int duration;
 	private final boolean isExplicit;
+	private final int bpm;
 	
 	/* Constructs a new Song class */
+
 	public Song(String songName, String albumName, String artistName, String songId,
-			int duration, boolean isExplicit) {
+			int duration, boolean isExplicit, int bpm) {
 		
 		this.songName = songName;
 		this.albumName = albumName;
@@ -29,7 +31,7 @@ public class Song {
 		this.songId = songId;
 		this.duration = duration;
 		this.isExplicit = isExplicit;
-		
+		this.bpm = bpm;
 	}
 	
 	/* Returns the name of the song */

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class SpotifyGateway extends ClientCredentialsExample{
-	
+
 	/* Searches for a list of songs that contain the query */
 	public static Song[] searchForSongs(String query) {
 		
@@ -25,14 +25,14 @@ public class SpotifyGateway extends ClientCredentialsExample{
 		
 		Song[] foundSongs = new Song[search.tracks.length];
 		for(int i = 0; i < search.tracks.length; i++) {
-		
 			foundSongs[i] = new Song(
 			search.tracks[i].getName(),
 			search.tracks[i].getAlbum().getName(),
 			search.tracks[i].getArtists()[0].getName(),
 			search.tracks[i].getId(),
 			search.tracks[i].getDurationMs()/1000,
-			search.tracks[i].getIsExplicit()
+			search.tracks[i].getIsExplicit(),
+            Math.round(spotifyApi.getAudioFeaturesForTrack(search.tracks[i].getId()).build().execute().getTempo());
 			);
 			
 		}
