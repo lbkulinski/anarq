@@ -1,6 +1,7 @@
 package com.anarq.core;
 
 import com.anarq.spotify.*;
+import com.anarq.database.*;
 
 import java.util.*;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +15,9 @@ public class CoreApplication {
 	public static void main(String[] args) {
 		
 		SpringApplication.run(CoreApplication.class, args);
+		
+		ConnectToDatabase c = new ConnectToDatabase();
+        c.connect();
 		
 	}
 	
