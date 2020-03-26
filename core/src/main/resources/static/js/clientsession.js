@@ -90,7 +90,9 @@ quitSession.addEventListener("click", function(){
 	searchRequest.open('PUT', searchPath);
 	searchRequest.onload = function() {
 		
-		setUsername("");
+		if (getIsLoggedIn() != "true") {
+			setUsername("");
+		}
 		setUserId("");
 		setCurrentSessionId("");
 		

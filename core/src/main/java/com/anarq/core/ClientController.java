@@ -9,7 +9,8 @@ public class ClientController {
 	@PutMapping("/connect")
 	public ConnectedClient attemptToConnectToSession(
 	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
-	@RequestParam(value="username", defaultValue="no_username")String username) {
+	@RequestParam(value="username", defaultValue="no_username")String username,
+	@RequestParam(value="isAccount", defaultValue="false")boolean isAccount) {
 		
 		// Attempt to obtain the given session based on the sessionId provided
 		Session session = CoreApplication.getSessionForSessionId(sessionId);
@@ -19,7 +20,7 @@ public class ClientController {
 			return null;
 		}
 		
-		ConnectedClient newConnectedClient = new ConnectedClient(username, false, Permission.JAMMER);
+		ConnectedClient newConnectedClient = new ConnectedClient(username, isAccount, Permission.JAMMER);
 		session.addClient(newConnectedClient);
 		
 		// Redirect

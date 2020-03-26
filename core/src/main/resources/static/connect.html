@@ -8,7 +8,7 @@
 <body>
 	<header>
 	
-		<div class="signin">
+		<div class="signin" id="userdata">
 			<button id="signin" type="button" onclick="location.href = '/signin.html'">Sign In or Log In</button>
 		</div>
 	
@@ -18,9 +18,11 @@
 			<p>Session ID:</p>
 			<input id="sessionId" type="text" size="25"></input>
 			<br>
-			<p>Username:</p>
-			<input id="username" type="text" size="25"></input>
+			<div id="username-field">
+				<p>Username:</p>
+				<input id="username" type="text" size="25"></input>
 			<br>
+			</div>
 			<button id="connect" type="button">Connect to Session</button>
 			<br>
 			<p>Or</p>

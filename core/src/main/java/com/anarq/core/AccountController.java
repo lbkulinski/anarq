@@ -46,7 +46,7 @@ public class AccountController {
 			
 		}
 		
-		return "Login Success";
+		return "Login Success!";
 		
 	}
 	

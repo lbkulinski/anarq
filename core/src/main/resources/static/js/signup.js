@@ -36,7 +36,8 @@ signupButton.addEventListener("click", function(){
 			
 			if (response == "Sign Up Success!") {
 				
-				window.location.href="/signupsuccess.html";
+				
+				logIn(usernameQuery.value, passwordQuery.value);
 				
 			}
 			else {
@@ -56,6 +57,12 @@ signupButton.addEventListener("click", function(){
 		setError("Error: Passwords do not match!");
 		
 	}
+	
+});
+
+signupButton.addEventListener("click", function(){
+	
+	logIn(usernameQuery.value, passwordQuery.value);
 	
 });
 

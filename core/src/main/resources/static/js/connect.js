@@ -1,13 +1,28 @@
 var connectButton = document.getElementById("connect");
+var userData = document.getElementById("userdata");
+var usernameField = document.getElementById("username-field");
 var hostButton = document.getElementById("host");
 var sessionId = document.getElementById("sessionId");
 var username = document.getElementById("username");
+
+if (getIsLoggedIn() == "true") {
+	userData.innerHTML = "Welcome, " + getUsername() + "! <br> <button id=\"logout\" type=\"button\" onclick=\"location.href = '/logout.html'\">Log Out</button>";
+	usernameField.innerHTML = "";
+}
 
 // When the connect button is clicked, attempt to connect to the session
 connectButton.addEventListener("click", function(){
 	
 	var searchRequest = new XMLHttpRequest();
-	var searchPath = '/connect?sessionId=' + sessionId.value + '&username=' + username.value;
+	var searchPath = '/connect?sessionId=' + sessionId.value;
+	if (getIsLoggedIn() == "true") {
+		searchPath += '&username=' + getUsername();
+	}
+	else {
+		searchPath += '&username=' + username.value;
+	}
+	searchPath += '&isAccount=' + getIsLoggedIn();
+	
 	searchRequest.open('PUT', searchPath);
 	searchRequest.onload = function() {
 		
@@ -18,7 +33,9 @@ connectButton.addEventListener("click", function(){
 		
 			var data = JSON.parse(searchRequest.responseText);
 		
-			setUsername(username.value);
+			if (getIsLoggedIn() != "true") {
+				setUsername(username.value);
+			}
 			setUserId(data.id);
 			setCurrentSessionId(sessionId.value);
 			
@@ -51,7 +68,9 @@ hostButton.addEventListener("click", function(){
 			
 			var data = JSON.parse(searchRequest.responseText);
 			
-			setUsername(data.name);
+			if (getIsLoggedIn() != "true") {
+				setUsername(data.name);
+			}
 			setUserId(data.id);
 			setCurrentSessionId(data.hostSessionId);
 			setCurrentHostSessionId(data.hostSessionId);
