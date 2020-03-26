@@ -44,6 +44,16 @@ body input {
 	text-align:center;
 	
 }
+body select {
+	
+	border-radius: 30px;
+	margin-top: 0;
+	margin-bottom: 0;
+	height: 50px;
+	font-size: 30px;
+	text-align:center;
+	
+}
 body button {
 	
 	border-radius: 30px;
@@ -51,6 +61,11 @@ body button {
 	height: 40px;
 	font-size: 20px;
 	text-align: center;
+	
+}
+.error {
+	
+	color: red;
 	
 }
 .bigtext {

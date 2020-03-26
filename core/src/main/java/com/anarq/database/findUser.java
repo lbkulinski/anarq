@@ -6,16 +6,16 @@ import org.bson.BsonDocument;
 import org.bson.BsonString;
 import org.bson.Document;
 
-public class findUser {
+public class FindUser {
 
     String text;
     String field;
 
-    public findUser(String text) {
+    public FindUser(String text) {
         this.text = text;
         field = "Username";
     }
-    public findUser(String field, String text) {
+    public FindUser(String field, String text) {
         this.field = field;
         this.text = text;
     }
@@ -40,6 +40,22 @@ public class findUser {
         }
         return null;
     }
+	
+	public Document attemptLogin(String password) {
+		
+		Document userInfo = find();
+		
+		if (userInfo == null) {
+			return null;
+		}
+		
+		if (((String) (userInfo.get("Password"))).equals(password)) {
+			return userInfo;
+		}
+		
+		return null;
+		
+	}
 
     public Document findHost() {
 
@@ -62,8 +78,4 @@ public class findUser {
         return null;
     }
 
-    public static void main(String[] args) {
-        findUser f = new findUser("testing");
-        f.find();
-    }
 }

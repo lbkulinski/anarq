@@ -24,16 +24,26 @@ public class SpotifyGateway extends ClientCredentialsExample{
 		SearchArtistsExample search = new SearchArtistsExample(spotifyApi, query);
 		
 		Song[] foundSongs = new Song[search.tracks.length];
-		for(int i = 0; i < search.tracks.length; i++) {
-			foundSongs[i] = new Song(
-			search.tracks[i].getName(),
-			search.tracks[i].getAlbum().getName(),
-			search.tracks[i].getArtists()[0].getName(),
-			search.tracks[i].getId(),
-			search.tracks[i].getDurationMs()/1000,
-			search.tracks[i].getIsExplicit(),
-            Math.round(spotifyApi.getAudioFeaturesForTrack(search.tracks[i].getId()).build().execute().getTempo());
-			);
+		
+		try {
+		
+			for(int i = 0; i < search.tracks.length; i++) {
+				foundSongs[i] = new Song(
+				search.tracks[i].getName(),
+				search.tracks[i].getAlbum().getName(),
+				search.tracks[i].getArtists()[0].getName(),
+				search.tracks[i].getId(),
+				search.tracks[i].getDurationMs()/1000,
+				search.tracks[i].getIsExplicit(),
+				Math.round(spotifyApi.getAudioFeaturesForTrack(search.tracks[i].getId()).build().execute().getTempo())
+				);
+				
+			}
+		
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			return null;
 			
 		}
 		
@@ -55,12 +65,25 @@ public class SpotifyGateway extends ClientCredentialsExample{
             System.out.println("Error: Spotify Error");
         }
 		
-		Song newSong = new Song(output.getName(),
+		Song newSong = null;
+		
+		try {
+		
+			newSong = new Song(output.getName(),
 			output.getAlbum().getName(),
 			output.getArtists()[0].getName(),
 			output.getId(),
 			output.getDurationMs()/1000,
-			output.getIsExplicit());
+			output.getIsExplicit(),
+			Math.round(spotifyApi.getAudioFeaturesForTrack(output.getId()).build().execute().getTempo())
+			);
+		
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			return null;
+			
+		}
 		
 		return newSong;
 		

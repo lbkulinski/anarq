@@ -2,6 +2,8 @@ package com.anarq.database;
 
 public class PasswordValidation {
 
+	private static final int MIN_PASSWORD_LENGTH = 8; 
+	private static final int MAX_PASSWORD_LENGTH = 64;
     private final static String salt = "ANARQ";
     private String password;
 
@@ -14,25 +16,28 @@ public class PasswordValidation {
      * @return True if it meets our requirements and false if it doesn't
      */
 
-    public boolean validatePassword(){
+    public String validatePassword(){
 
 
-        if ((password.length() < 8) || (password.length() > 16)) {
-            return false;
+        if ((password.length() < MIN_PASSWORD_LENGTH)) {
+			return "Password must be at least " + MIN_PASSWORD_LENGTH + " characters in length!";
+		}
+		if ((password.length() > MAX_PASSWORD_LENGTH)) {
+            return "Password must be less than " + MAX_PASSWORD_LENGTH + " characters in length!";
         }
         if (!containsNumbers()) {
-            return false;
+            return "Password must contain at least one (1) numeral!";
         }
         if (!containsLowerCaseCharacters()) {
-            return false;
+            return "Password must contain at least one (1) lower case character!";
         }
         if (!containsUpperCaseCharacters()) {
-            return false;
+            return "Password must contain at least one (1) upper case character!";
         }
         if (!containsSpecialCharacters()) {
-            return false;
+            return "Password must contain at least one (1) special character! (@,$,#,&)";
         }
-        return true;
+        return "Password Ok";
     }
 
     /**
@@ -57,20 +62,18 @@ public class PasswordValidation {
 
     public boolean containsSpecialCharacters() {
 
-        for (int i = 0; i < password.length(); i++) {
-            if ((password.charAt(i)+"").equals("@")) {
+            if (password.contains("@")) {
                 return true;
             }
-            if ((password.charAt(i)+"").equals("$")) {
+            if (password.contains("$")) {
                 return true;
             }
-            if ((password.charAt(i)+"").equals("#")) {
+            if (password.contains("#")) {
                 return true;
             }
-            if ((password.charAt(i)+"").equals("&")) {
+            if (password.contains("&")) {
                 return true;
             }
-        }
         return false;
 
     }

@@ -23,7 +23,7 @@ import java.util.Set;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-public class createUser {
+public class CreateUser {
 
     protected String firstName;
     protected String lastName;
@@ -38,7 +38,7 @@ public class createUser {
     MongoDatabase database;
     Map<String, Object> userDetails;
 
-    public createUser(String username, String password, String firstName, String lastName,  int birthDay, int birthMonth, int birthYear) {
+    public CreateUser(String username, String password, String firstName, String lastName,  int birthDay, int birthMonth, int birthYear) {
 
         this.username = username;
         this.password = password;
@@ -54,39 +54,66 @@ public class createUser {
 
     /**
      * Method to add a user to the database
-     * @return 1 if the user was successfully added or 0 if the user was not added to the database
+     * @return The result code from the sign up process
      */
-    public int addJammer()  throws Exception{
-        UsernameValidation meetsCriteria = new UsernameValidation(username);
+    public String addJammer() {
+		
+		try {
+		
+        UsernameValidation usernameCriteria = new UsernameValidation(username);
         PasswordValidation passwordCriteria = new PasswordValidation(password);
-        if (meetsCriteria.validateUsername() /* && passwordCriteria.validatePassword */) {
-            userDetails = Map.of("Username", username,
-                    "Password", password,
-                    "First name", firstName,
-                    "Last name", lastName,
-                    "Birth Day", birthDay,
-                    "Birth Month", birthMonth,
-                    "Birth Year", birthYear);
 
-            MongoCollection<Document> jammerCollection = database.getCollection("jammers-list");
-            Document user = new Document(userDetails);
-            jammerCollection.insertOne(user);
-            System.out.println("Added user");
-            return 1;
-        } else {
+		String usernameValidation = usernameCriteria.validateUsername();
+		String passwordValidation = passwordCriteria.validatePassword();
 
-            String [] altUsernames = new String[3];
+        if (usernameValidation.equals("Username Taken")) {
+			
+			 String [] altUsernames = new String[3];
             for (int i = 0; i < 3; i++) {
                 int randomNumber = Integer.parseInt(getRandomAlternativeString());
                 altUsernames[i] = username + randomNumber;
             }
-            System.out.println();
-            System.out.print(username + " is Already Taken. Try: ");
+			String output = "";
+            output = output + (username + " is Already Taken. Try: ");
             for (int i = 0; i < 3; i++) {
-                System.out.print(altUsernames[i] + " ");
+                output = output + (altUsernames[i] + " ");
             }
-            return 0;
-        }
+            return output;
+		}
+		if (!usernameValidation.equals("Username Ok")) {
+			
+			return usernameValidation;
+			
+		}
+		
+		if (!passwordValidation.equals("Password Ok")) {
+			
+			return passwordValidation;
+			
+		}
+		
+		userDetails = Map.of("Username", username,
+				"Password", password,
+				"First name", firstName,
+				"Last name", lastName,
+				"Birth Day", birthDay,
+				"Birth Month", birthMonth,
+				"Birth Year", birthYear);
+
+		MongoCollection<Document> jammerCollection = database.getCollection("jammers-list");
+		Document user = new Document(userDetails);
+		jammerCollection.insertOne(user);
+		System.out.println("New User has Signed up!");
+		
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			return "Fatal Error!";
+			
+		}
+		
+		return "Sign Up Success!";
+ 
     }
 
     public int addHost() {
@@ -127,8 +154,4 @@ public class createUser {
         return String.format("%03d", number);
     }
 
-    public static void main(String[] args) throws Exception {
-        createUser u = new createUser("ex", "1234", "bones", "miek", 3,1,109);
-        System.out.println(u.addJammer());
-    }
 }

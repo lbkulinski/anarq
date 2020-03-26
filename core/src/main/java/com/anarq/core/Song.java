@@ -83,4 +83,11 @@ public class Song {
 		
 	}
 	
+	/* Returns the BPM of the song in seconds */
+	public int getBPM() {
+		
+		return bpm;
+		
+	}
+	
 }

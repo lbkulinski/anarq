@@ -121,14 +121,14 @@ public class RequestQueue {
             return false;
         }
 
-        if (explicitFilter && song.songInfo.isExplicit) { //checks if song is explicit AND explicit filter is on
+        if (explicitFilter && song.getIsExplicit()) { //checks if song is explicit AND explicit filter is on
             //add song to override list and return false
             System.out.println("Request Pending: Explicit Content is not allowed ... Override request sent to host");
             overrides.add(song);
             return false;
         }
 
-        if (song.songInfo.bpm > this.maxBPM || song.songInfo.bpm < this.minBPM) {
+        if (song.getBPM() > this.maxBPM || song.getBPM() < this.minBPM) {
             System.out.println("Request Pending: BPM is not in the allowed range ... Override request sent to host");
             overrides.add(song);
             return false;

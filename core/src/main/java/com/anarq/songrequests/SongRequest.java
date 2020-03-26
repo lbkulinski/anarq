@@ -67,6 +67,16 @@ public class SongRequest {
     public String getGenre() {
         return songInfo.getSongGenre();
     }
+	
+	/* Returns the explict nature of the song request */
+    public boolean getIsExplicit() {
+        return songInfo.getIsExplicit();
+    }
+	
+	/* Returns the explict nature of the song request */
+    public int getBPM() {
+        return songInfo.getBPM();
+    }
 
 	/* Returns the vote score of the song request */
     public int getVotes() {

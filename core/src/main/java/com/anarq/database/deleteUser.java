@@ -7,12 +7,12 @@ import org.bson.BsonDocument;
 import org.bson.BsonString;
 import org.bson.Document;
 
-public class deleteUser {
+public class DeleteUser {
 
     String text;
     String field;
 
-    public deleteUser(String text) {
+    public DeleteUser(String text) {
         this.text = text;
         field = "Username";
     }
@@ -22,7 +22,7 @@ public class deleteUser {
      * @return -1 if user to be deleted is not found or 1 if the user is successfully deleted
      */
     public int delete() {
-        findUser jammer = new findUser(text);
+        FindUser jammer = new FindUser(text);
         Document user = jammer.find();
 
         if (user == null){
@@ -48,8 +48,4 @@ public class deleteUser {
         }
     }
 
-    public static void main(String[] args) {
-        deleteUser u = new deleteUser("new");
-        u.delete();
-    }
 }

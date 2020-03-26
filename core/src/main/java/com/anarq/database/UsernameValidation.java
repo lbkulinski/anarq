@@ -4,6 +4,8 @@ import java.io.*;
 
 public class UsernameValidation {
 
+	private static final int MIN_USERNAME_LENGTH = 3; 
+	private static final int MAX_USERNAME_LENGTH = 16; 
     String username;
 
     public UsernameValidation(String name) {
@@ -17,23 +19,10 @@ public class UsernameValidation {
      * @throws IOException
      */
 
-    public boolean hasBadWords () throws IOException{
+    public boolean hasBadWords () {
 
-        BufferedReader br = null;
-        try {
-//            File f = new File("./BadWords.txt");
-            File f = new File("/Users/sidmad/Desktop/Projects Folder/Purdue/Spring 2020/CS 307/src/BadWords.txt");
-            br = new BufferedReader(new FileReader(f));
-        } catch (FileNotFoundException f) {
-            System.out.println("\n\n FILE NOT FOUND \n\n");
-        }
-        String word;
-        while ((word = br.readLine()) != null) {
-            if (contains(word)) {
-                return true;
-            }
-        }
-        return false;
+        return NaughtyWords.isANaughtyWord(username);
+		
     }
 
     /**
@@ -43,7 +32,7 @@ public class UsernameValidation {
 
     public boolean isTaken () {
 
-        findUser user = new findUser(username);
+        FindUser user = new FindUser(username);
         if (user.find() == null) {
             return false;
         } else {
@@ -57,20 +46,23 @@ public class UsernameValidation {
      * @throws Exception
      */
 
-    public boolean validateUsername() throws Exception{
+    public String validateUsername() {
 
 
-        if ((username.length() < 1) || (username.length() > 16)) {
-            return false;
+        if ((username.length() < MIN_USERNAME_LENGTH)) {
+            return "Username must be at least " + MIN_USERNAME_LENGTH + " characters in length!";
+        }
+		if ((username.length() > MAX_USERNAME_LENGTH)) {
+            return "Username must be less than " + MAX_USERNAME_LENGTH + " characters in length!";
         }
         if (isTaken()) {
-            return false;
+            return "Username Taken";
         }
         if (hasBadWords()) {
-            return false;
+            return "Username cannot contain any innappropriate words!";
         }
 
-     return true;
+     return "Username Ok";
     }
 
     /**
