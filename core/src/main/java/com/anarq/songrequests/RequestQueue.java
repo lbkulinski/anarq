@@ -30,6 +30,58 @@ class VotesComparator implements Comparator<SongRequest> {
     }
 } 
 
+class Genre {
+    boolean pop;
+    boolean rock;
+    boolean country;
+    boolean jazz;
+    boolean rap;
+    boolean metal;
+    boolean rb;
+    boolean hiphop;
+    boolean electronic;
+    boolean christian;
+
+    public Genre() {
+        this.pop = true;
+        this.rock = true;
+        this.country = true;
+        this.jazz = true;
+        this.rap = true;
+        this.metal = true;
+        this.rb = true;
+        this.hiphop = true;
+        this.electronic = true;
+        this.christian = true;
+    }
+
+    public Genre(boolean[] values) {
+        if (values.length != 10) {
+            this.pop = true;
+            this.rock = true;
+            this.country = true;
+            this.jazz = true;
+            this.rap = true;
+            this.metal = true;
+            this.rb = true;
+            this.hiphop = true;
+            this.electronic = true;
+            this.christian = true;
+        }
+        else {
+            this.pop = values[0];
+            this.rock = values[1];
+            this.country = values[2];
+            this.jazz = values[3];
+            this.rap = values[4];
+            this.metal = values[5];
+            this.rb = values[6];
+            this.hiphop = values[7];
+            this.electronic = values[8];
+            this.christian = values[9];
+        }
+    }
+}
 /* 
 	RequestQueue
 		Contains methods pertaining to the organization and deployment of songrequests
@@ -53,6 +105,7 @@ public class RequestQueue {
     private ArrayList<SongRequest> songs = new ArrayList<SongRequest>();
     private PriorityQueue<SongRequest> songQueue = new PriorityQueue<SongRequest>(new VotesComparator());
     private ArrayList<SongRequest> overrides = new ArrayList<SongRequest>();
+    private Genre blacklistedGenres;
 
 	/* Creates a new RequestQueue Instance */
     public RequestQueue() {
@@ -64,10 +117,11 @@ public class RequestQueue {
         this.minBPM = 0;
         this.maxBPM = Integer.MAX_VALUE;
         this.visibility = true;
+        this.blacklistedGenres = new Genre();
     }
 
 	/* Creates a new RequestQueue Instance using the inputs */
-    public RequestQueue(MusicChooser musicChooser, int maxRequests, boolean acceptingRequests, boolean explicitFilter, int minBPM, int maxBPM, boolean visibility) {
+    public RequestQueue(MusicChooser musicChooser, int maxRequests, boolean acceptingRequests, boolean explicitFilter, int minBPM, int maxBPM, boolean visibility, boolean blacklistedGenres[]) {
         this.maxRequests = maxRequests;
         this.musicChooser = musicChooser;
         this.acceptingRequests = acceptingRequests;
@@ -82,6 +136,7 @@ public class RequestQueue {
             this.maxBPM = maxBPM;
         }
         this.visibility = visibility;
+        this.blacklistedGenres = new Genre(blacklistedGenres);
     }
 
 	/* Returns the max number of requests */
@@ -103,6 +158,10 @@ public class RequestQueue {
 
     public boolean getVisibility() {
         return visibility;
+    }
+
+    public Genre getBlacklistedGenres() {
+        return blacklistedGenres;
     }
 
 	/* Adds a song to the request queue */
@@ -134,6 +193,12 @@ public class RequestQueue {
             return false;
         }
 
+        if(!checkGenres(song, this.getBlacklistedGenres())) {
+            System.out.println("Request pending: Genre is not allowed in the queue ... Override request sent to host");
+            overrides.add(song);
+            return false;
+        }
+
         if (songQueue.size() < getMaxRequests()) {
             this.autoDJ = false;
 			System.out.println("Song added to queue: " + song.getId());
@@ -143,6 +208,25 @@ public class RequestQueue {
             System.out.println("Request Failed: Queue is full");
             return false;
         }
+    }
+
+    public boolean checkGenres(SongRequest song, Genre genres) {
+        String spotifyGenre = song.getSongGenre();
+        if(
+            (spotifyGenre.contains("pop") && !genres.pop)
+            || (spotifyGenre.contains("rock") && !genres.rock)
+            || (spotifyGenre.contains("country") && !genres.country)
+            || (spotifyGenre.contains("jazz") && !genres.jazz)
+            || (spotifyGenre.contains("rap") && !genres.rap)
+            || (spotifyGenre.contains("metal") && !genres.metal)
+            || (spotifyGenre.contains("r&b") && !genres.rb)
+            || (spotifyGenre.contains("hip hop") && !genres.hiphop)
+            || (spotifyGenre.contains("electronic") && !genres.electronic)
+            || (spotifyGenre.contains("christian") && !genres.christian)
+        ) {
+            return false;
+        }
+       return true;
     }
 
     public void removeOverride(int i, boolean decision) {

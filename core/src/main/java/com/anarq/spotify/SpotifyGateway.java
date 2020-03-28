@@ -24,14 +24,16 @@ public class SpotifyGateway extends ClientCredentialsExample{
 		SearchArtistsExample search = new SearchArtistsExample(spotifyApi, query);
 		
 		Song[] foundSongs = new Song[search.tracks.length];
-		
+		//genre sections: Pop, Rock, Country, Jazz, Rap, Metal, R&B, Hip-Hop, Electronic, Christian
+
 		try {
-		
+            String tempGenre = spotifyApi.getArtist(search.tracks[i].getArtists()[0].getId()).build().execute().getGenres().length > 0 ?
+                                spotifyApi.getArtist(search.tracks[i].getArtists()[0].getId()).build().execute().getGenres()[0] | "N/A";
 			for(int i = 0; i < search.tracks.length; i++) {
 				foundSongs[i] = new Song(
 				search.tracks[i].getName(),
 				search.tracks[i].getAlbum().getName(),
-				search.tracks[i].getArtists()[0].getName(),
+                tempGenre,
 				search.tracks[i].getId(),
 				search.tracks[i].getDurationMs()/1000,
 				search.tracks[i].getIsExplicit(),

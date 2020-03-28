@@ -21,13 +21,13 @@ public class Song {
 	
 	/* Constructs a new Song class */
 
-	public Song(String songName, String albumName, String artistName, String songId,
+	public Song(String songName, String albumName, String artistName, String songGenre, String songId,
 			int duration, boolean isExplicit, int bpm) {
 		
 		this.songName = songName;
 		this.albumName = albumName;
 		this.artistName = artistName;
-		this.songGenre = "";
+		this.songGenre = songGenre;
 		this.songId = songId;
 		this.duration = duration;
 		this.isExplicit = isExplicit;
