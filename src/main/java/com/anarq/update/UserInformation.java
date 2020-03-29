@@ -25,8 +25,8 @@ public final class UserInformation {
     private String newValue;
 
     /**
-     * Constructs a newly allocated {@code UserInformation} object with a default username, password, and
-     * new value of {@code null}.
+     * Constructs a newly allocated {@code UserInformation} object with a default username, password, and new value of
+     * {@code null}.
      */
     public UserInformation() {
         this.username = null;
