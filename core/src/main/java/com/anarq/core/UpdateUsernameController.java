@@ -1,5 +1,7 @@
 package com.anarq.core;
 
+import com.anarq.database.*;
+
 import org.springframework.stereotype.Controller;
 import java.util.Set;
 import com.anarq.update.UserType;
@@ -185,7 +187,7 @@ public final class UpdateUsernameController {
         String collectionName;
         MongoCollection<Document> collection;
         Bson filter;
-        String fieldName = "username";
+        String fieldName = "Username";
         Bson update;
         UpdateResult result;
 
@@ -195,17 +197,19 @@ public final class UpdateUsernameController {
 
         Objects.requireNonNull(newUsername, "the specified new username is null");
 
-        databaseUsername = System.getProperty("database-username");
+        //databaseUsername = System.getProperty("database-username");
 
-        databasePassword = System.getProperty("database-password");
+        //databasePassword = System.getProperty("database-password");
 
-        uri = String.format(format, databaseUsername, databasePassword);
+        //uri = String.format(format, databaseUsername, databasePassword);
 
-        client = MongoClients.create(uri);
+        //client = MongoClients.create(uri);
 
-        userDatabase = client.getDatabase(databaseName);
+        //userDatabase = client.getDatabase(databaseName);
 
-        switch (userType) {
+		userDatabase = ConnectToDatabase.connectToDatabase();
+
+       /* switch (userType) {
             case DJ:
                 collectionName = "djs";
                 break;
@@ -214,7 +218,9 @@ public final class UpdateUsernameController {
                 break;
             default:
                 throw new IllegalStateException(String.format("unexpected user type: %s", userType));
-        } //end switch
+        } //end switch*/
+
+		collectionName = "jammers";
 
         collection = userDatabase.getCollection(collectionName);
 
@@ -224,7 +230,7 @@ public final class UpdateUsernameController {
 
         result = collection.updateOne(filter, update);
 
-        client.close();
+        //client.close();
 
         return result.getModifiedCount() == 1;
     } //updateUsername

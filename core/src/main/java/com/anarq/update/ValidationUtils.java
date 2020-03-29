@@ -1,5 +1,7 @@
 package com.anarq.update;
 
+import com.anarq.database.*;
+
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
@@ -47,7 +49,7 @@ public final class ValidationUtils {
         String collectionName;
         MongoCollection<Document> collection;
         Bson filter;
-        String fieldName = "username";
+        String fieldName = "Username";
         FindIterable<Document> results;
         boolean present;
 
@@ -55,17 +57,19 @@ public final class ValidationUtils {
 
         Objects.requireNonNull(username, "the specified username is null");
 
-        databaseUsername = System.getProperty("database-username");
+        //databaseUsername = System.getProperty("database-username");
 
-        databasePassword = System.getProperty("database-password");
+        //databasePassword = System.getProperty("database-password");
 
-        uri = String.format(format, databaseUsername, databasePassword);
+        //uri = String.format(format, databaseUsername, databasePassword);
 
-        client = MongoClients.create(uri);
+        //client = MongoClients.create(uri);
 
-        userDatabase = client.getDatabase(databaseName);
+        //userDatabase = client.getDatabase(databaseName);
 
-        switch (userType) {
+		userDatabase = ConnectToDatabase.connectToDatabase();
+
+        /*switch (userType) {
             case DJ:
                 collectionName = "djs";
                 break;
@@ -74,7 +78,9 @@ public final class ValidationUtils {
                 break;
             default:
                 throw new IllegalStateException(String.format("unexpected user type: %s", userType));
-        } //end switch
+        } //end switch*/
+
+		collectionName = "jammers";
 
         collection = userDatabase.getCollection(collectionName);
 
@@ -84,7 +90,7 @@ public final class ValidationUtils {
 
         present = results.first() != null;
 
-        client.close();
+        //client.close();
 
         return present;
     } //presentInDatabase
