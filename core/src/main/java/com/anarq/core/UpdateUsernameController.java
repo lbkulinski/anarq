@@ -1,10 +1,11 @@
 package com.anarq.core;
 
+import com.anarq.database.*;
+
 import org.springframework.stereotype.Controller;
 import java.util.Set;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
-import com.anarq.update.ValidationUtils;
 import java.io.BufferedReader;
 import java.util.HashSet;
 import java.io.FileReader;
@@ -22,7 +23,6 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
-import com.anarq.update.UserInformation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -133,7 +133,7 @@ public final class UpdateUsernameController {
 
         badWords = new HashSet<>();
 
-        try {
+        /*try {
             reader = new BufferedReader(new FileReader(fileName));
 
             line = reader.readLine();
@@ -159,7 +159,10 @@ public final class UpdateUsernameController {
             } //end if
         } //end for
 
-        return true;
+        return true;*/
+		
+		return !NaughtyWords.isANaughtyWord(newUsername);
+		
     } //newUsernameValid
 
     /**
@@ -191,15 +194,15 @@ public final class UpdateUsernameController {
 
         Objects.requireNonNull(newUsername, "the specified new username is null");
 
-        databaseUsername = System.getProperty("database-username");
+        /*databaseUsername = System.getProperty("database-username");
 
         databasePassword = System.getProperty("database-password");
 
         uri = String.format(format, databaseUsername, databasePassword);
 
-        client = MongoClients.create(uri);
+        client = MongoClients.create(uri);*/
 
-        userDatabase = client.getDatabase(databaseName);
+        userDatabase = ConnectToDatabase.getDatabaseConnection(); //client.getDatabase(databaseName);
 
         collection = userDatabase.getCollection(collectionName);
 
@@ -213,7 +216,7 @@ public final class UpdateUsernameController {
 
         result = collection.updateOne(filter, update);
 
-        client.close();
+        //client.close();
 
         return result.getModifiedCount() == 1;
     } //updateUsername

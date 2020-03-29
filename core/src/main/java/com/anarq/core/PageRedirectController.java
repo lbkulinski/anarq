@@ -2,10 +2,8 @@ package com.anarq.core;
 
 import org.springframework.stereotype.Controller;
 import java.util.Set;
-import com.anarq.update.UserType;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
-import com.anarq.update.ValidationUtils;
 import java.io.BufferedReader;
 import java.util.HashSet;
 import java.io.FileReader;
@@ -22,7 +20,6 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
-import com.anarq.update.UserInformation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 

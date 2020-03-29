@@ -14,7 +14,7 @@ public class FindUser {
 
     public FindUser(String text) {
         this.text = text;
-        field = "Username";
+        field = "username";
     }
     public FindUser(String field, String text) {
         this.field = field;
@@ -23,8 +23,7 @@ public class FindUser {
 
     public Document find() {
 
-        ConnectToDatabase newConnection = new ConnectToDatabase();
-        MongoDatabase database = newConnection.connect();
+        MongoDatabase database = ConnectToDatabase.getDatabaseConnection();
         MongoCollection<Document> jammerCollection = database.getCollection("users");
 
         BsonString searchString = new BsonString(text);
@@ -46,10 +45,10 @@ public class FindUser {
         Document rawDocument = find();
 		
 		return new AccountInfo(
-		(String) rawDocument.get("Username"),
-		(String) rawDocument.get("First name"),
-		(String) rawDocument.get("Last name"),
-		(String) rawDocument.get("Email")
+		(String) rawDocument.get("username"),
+		(String) rawDocument.get("first-name"),
+		(String) rawDocument.get("last-name"),
+		(String) rawDocument.get("email")
 		);
 		
     }
@@ -59,10 +58,11 @@ public class FindUser {
 		Document userInfo = find();
 		
 		if (userInfo == null) {
+			System.out.println("User Not Found!!!!!");
 			return null;
 		}
 		
-		if (((String) (userInfo.get("Password"))).equals(password)) {
+		if (((String) (userInfo.get("password"))).equals(password)) {
 			return userInfo;
 		}
 		

@@ -17,14 +17,12 @@ import com.mongodb.client.result.UpdateResult;
 import com.mongodb.client.model.Updates;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
-import com.anarq.update.UserInformation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import com.anarq.update.ValidationUtils;
 
 /**
  * A controller for updating a user's profile picture.

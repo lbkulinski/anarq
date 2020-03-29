@@ -21,10 +21,8 @@ import com.mongodb.client.result.UpdateResult;
 import com.mongodb.client.model.Updates;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
-import com.anarq.update.UserInformation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import com.anarq.update.ValidationUtils;
 
 /**
  * A controller for updating a user's biography.

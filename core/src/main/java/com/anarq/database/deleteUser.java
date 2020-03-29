@@ -14,7 +14,7 @@ public class DeleteUser {
 
     public DeleteUser(String text) {
         this.text = text;
-        field = "Username";
+        field = "username";
     }
 
     /**
@@ -39,8 +39,7 @@ public class DeleteUser {
 //                return -1;
 //            }
 
-            ConnectToDatabase newConnection = new ConnectToDatabase();
-            MongoDatabase database = newConnection.connect();
+            MongoDatabase database = ConnectToDatabase.getDatabaseConnection();
             MongoCollection<Document> jammerCollection = database.getCollection("users");
             System.out.println("Deleted User - " + user.toString());
             jammerCollection.deleteOne(user);

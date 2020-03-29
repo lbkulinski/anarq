@@ -46,8 +46,13 @@ public class AccountController {
 			
 		}
 		
-		return username;
+		if(info.get("user-id") == null) {
+			
+			return "Login Failed.";
+			
+		}
 		
+		return (String) info.get("user-id");
 	}
 	
 	@GetMapping("/get-account-info")
@@ -56,7 +61,7 @@ public class AccountController {
 		
 		// TODO: Check if account exists and retrieve info
 		
-		FindUser fu = new FindUser(userKey);
+		FindUser fu = new FindUser("user-id", userKey);
 		
 		return fu.findAccountInfo();
 		

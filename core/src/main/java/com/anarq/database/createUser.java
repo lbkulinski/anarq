@@ -50,8 +50,8 @@ public class CreateUser {
         this.birthMonth = birthMonth;
         this.birthYear = birthYear;
 
-        newConnection = new ConnectToDatabase();
-        database = newConnection.connect();
+        database = ConnectToDatabase.getDatabaseConnection();
+		
     }
 
     /**
@@ -94,14 +94,15 @@ public class CreateUser {
 			
 		}
 		
-		userDetails = Map.of("Username", username,
-				"Password", password,
-				"First name", firstName,
-				"Last name", lastName,
-				"Email", email,
-				"Birth Day", birthDay,
-				"Birth Month", birthMonth,
-				"Birth Year", birthYear);
+		userDetails = Map.of("user-id", "ID" + String.format("%X", (int) (Math.random() * 999999.0f)),
+				"username", username,
+				"password", password,
+				"first-name", firstName,
+				"last-name", lastName,
+				"email", email,
+				"birth-day", birthDay,
+				"birth-month", birthMonth,
+				"birth-year", birthYear);
 
 		MongoCollection<Document> jammerCollection = database.getCollection("users");
 		Document user = new Document(userDetails);
@@ -122,14 +123,14 @@ public class CreateUser {
     public int addHost() {
 
         int roomCode = Integer.parseInt(getRandomNumberString());
-        userDetails = Map.of("Username", username,
-                             "Password", password,
-                             "First name", firstName,
-                             "Last name", lastName,
-                             "Room Code", roomCode,
-                             "Birth Day", birthDay,
-                             "Birth Month", birthMonth,
-                             "Birth Year", birthYear);
+        userDetails = Map.of("username", username,
+				"password", password,
+				"first-name", firstName,
+				"last-name", lastName,
+				"email", email,
+				"birth-day", birthDay,
+				"birth-month", birthMonth,
+				"birth-year", birthYear);
 
         MongoCollection<Document> hostCollection = database.getCollection("hosts-list");
         Document user = new Document(userDetails);

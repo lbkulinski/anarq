@@ -1,5 +1,7 @@
 package com.anarq.core;
 
+import com.anarq.database.*;
+
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
@@ -55,15 +57,15 @@ public final class ValidationUtils {
 
         Objects.requireNonNull(username, "the specified username is null");
 
-        databaseUsername = System.getProperty("database-username");
+        /*databaseUsername = System.getProperty("database-username");
 
         databasePassword = System.getProperty("database-password");
 
         uri = String.format(format, databaseUsername, databasePassword);
 
-        client = MongoClients.create(uri);
+        client = MongoClients.create(uri);*/
 
-        userDatabase = client.getDatabase(databaseName);
+        userDatabase = ConnectToDatabase.connectToDatabase();//client.getDatabase(databaseName);
 
         collection = userDatabase.getCollection(collectionName);
 
@@ -77,7 +79,7 @@ public final class ValidationUtils {
 
         present = results.first() != null;
 
-        client.close();
+        //client.close();
 
         return present;
     } //presentInDatabase
@@ -113,15 +115,15 @@ public final class ValidationUtils {
 
         Objects.requireNonNull(password, "the specified password is null");
 
-        databaseUsername = System.getProperty("database-username");
+        /*databaseUsername = System.getProperty("database-username");
 
         databasePassword = System.getProperty("database-password");
 
         uri = String.format(format, databaseUsername, databasePassword);
 
-        client = MongoClients.create(uri);
+        client = MongoClients.create(uri);*/
 
-        userDatabase = client.getDatabase(databaseName);
+        userDatabase = ConnectToDatabase.connectToDatabase();//client.getDatabase(databaseName);
 
         collection = userDatabase.getCollection(collectionName);
 
@@ -139,10 +141,12 @@ public final class ValidationUtils {
             throw new IllegalStateException("the user with the specified username is not present in the database");
         } //end if
 
-        readPasswordHash = result.get("password-hash", String.class);
+        //readPasswordHash = result.get("password-hash", String.class);
+		readPasswordHash = result.get("password", String.class);
 
-        client.close();
+        //client.close();
 
-        return BCrypt.checkpw(password, readPasswordHash);
+        //return BCrypt.checkpw(password, readPasswordHash);
+		return password.equals(readPasswordHash);
     } //correctPassword
 }
