@@ -1,4 +1,4 @@
-package com.anarq.update.profilepic;
+package com.anarq.core;
 
 import org.springframework.stereotype.Controller;
 import com.anarq.update.UserType;
@@ -8,11 +8,15 @@ import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import com.mongodb.client.FindIterable;
-import org.bson.types.Binary;
 import java.util.Objects;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.model.Filters;
-import java.util.Arrays;
+import java.io.BufferedReader;
+import java.util.Set;
+import java.util.HashSet;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import com.mongodb.client.result.UpdateResult;
 import com.mongodb.client.model.Updates;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,31 +24,27 @@ import org.springframework.ui.Model;
 import com.anarq.update.UserInformation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import com.anarq.update.ValidationUtils;
 
 /**
- * A controller for updating a user's profile picture.
+ * A controller for updating a user's biography.
  *
  * @author Logan Kulinski, lbk@purdue.edu
  * @version March 24, 2020
  */
 @Controller
-public final class UpdateProfilePictureController {
+public final class UpdateBioController {
     /**
-     * Returns whether or not the specified bytes is the same as the bytes of the user with the specified username.
+     * Returns whether or not the specified bio is the same as the bio of the user with the specified username.
      *
      * @param userType the user type to be used in the operation
      * @param username the username to be used in the operation
-     * @param bytes the bytes to be used in the operation
-     * @return {@code true}, if the specified bytes is the same as the bytes of the user with the specified username
-     * and {@code false} otherwise
-     * @throws NullPointerException if the specified user type, username, or bytes is {@code null}
+     * @param bio the bio to be used in the operation
+     * @return {@code true}, if the specified bio is the same as the bio of the user with the specified username and
+     * {@code false} otherwise
+     * @throws NullPointerException if the specified user type, username, or bio is {@code null}
      */
-    private boolean profilePictureSame(UserType userType, String username, byte[] bytes) {
+    private boolean bioSame(UserType userType, String username, String bio) {
         String databaseUsername;
         String databasePassword;
         String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
@@ -58,16 +58,15 @@ public final class UpdateProfilePictureController {
         String usernameFieldName = "username";
         FindIterable<Document> results;
         Document result;
-        Binary currentBinary;
-        String pictureBytesFieldName = "picture-bytes";
-        byte[] currentBytes;
+        String currentBio;
+        String bioFieldName = "bio";
         boolean same;
 
         Objects.requireNonNull(userType, "the specified user type is null");
 
         Objects.requireNonNull(username, "the specified username is null");
 
-        Objects.requireNonNull(bytes, "the specified bytes is null");
+        Objects.requireNonNull(bio, "the specified bio is null");
 
         databaseUsername = System.getProperty("database-username");
 
@@ -102,27 +101,75 @@ public final class UpdateProfilePictureController {
             throw new IllegalStateException("the user with the specified username is not present in the database");
         } //end if
 
-        currentBinary = result.get(pictureBytesFieldName, Binary.class);
+        currentBio = result.getString(bioFieldName);
 
-        currentBytes = currentBinary.getData();
-
-        same = Arrays.equals(bytes, currentBytes);
+        same = Objects.equals(bio, currentBio);
 
         client.close();
 
         return same;
-    } //profilePictureSame
+    } //bioSame
 
     /**
-     * Attempts to update the profile picture of the user with the specified username with the specified bytes.
+     * Returns whether or not the specified bio is valid. A bio is valid if it does not contain any "bad words".
+     *
+     * @param bio the bio to be used in the operation
+     * @return {@code true}, if the specified bio is valid and {@code false} otherwise
+     * @throws NullPointerException if the specified bio is {@code null}
+     * @throws UncheckedIOException if an I/O error occurs while trying to read the file containing the bad words
+     */
+    private boolean bioValid(String bio) {
+        String fileName = "src/main/BadWords.txt";
+        BufferedReader reader;
+        String line;
+        Set<String> badWords;
+        String pattern;
+
+        Objects.requireNonNull(bio, "the specified bio is null");
+
+        bio = bio.toLowerCase();
+
+        badWords = new HashSet<>();
+
+        try {
+            reader = new BufferedReader(new FileReader(fileName));
+
+            line = reader.readLine();
+
+            while (line != null) {
+                line = line.toLowerCase();
+
+                badWords.add(line);
+
+                line = reader.readLine();
+            } //end while
+
+            reader.close();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        } //end try catch
+
+        for (String badWord : badWords) {
+            pattern = String.format(".*%s.*", badWord);
+
+            if (bio.matches(pattern)) {
+                return false;
+            } //end if
+        } //end for
+
+        return true;
+    } //bioValid
+
+    /**
+     * Attempts to update the bio of the user with the specified username with the specified bio.
      *
      * @param userType the user type to be used in the operation
      * @param username the username to be used in the operation
-     * @param bytes the bytes to be used in the operation
-     * @return {@code true}, if the user's profile picture was successfully updated and {@code false} otherwise
-     * @throws NullPointerException if the specified user type, username, or bytes is {@code null}
+     * @param bio the bio to be used in the operation
+     * @return {@code true}, if the user's bio was successfully updated and {@code false} otherwise
+     * @throws NullPointerException if the specified user type, username, or bio is {@code null}
      */
-    private boolean updateProfilePicture(UserType userType, String username, byte[] bytes) {
+    private boolean updateBio(UserType userType, String username, String bio) {
         String databaseUsername;
         String databasePassword;
         String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
@@ -135,14 +182,14 @@ public final class UpdateProfilePictureController {
         Bson filter;
         String usernameFieldName = "username";
         Bson update;
-        String pictureBytesFieldName = "picture-bytes";
+        String bioFieldName = "bio";
         UpdateResult result;
 
         Objects.requireNonNull(userType, "the specified user type is null");
 
         Objects.requireNonNull(username, "the specified username is null");
 
-        Objects.requireNonNull(bytes, "the specified bytes is null");
+        Objects.requireNonNull(bio, "the specified bio is null");
 
         databaseUsername = System.getProperty("database-username");
 
@@ -169,72 +216,55 @@ public final class UpdateProfilePictureController {
 
         filter = Filters.eq(usernameFieldName, username);
 
-        update = Updates.set(pictureBytesFieldName, bytes);
+        update = Updates.set(bioFieldName, bio);
 
         result = collection.updateOne(filter, update);
 
         client.close();
 
         return result.getModifiedCount() == 1;
-    } //updateProfilePicture
+    } //updateBio
 
     /**
-     * Displays the form for updating a user's profile picture and collects the user's input.
+     * Displays the form for updating a user's bio and collects the user's input.
      *
      * @param model the model to be used in the operation
-     * @return the HTML code for the profile picture update form
+     * @return the HTML code for the bio update form
      */
-    @GetMapping("/updateProfilePicture")
-    public String updateProfilePictureForm(Model model) {
+    @GetMapping("/updateBio")
+    public String updateBioForm(Model model) {
         model.addAttribute("userInformation", new UserInformation());
 
-        return "updateProfilePictureForm";
-    } //updateProfilePictureForm
+        return "updateBioForm";
+    } //updateBioForm
 
     /**
-     * Displays the result after attempting to update the user's profile picture.
+     * Displays the result after attempting to update the user's bio.
      *
      * @param userInformation the user information to be used in the operation
-     * @param file the file to be used in the operation
-     * @return the HTML code for the profile picture update result
+     * @return the HTML code for the bio update result
      */
-    @PostMapping("/updateProfilePicture")
-    public String updateProfilePictureSubmit(@ModelAttribute UserInformation userInformation,
-                                             @RequestParam("file") MultipartFile file) {
-        UserType userType;
-        String username;
-        String password;
-        String contentType;
-        byte[] bytes;
+    @PostMapping("/updateBio")
+    public String updateBioSubmit(@ModelAttribute UserInformation userInformation) {
+        UserType userType = userInformation.getUserType();
+        String username = userInformation.getUsername();
+        String password = userInformation.getPassword();
+        String bio = userInformation.getNewValue();
 
-        userType = userInformation.getUserType();
-
-        username = userInformation.getUsername();
-
-        password = userInformation.getPassword();
-
-        contentType = file.getContentType();
-
-        try {
-            bytes = file.getBytes();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        } //end try catch
+        username = username.toLowerCase();
 
         if (!ValidationUtils.userPresent(userType, username)) {
-            return "updateProfilePictureUserNotFoundResult";
+            return "updateBioUserNotFoundResult";
         } else if (!ValidationUtils.passwordCorrect(userType, username, password)) {
-            return "updateProfilePictureIncorrectPasswordResult";
-        } else if (file.isEmpty()) {
-            return "updateProfilePictureEmptyFileResult";
-        } else if (!Objects.equals(contentType, "image/jpeg")) {
-            return "updateProfilePictureNotJPEGResult";
-        } else if (this.profilePictureSame(userType, username, bytes)) {
-            return "updateProfilePictureNoChangeResult";
+            return "updateBioIncorrectPasswordResult";
+        } else if (this.bioSame(userType, username, bio)) {
+            return "updateBioNoChangeResult";
+        } else if (!this.bioValid(bio)) {
+            return "updateBioInvalidBioResult";
         } else {
-            boolean success = this.updateProfilePicture(userType, username, bytes);
+            boolean success = this.updateBio(userType, username, bio);
 
-            return success ? "updateProfilePictureSuccessResult" : "updateProfilePictureFailureResult";
+            return success ? "updateBioSuccessResult" : "updateBioFailureResult";
         } //end if
-    } //updateProfilePictureSubmit
+    } //updateBioSubmit
 }

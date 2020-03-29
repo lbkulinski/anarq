@@ -7,7 +7,7 @@ import java.util.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages={"com.anarq"})
 public class CoreApplication {
 
 	private static ArrayList<Session> activeSessions = new ArrayList<Session>();
@@ -18,6 +18,9 @@ public class CoreApplication {
 		
 		ConnectToDatabase c = new ConnectToDatabase();
         c.connect();
+		
+		// Initalize Encryption
+		EncryptionDecryptionAES a = new EncryptionDecryptionAES();
 		
 	}
 	

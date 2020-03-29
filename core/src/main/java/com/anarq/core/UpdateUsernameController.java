@@ -1,4 +1,4 @@
-package com.anarq.update.username;
+package com.anarq.core;
 
 import org.springframework.stereotype.Controller;
 import java.util.Set;

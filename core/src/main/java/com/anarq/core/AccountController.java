@@ -19,7 +19,7 @@ public class AccountController {
 	@RequestParam(value="password", defaultValue="password")String password) {
 		
 		// TODO: Add sign up testing	
-		CreateUser newUser = new CreateUser(username, password, firstname, lastname, day, month, year);
+		CreateUser newUser = new CreateUser(username, password, firstname, lastname, email, day, month, year);
 		
 		return newUser.addJammer();
 		
@@ -34,7 +34,7 @@ public class AccountController {
 		
 		if (userLogin == null) {
 			
-			return "No combination of that Username and Password was found!";
+			return "Login Failed.";
 			
 		}
 		
@@ -42,12 +42,26 @@ public class AccountController {
 		
 		if (info == null) {
 			
-			return "No combination of that Username and Password was found!";
+			return "Login Failed.";
 			
 		}
 		
-		return "Login Success!";
+		return username;
 		
 	}
+	
+	@GetMapping("/get-account-info")
+	public AccountInfo getAccountInfo(
+	@RequestParam(value="userkey", defaultValue="no_user_key")String userKey) {
+		
+		// TODO: Check if account exists and retrieve info
+		
+		FindUser fu = new FindUser(userKey);
+		
+		return fu.findAccountInfo();
+		
+		
+	}
+	
 	
 }

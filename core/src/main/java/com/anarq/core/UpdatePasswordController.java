@@ -1,4 +1,4 @@
-package com.anarq.update.password;
+package com.anarq.core;
 
 import org.springframework.stereotype.Controller;
 import java.util.Objects;

@@ -9,6 +9,23 @@ import javax.crypto.SecretKey;
 public class EncryptionDecryptionAES {
 
     static Cipher cipher;
+	static SecretKey secretKey;
+	
+	public EncryptionDecryptionAES() {
+		
+		try {
+		
+			KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+			keyGenerator.init(128); // block size is 128bits
+			secretKey = keyGenerator.generateKey();
+		
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}
+		
+	}
 
     /*
         Code derived from:
@@ -24,15 +41,39 @@ public class EncryptionDecryptionAES {
      * @throws Exception
      */
 
-    public void encrypt (String password) throws Exception {
+    public static String encrypt(String text) {
         // TODO save the encrypted password and the key
 
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-        keyGenerator.init(128); // block size is 128bits
-        SecretKey secretKey = keyGenerator.generateKey();
+		try {
+			
+			cipher = Cipher.getInstance("AES");
+			return encryptText(text, secretKey);
+		
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}
+		
+		return "encrypt_failed";
 
-        cipher = Cipher.getInstance("AES");
-        String encryptedPassword = encryptText(password, secretKey);
+    }
+	
+	public static String decrypt(String text) {
+        // TODO save the encrypted password and the key
+
+		try {
+			
+			cipher = Cipher.getInstance("AES");
+			return decryptText(text, secretKey);
+		
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}
+		
+		return "decrypt_failed";
 
     }
 

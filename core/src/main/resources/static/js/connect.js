@@ -5,8 +5,10 @@ var hostButton = document.getElementById("host");
 var sessionId = document.getElementById("sessionId");
 var username = document.getElementById("username");
 
-if (getIsLoggedIn() == "true") {
-	userData.innerHTML = "Welcome, " + getUsername() + "! <br> <button id=\"logout\" type=\"button\" onclick=\"location.href = '/logout.html'\">Log Out</button>";
+if (getIsLoggedIn() != "false") {
+	userData.innerHTML = "Welcome, " + getUsername()
+	+ "! <br> <button id=\"logout\" type=\"button\" onclick=\"location.href = '/logout.html'\">Log Out</button>"
+	 + "! <br> <button id=\"account-page\" type=\"button\" onclick=\"location.href = '/accountpage.html'\">My Account</button>";
 	usernameField.innerHTML = "";
 }
 
@@ -33,7 +35,7 @@ connectButton.addEventListener("click", function(){
 		
 			var data = JSON.parse(searchRequest.responseText);
 		
-			if (getIsLoggedIn() != "true") {
+			if (getIsLoggedIn() == "false") {
 				setUsername(username.value);
 			}
 			setUserId(data.id);
@@ -68,7 +70,7 @@ hostButton.addEventListener("click", function(){
 			
 			var data = JSON.parse(searchRequest.responseText);
 			
-			if (getIsLoggedIn() != "true") {
+			if (getIsLoggedIn() == "false") {
 				setUsername(data.name);
 			}
 			setUserId(data.id);

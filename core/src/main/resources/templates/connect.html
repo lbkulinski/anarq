@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Connect to an AnarQ Session</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<header>
+	
+		<div class="signin" id="userdata">
+			<button id="signin" type="button" onclick="location.href = '/signin.html'">Sign In or Log In</button>
+		</div>
+	
+		<div class="centered-in-frame">
+		<image src="images/AnarQLogo.png" width="100%"></image>
+			<h1>Join or Host a Session</h1>
+			<p>Session ID:</p>
+			<input id="sessionId" type="text" size="25"></input>
+			<br>
+			<div id="username-field">
+				<p>Username:</p>
+				<input id="username" type="text" size="25"></input>
+			<br>
+			</div>
+			<button id="connect" type="button">Connect to Session</button>
+			<br>
+			<p>Or</p>
+			<button id="host" type="button">Host Session</button>
+		</div>
+	</header>
+	
+	
+	<script type="text/javascript" src="js/currentsession.js"></script>
+	<script type="text/javascript" src="js/connect.js"></script>
+</body>
+</html>

@@ -28,6 +28,7 @@ public class CreateUser {
     protected String firstName;
     protected String lastName;
     protected String password;
+	protected String email;
 
     protected String username;
     protected int birthDay;
@@ -38,12 +39,13 @@ public class CreateUser {
     MongoDatabase database;
     Map<String, Object> userDetails;
 
-    public CreateUser(String username, String password, String firstName, String lastName,  int birthDay, int birthMonth, int birthYear) {
+    public CreateUser(String username, String password, String firstName, String lastName, String email, int birthDay, int birthMonth, int birthYear) {
 
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+		this.email = email;
         this.birthDay = birthDay;
         this.birthMonth = birthMonth;
         this.birthYear = birthYear;
@@ -96,6 +98,7 @@ public class CreateUser {
 				"Password", password,
 				"First name", firstName,
 				"Last name", lastName,
+				"Email", email,
 				"Birth Day", birthDay,
 				"Birth Month", birthMonth,
 				"Birth Year", birthYear);

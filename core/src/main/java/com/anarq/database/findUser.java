@@ -1,5 +1,6 @@
 package com.anarq.database;
 
+import com.anarq.core.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.BsonDocument;
@@ -28,7 +29,6 @@ public class FindUser {
 
         BsonString searchString = new BsonString(text);
         BsonDocument searchDocument = new BsonDocument(field, searchString);
-//        System.out.println("Matches = " + jammerCollection.countDocuments(searchDocument));
 
         if (jammerCollection.find(searchDocument) == null) {
             return null;
@@ -39,6 +39,19 @@ public class FindUser {
             }
         }
         return null;
+    }
+	
+	public AccountInfo findAccountInfo() {
+
+        Document rawDocument = find();
+		
+		return new AccountInfo(
+		(String) rawDocument.get("Username"),
+		(String) rawDocument.get("First name"),
+		(String) rawDocument.get("Last name"),
+		(String) rawDocument.get("Email")
+		);
+		
     }
 	
 	public Document attemptLogin(String password) {

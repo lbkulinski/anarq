@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Hosting an AnarQ Session</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<header>
+		<h2>You are now Hosting $LOBBY_NAME!</h2>
+		<h3>Give people this code to connect:</h3>
+		<div class="bigtext"><h1 id="session-header">ID: $SESSIONID</h1></div>
+		<button id="request-song" type="button" onclick="location.href = '/search.html'">Request a Song</button>
+		<button id="quit-session" type="button">Terminate Session</button>
+	</header>
+	<div class="column">
+	<p>Song Request Queue</p>
+	<div id="current-requests"></div>
+	</div>
+	<div class="column">
+	<p>Connected Jammers</p>
+	<div id="connected-clients"></div>
+	</div>
+	
+	
+	<script type="text/javascript" src="js/currentsession.js"></script>
+	<script type="text/javascript" src="js/hostauthentication.js"></script>
+	<script type="text/javascript" src="js/hostsession.js"></script>
+	<script type="text/javascript" src="js/updateuserinfo.js"></script>
+</body>
+</html>

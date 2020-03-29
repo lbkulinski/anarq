@@ -11,9 +11,9 @@ function logIn(username, password) {
 			
 			console.log(response);
 			
-			if (response == "Login Success!") {
+			if (response != "Login Failed." && getIsLoggedIn() == "false") {
 				
-				setIsLoggedIn("true");
+				setIsLoggedIn(response);
 				setUsername(username);
 				setCurrentSessionId("");
 				setUserId("");
