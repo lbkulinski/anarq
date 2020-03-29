@@ -1,4 +1,4 @@
-package com.anarq.update.profilepic;
+package com.anarq.core;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
  * An exception handler for exceeding the maximum file size.
  *
  * @author Logan Kulinski, lbk@purdue.edu
- * @version March 25, 2020
+ * @version March 29, 2020
  */
 @ControllerAdvice
 public final class FileSizeExceptionHandler {

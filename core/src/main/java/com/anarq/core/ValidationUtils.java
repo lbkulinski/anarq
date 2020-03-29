@@ -1,11 +1,10 @@
-package com.anarq.update;
-
-import com.anarq.database.*;
+package com.anarq.core;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
+import java.util.regex.Pattern;
 import org.bson.conversions.Bson;
 import com.mongodb.client.FindIterable;
 import java.util.Objects;
@@ -17,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
  * A set of validation utility methods used by account operations.
  *
  * @author Logan Kulinski, lbk@purdue.edu
- * @version March 14, 2020
+ * @version March 29, 2020
  */
 public final class ValidationUtils {
     /**
@@ -30,15 +29,14 @@ public final class ValidationUtils {
     } //UpdateUtils
 
     /**
-     * Returns whether or not a user with the specified username and user type is present in the database.
+     * Returns whether or not a user with the specified username is present in the database.
      *
-     * @param userType the user type to be used in the operation
      * @param username the username to be used in the operation
-     * @return {@code true}, if a user with the specified username and user type is present in the database and
-     * {@code false} otherwise
-     * @throws NullPointerException if the specified user type or username is {@code null}
+     * @return {@code true}, if a user with the specified username and is present in the database and {@code false}
+     * otherwise
+     * @throws NullPointerException if the specified username is {@code null}
      */
-    public static boolean userPresent(UserType userType, String username) {
+    public static boolean userPresent(String username) {
         String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
         String databaseUsername;
         String databasePassword;
@@ -46,51 +44,40 @@ public final class ValidationUtils {
         MongoClient client;
         String databaseName = "user-database";
         MongoDatabase userDatabase;
-        String collectionName;
+        String collectionName = "users";
         MongoCollection<Document> collection;
+        String regexString;
+        Pattern regex;
         Bson filter;
-        String fieldName = "Username";
+        String fieldName = "username";
         FindIterable<Document> results;
         boolean present;
 
-        Objects.requireNonNull(userType, "the specified user type is null");
-
         Objects.requireNonNull(username, "the specified username is null");
 
-        //databaseUsername = System.getProperty("database-username");
+        databaseUsername = System.getProperty("database-username");
 
-        //databasePassword = System.getProperty("database-password");
+        databasePassword = System.getProperty("database-password");
 
-        //uri = String.format(format, databaseUsername, databasePassword);
+        uri = String.format(format, databaseUsername, databasePassword);
 
-        //client = MongoClients.create(uri);
+        client = MongoClients.create(uri);
 
-        //userDatabase = client.getDatabase(databaseName);
-
-		userDatabase = ConnectToDatabase.connectToDatabase();
-
-        /*switch (userType) {
-            case DJ:
-                collectionName = "djs";
-                break;
-            case JAMMER:
-                collectionName = "jammers";
-                break;
-            default:
-                throw new IllegalStateException(String.format("unexpected user type: %s", userType));
-        } //end switch*/
-
-		collectionName = "jammers";
+        userDatabase = client.getDatabase(databaseName);
 
         collection = userDatabase.getCollection(collectionName);
 
-        filter = Filters.eq(fieldName, username);
+        regexString = String.format("^%s$", username);
+
+        regex = Pattern.compile(regexString, Pattern.CASE_INSENSITIVE);
+
+        filter = Filters.regex(fieldName, regex);
 
         results = collection.find(filter);
 
         present = results.first() != null;
 
-        //client.close();
+        client.close();
 
         return present;
     } //presentInDatabase
@@ -98,14 +85,13 @@ public final class ValidationUtils {
     /**
      * Returns whether or not a user with the specified username entered the correct password.
      *
-     * @param userType the user type to be used in the operation
      * @param username the username to be used in the operation
      * @param password the password to be used in the operation
      * @return {@code true}, if a user with the specified username entered the correct password and {@code false}
      * otherwise
-     * @throws NullPointerException if the specified user type, username, or password is {@code null}
+     * @throws NullPointerException if the specified username or password is {@code null}
      */
-    public static boolean passwordCorrect(UserType userType, String username, String password) {
+    public static boolean passwordCorrect(String username, String password) {
         String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
         String databaseUsername;
         String databasePassword;
@@ -113,15 +99,15 @@ public final class ValidationUtils {
         MongoClient client;
         String databaseName = "user-database";
         MongoDatabase userDatabase;
-        String collectionName;
+        String collectionName = "users";
         MongoCollection<Document> collection;
+        String regexString;
+        Pattern regex;
         Bson filter;
         String fieldName = "username";
         FindIterable<Document> results;
         Document result;
         String readPasswordHash;
-
-        Objects.requireNonNull(userType, "the specified user type is null");
 
         Objects.requireNonNull(username, "the specified username is null");
 
@@ -137,20 +123,13 @@ public final class ValidationUtils {
 
         userDatabase = client.getDatabase(databaseName);
 
-        switch (userType) {
-            case DJ:
-                collectionName = "djs";
-                break;
-            case JAMMER:
-                collectionName = "jammers";
-                break;
-            default:
-                throw new IllegalStateException(String.format("unexpected user type: %s", userType));
-        } //end switch
-
         collection = userDatabase.getCollection(collectionName);
 
-        filter = Filters.eq(fieldName, username);
+        regexString = String.format("^%s$", username);
+
+        regex = Pattern.compile(regexString, Pattern.CASE_INSENSITIVE);
+
+        filter = Filters.regex(fieldName, regex);
 
         results = collection.find(filter);
 
