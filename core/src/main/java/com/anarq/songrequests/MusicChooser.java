@@ -43,5 +43,11 @@ public class MusicChooser {
 		return SpotifyGateway.searchForSongs(query);
 		
 	}
+
+	public Song getSongForSongId(String id) {
+		
+		return SpotifyGateway.getSongForSongId(id);
+		
+	}
 	
 }

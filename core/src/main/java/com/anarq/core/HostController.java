@@ -55,8 +55,15 @@ public class HostController {
 			return false;
 		}
 		
-		return session.deleteSongRequest(songId);
-		
+		String artist = session.getMusicChooser().getSongForSongId(songId).getArtistName();
+		boolean ret = session.deleteSongRequest(songId);
+
+		if (session.getRequestQueue().isEmpty()) {
+			System.out.println("My artist = " + artist);
+			session.requestSong(session.getMusicChooser().searchForSongs(artist)[0], "autoDJ");
+		}
+
+		return ret;
 	}
 	
 	@PutMapping("/kick-user")
