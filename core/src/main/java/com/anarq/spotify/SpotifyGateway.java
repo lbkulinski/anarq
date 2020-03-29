@@ -27,12 +27,13 @@ public class SpotifyGateway extends ClientCredentialsExample{
 		//genre sections: Pop, Rock, Country, Jazz, Rap, Metal, R&B, Hip-Hop, Electronic, Christian
 
 		try {
-            String tempGenre = spotifyApi.getArtist(search.tracks[i].getArtists()[0].getId()).build().execute().getGenres().length > 0 ?
-                                spotifyApi.getArtist(search.tracks[i].getArtists()[0].getId()).build().execute().getGenres()[0] | "N/A";
 			for(int i = 0; i < search.tracks.length; i++) {
+                String tempGenre = spotifyApi.getArtist(search.tracks[i].getArtists()[0].getId()).build().execute().getGenres().length > 0 ?
+                        spotifyApi.getArtist(search.tracks[i].getArtists()[0].getId()).build().execute().getGenres()[0] : "N/A";
 				foundSongs[i] = new Song(
 				search.tracks[i].getName(),
 				search.tracks[i].getAlbum().getName(),
+                search.tracks[i].getArtists()[0].getName(),
                 tempGenre,
 				search.tracks[i].getId(),
 				search.tracks[i].getDurationMs()/1000,
@@ -70,10 +71,12 @@ public class SpotifyGateway extends ClientCredentialsExample{
 		Song newSong = null;
 		
 		try {
-		
+            String tempGenre = spotifyApi.getArtist(output.getArtists()[0].getId()).build().execute().getGenres().length > 0 ?
+                    spotifyApi.getArtist(output.getArtists()[0].getId()).build().execute().getGenres()[0] : "N/A";
 			newSong = new Song(output.getName(),
 			output.getAlbum().getName(),
 			output.getArtists()[0].getName(),
+			tempGenre,
 			output.getId(),
 			output.getDurationMs()/1000,
 			output.getIsExplicit(),

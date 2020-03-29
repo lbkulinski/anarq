@@ -211,7 +211,7 @@ public class RequestQueue {
     }
 
     public boolean checkGenres(SongRequest song, Genre genres) {
-        String spotifyGenre = song.getSongGenre();
+        String spotifyGenre = song.getGenre();
         if(
             (spotifyGenre.contains("pop") && !genres.pop)
             || (spotifyGenre.contains("rock") && !genres.rock)
