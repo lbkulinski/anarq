@@ -1,11 +1,11 @@
 package com.anarq.update.bio;
 
 import org.springframework.stereotype.Controller;
-import com.anarq.update.UserType;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
+import java.util.regex.Pattern;
 import org.bson.conversions.Bson;
 import com.mongodb.client.FindIterable;
 import java.util.Objects;
@@ -37,14 +37,13 @@ public final class UpdateBioController {
     /**
      * Returns whether or not the specified bio is the same as the bio of the user with the specified username.
      *
-     * @param userType the user type to be used in the operation
      * @param username the username to be used in the operation
      * @param bio the bio to be used in the operation
      * @return {@code true}, if the specified bio is the same as the bio of the user with the specified username and
      * {@code false} otherwise
-     * @throws NullPointerException if the specified user type, username, or bio is {@code null}
+     * @throws NullPointerException if the specified username or bio is {@code null}
      */
-    private boolean bioSame(UserType userType, String username, String bio) {
+    private boolean bioSame(String username, String bio) {
         String databaseUsername;
         String databasePassword;
         String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
@@ -52,8 +51,10 @@ public final class UpdateBioController {
         MongoClient client;
         String databaseName = "user-database";
         MongoDatabase userDatabase;
-        String collectionName;
+        String collectionName = "users";
         MongoCollection<Document> collection;
+        String regexString;
+        Pattern regex;
         Bson filter;
         String usernameFieldName = "username";
         FindIterable<Document> results;
@@ -61,8 +62,6 @@ public final class UpdateBioController {
         String currentBio;
         String bioFieldName = "bio";
         boolean same;
-
-        Objects.requireNonNull(userType, "the specified user type is null");
 
         Objects.requireNonNull(username, "the specified username is null");
 
@@ -78,20 +77,13 @@ public final class UpdateBioController {
 
         userDatabase = client.getDatabase(databaseName);
 
-        switch (userType) {
-            case DJ:
-                collectionName = "djs";
-                break;
-            case JAMMER:
-                collectionName = "jammers";
-                break;
-            default:
-                throw new IllegalStateException(String.format("unexpected user type: %s", userType));
-        } //end switch
-
         collection = userDatabase.getCollection(collectionName);
 
-        filter = Filters.eq(usernameFieldName, username);
+        regexString = String.format("^%s$", username);
+
+        regex = Pattern.compile(regexString, Pattern.CASE_INSENSITIVE);
+
+        filter = Filters.regex(usernameFieldName, regex);
 
         results = collection.find(filter);
 
@@ -163,13 +155,12 @@ public final class UpdateBioController {
     /**
      * Attempts to update the bio of the user with the specified username with the specified bio.
      *
-     * @param userType the user type to be used in the operation
      * @param username the username to be used in the operation
      * @param bio the bio to be used in the operation
      * @return {@code true}, if the user's bio was successfully updated and {@code false} otherwise
-     * @throws NullPointerException if the specified user type, username, or bio is {@code null}
+     * @throws NullPointerException if the specified username, or bio is {@code null}
      */
-    private boolean updateBio(UserType userType, String username, String bio) {
+    private boolean updateBio(String username, String bio) {
         String databaseUsername;
         String databasePassword;
         String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
@@ -177,15 +168,15 @@ public final class UpdateBioController {
         MongoClient client;
         String databaseName = "user-database";
         MongoDatabase userDatabase;
-        String collectionName;
+        String collectionName = "users";
         MongoCollection<Document> collection;
+        String regexString;
+        Pattern regex;
         Bson filter;
         String usernameFieldName = "username";
         Bson update;
         String bioFieldName = "bio";
         UpdateResult result;
-
-        Objects.requireNonNull(userType, "the specified user type is null");
 
         Objects.requireNonNull(username, "the specified username is null");
 
@@ -201,20 +192,13 @@ public final class UpdateBioController {
 
         userDatabase = client.getDatabase(databaseName);
 
-        switch (userType) {
-            case DJ:
-                collectionName = "djs";
-                break;
-            case JAMMER:
-                collectionName = "jammers";
-                break;
-            default:
-                throw new IllegalStateException(String.format("unexpected user type: %s", userType));
-        } //end switch
-
         collection = userDatabase.getCollection(collectionName);
 
-        filter = Filters.eq(usernameFieldName, username);
+        regexString = String.format("^%s$", username);
+
+        regex = Pattern.compile(regexString, Pattern.CASE_INSENSITIVE);
+
+        filter = Filters.regex(usernameFieldName, regex);
 
         update = Updates.set(bioFieldName, bio);
 
@@ -246,23 +230,20 @@ public final class UpdateBioController {
      */
     @PostMapping("/updateBio")
     public String updateBioSubmit(@ModelAttribute UserInformation userInformation) {
-        UserType userType = userInformation.getUserType();
         String username = userInformation.getUsername();
         String password = userInformation.getPassword();
         String bio = userInformation.getNewValue();
 
-        username = username.toLowerCase();
-
-        if (!ValidationUtils.userPresent(userType, username)) {
+        if (!ValidationUtils.userPresent(username)) {
             return "updateBioUserNotFoundResult";
-        } else if (!ValidationUtils.passwordCorrect(userType, username, password)) {
+        } else if (!ValidationUtils.passwordCorrect(username, password)) {
             return "updateBioIncorrectPasswordResult";
-        } else if (this.bioSame(userType, username, bio)) {
+        } else if (this.bioSame(username, bio)) {
             return "updateBioNoChangeResult";
         } else if (!this.bioValid(bio)) {
             return "updateBioInvalidBioResult";
         } else {
-            boolean success = this.updateBio(userType, username, bio);
+            boolean success = this.updateBio(username, bio);
 
             return success ? "updateBioSuccessResult" : "updateBioFailureResult";
         } //end if

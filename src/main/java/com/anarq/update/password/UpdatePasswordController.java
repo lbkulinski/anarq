@@ -2,11 +2,11 @@ package com.anarq.update.password;
 
 import org.springframework.stereotype.Controller;
 import java.util.Objects;
-import com.anarq.update.UserType;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
+import java.util.regex.Pattern;
 import org.bson.conversions.Bson;
 import com.mongodb.client.result.UpdateResult;
 import com.mongodb.client.MongoClients;
@@ -57,12 +57,11 @@ public class UpdatePasswordController {
     /**
      * Attempts to update the password of the user with the specified username with the specified new password.
      *
-     * @param userType the user type to be used in the operation
      * @param username the username to be used in the operation
      * @param newPassword the new password to be used in the operation
      * @return {@code true}, if the user's password was successfully updated and {@code false} otherwise
      */
-    private boolean updatePassword(UserType userType, String username, String newPassword) {
+    private boolean updatePassword(String username, String newPassword) {
         String databaseUsername;
         String databasePassword;
         String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
@@ -70,16 +69,16 @@ public class UpdatePasswordController {
         MongoClient client;
         String databaseName = "user-database";
         MongoDatabase userDatabase;
-        String collectionName;
+        String collectionName = "users";
         MongoCollection<Document> collection;
+        String regexString;
+        Pattern regex;
         Bson filter;
         String usernameFieldName = "username";
         String passwordHash;
         String passwordHashFieldName = "password-hash";
         Bson update;
         UpdateResult result;
-
-        Objects.requireNonNull(userType, "the specified user type is null");
 
         Objects.requireNonNull(username, "the specified username is null");
 
@@ -95,20 +94,13 @@ public class UpdatePasswordController {
 
         userDatabase = client.getDatabase(databaseName);
 
-        switch (userType) {
-            case DJ:
-                collectionName = "djs";
-                break;
-            case JAMMER:
-                collectionName = "jammers";
-                break;
-            default:
-                throw new IllegalStateException(String.format("unexpected user type: %s", userType));
-        } //end switch
-
         collection = userDatabase.getCollection(collectionName);
 
-        filter = Filters.eq(usernameFieldName, username);
+        regexString = String.format("^%s$", username);
+
+        regex = Pattern.compile(regexString, Pattern.CASE_INSENSITIVE);
+
+        filter = Filters.regex(usernameFieldName, regex);
 
         passwordHash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
 
@@ -142,23 +134,20 @@ public class UpdatePasswordController {
      */
     @PostMapping("/updatePassword")
     public String updatePasswordSubmit(@ModelAttribute UserInformation userInformation) {
-        UserType userType = userInformation.getUserType();
         String username = userInformation.getUsername();
         String password = userInformation.getPassword();
         String newPassword = userInformation.getNewValue();
 
-        username = username.toLowerCase();
-
-        if (!ValidationUtils.userPresent(userType, username)) {
+        if (!ValidationUtils.userPresent(username)) {
             return "updatePasswordUserNotFoundResult";
-        } else if (!ValidationUtils.passwordCorrect(userType, username, password)) {
+        } else if (!ValidationUtils.passwordCorrect(username, password)) {
             return "updatePasswordIncorrectPasswordResult";
         } else if (Objects.equals(password, newPassword)) {
             return "updatePasswordNoChangeResult";
         } else if (!this.newPasswordValid(newPassword)) {
             return "updatePasswordInvalidNewPasswordResult";
         } else {
-            boolean success = this.updatePassword(userType, username, newPassword);
+            boolean success = this.updatePassword(username, newPassword);
 
             return success ? "updatePasswordSuccessResult" : "updatePasswordFailureResult";
         } //end if

@@ -8,10 +8,6 @@
 	<body>
 		<h1>Update Bio</h1>
 		<form action="#" th:action="@{/updateBio}" th:object="${userInformation}" method="post">
-			<p>User Type: <select th:field="*{userType}">
-				<option th:value="${T(com.anarq.update.UserType).DJ}" th:text="DJ"></option>
-				<option th:value="${T(com.anarq.update.UserType).JAMMER}" th:text="Jammer"></option>
-			</select></p>
 			<p>Username: <input type="text" th:field="*{username}"/></p>
 			<p>Password: <input type="password" th:field="*{password}"/></p>
 			<p>Bio:<br><textarea placeholder="Lorem ipsum..." th:field="*{newValue}"></textarea></p>

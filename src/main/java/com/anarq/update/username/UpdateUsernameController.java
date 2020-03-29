@@ -2,7 +2,6 @@ package com.anarq.update.username;
 
 import org.springframework.stereotype.Controller;
 import java.util.Set;
-import com.anarq.update.UserType;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import com.anarq.update.ValidationUtils;
@@ -15,6 +14,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
+import java.util.regex.Pattern;
 import org.bson.conversions.Bson;
 import com.mongodb.client.result.UpdateResult;
 import com.mongodb.client.MongoClients;
@@ -37,12 +37,11 @@ public final class UpdateUsernameController {
     /**
      * Returns a set of alternative usernames that are available and based on the specified username.
      *
-     * @param userType the user type to be used in the operation
      * @param username the username to be used in the operation
      * @return a set of alternative usernames that are available and based on the specified username
-     * @throws NullPointerException if the specified user type, username, or password is {@code null}
+     * @throws NullPointerException if the specified username or password is {@code null}
      */
-    private Set<String> getAltUsernames(UserType userType, String username) {
+    private Set<String> getAltUsernames(String username) {
         int randomNumber;
         int bound = 1_000;
         String altUsername0;
@@ -51,8 +50,6 @@ public final class UpdateUsernameController {
         int maxIterations = 1_000;
         String altUsername1;
         String altUsername2;
-
-        Objects.requireNonNull(userType, "the specified user type is null");
 
         Objects.requireNonNull(username, "the specified username is null");
 
@@ -66,7 +63,7 @@ public final class UpdateUsernameController {
 
             altUsername0 = String.format("%s%d", username, randomNumber);
 
-            exists = ValidationUtils.userPresent(userType, altUsername0);
+            exists = ValidationUtils.userPresent(altUsername0);
 
             iterationCount++;
         } while (exists);
@@ -85,7 +82,7 @@ public final class UpdateUsernameController {
 
             exists = Objects.equals(altUsername1, altUsername0);
 
-            exists |= ValidationUtils.userPresent(userType, altUsername1);
+            exists |= ValidationUtils.userPresent(altUsername1);
 
             iterationCount++;
         } while (exists);
@@ -106,7 +103,7 @@ public final class UpdateUsernameController {
 
             exists |= Objects.equals(altUsername2, altUsername1);
 
-            exists |= ValidationUtils.userPresent(userType, altUsername2);
+            exists |= ValidationUtils.userPresent(altUsername2);
 
             iterationCount++;
         } while (exists);
@@ -168,13 +165,12 @@ public final class UpdateUsernameController {
     /**
      * Attempts to update the username of the user with the specified current username with the specified new username.
      *
-     * @param userType the user type to be used in the operation
      * @param currentUsername the current username to be used in the operation
      * @param newUsername the new username to be used in the operation
      * @return {@code true}, if the user's username was successfully updated and {@code false} otherwise
-     * @throws NullPointerException if the specified user type, current username, or new username is {@code null}
+     * @throws NullPointerException if the specified current username or new username is {@code null}
      */
-    private boolean updateUsername(UserType userType, String currentUsername, String newUsername) {
+    private boolean updateUsername(String currentUsername, String newUsername) {
         String databaseUsername;
         String databasePassword;
         String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
@@ -182,14 +178,14 @@ public final class UpdateUsernameController {
         MongoClient client;
         String databaseName = "user-database";
         MongoDatabase userDatabase;
-        String collectionName;
+        String collectionName = "users";
         MongoCollection<Document> collection;
+        String regexString;
+        Pattern regex;
         Bson filter;
         String fieldName = "username";
         Bson update;
         UpdateResult result;
-
-        Objects.requireNonNull(userType, "the specified user type is null");
 
         Objects.requireNonNull(currentUsername, "the specified current username is null");
 
@@ -205,20 +201,13 @@ public final class UpdateUsernameController {
 
         userDatabase = client.getDatabase(databaseName);
 
-        switch (userType) {
-            case DJ:
-                collectionName = "djs";
-                break;
-            case JAMMER:
-                collectionName = "jammers";
-                break;
-            default:
-                throw new IllegalStateException(String.format("unexpected user type: %s", userType));
-        } //end switch
-
         collection = userDatabase.getCollection(collectionName);
 
-        filter = Filters.eq(fieldName, currentUsername);
+        regexString = String.format("^%s$", currentUsername);
+
+        regex = Pattern.compile(regexString, Pattern.CASE_INSENSITIVE);
+
+        filter = Filters.regex(fieldName, regex);
 
         update = Updates.set(fieldName, newUsername);
 
@@ -251,23 +240,18 @@ public final class UpdateUsernameController {
      */
     @PostMapping("/updateUsername")
     public String updateUsernameSubmit(@ModelAttribute UserInformation userInformation, Model model) {
-        UserType userType = userInformation.getUserType();
         String currentUsername = userInformation.getUsername();
         String password = userInformation.getPassword();
         String newUsername = userInformation.getNewValue();
 
-        currentUsername = currentUsername.toLowerCase();
-
-        newUsername = newUsername.toLowerCase();
-
-        if (!ValidationUtils.userPresent(userType, currentUsername)) {
+        if (!ValidationUtils.userPresent(currentUsername)) {
             return "updateUsernameUserNotFoundResult";
-        } else if (!ValidationUtils.passwordCorrect(userType, currentUsername, password)) {
+        } else if (!ValidationUtils.passwordCorrect(currentUsername, password)) {
             return "updateUsernameIncorrectPasswordResult";
         } else if (Objects.equals(currentUsername, newUsername)) {
             return "updateUsernameNoChangeResult";
-        } else if (ValidationUtils.userPresent(userType, newUsername)) {
-            Set<String> altUsernames = this.getAltUsernames(userType, newUsername);
+        } else if (ValidationUtils.userPresent(newUsername)) {
+            Set<String> altUsernames = this.getAltUsernames(newUsername);
 
             model.addAttribute("altUsernames", altUsernames);
 
@@ -275,7 +259,7 @@ public final class UpdateUsernameController {
         } else if (!this.newUsernameValid(newUsername)) {
             return "updateUsernameInvalidNewUsernameResult";
         } else {
-            boolean success = this.updateUsername(userType, currentUsername, newUsername);
+            boolean success = this.updateUsername(currentUsername, newUsername);
 
             return success ? "updateUsernameSuccessResult" : "updateUsernameFailureResult";
         } //end if
