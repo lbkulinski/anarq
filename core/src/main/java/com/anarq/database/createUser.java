@@ -103,7 +103,7 @@ public class CreateUser {
 				"Birth Month", birthMonth,
 				"Birth Year", birthYear);
 
-		MongoCollection<Document> jammerCollection = database.getCollection("jammers-list");
+		MongoCollection<Document> jammerCollection = database.getCollection("users");
 		Document user = new Document(userDetails);
 		jammerCollection.insertOne(user);
 		System.out.println("New User has Signed up!");

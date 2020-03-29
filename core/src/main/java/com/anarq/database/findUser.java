@@ -25,7 +25,7 @@ public class FindUser {
 
         ConnectToDatabase newConnection = new ConnectToDatabase();
         MongoDatabase database = newConnection.connect();
-        MongoCollection<Document> jammerCollection = database.getCollection("jammers-list");
+        MongoCollection<Document> jammerCollection = database.getCollection("users");
 
         BsonString searchString = new BsonString(text);
         BsonDocument searchDocument = new BsonDocument(field, searchString);

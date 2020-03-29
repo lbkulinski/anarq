@@ -41,7 +41,7 @@ public class DeleteUser {
 
             ConnectToDatabase newConnection = new ConnectToDatabase();
             MongoDatabase database = newConnection.connect();
-            MongoCollection<Document> jammerCollection = database.getCollection("jammers-list");
+            MongoCollection<Document> jammerCollection = database.getCollection("users");
             System.out.println("Deleted User - " + user.toString());
             jammerCollection.deleteOne(user);
             return 1;
