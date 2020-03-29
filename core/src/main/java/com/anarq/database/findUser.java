@@ -48,7 +48,8 @@ public class FindUser {
 		(String) rawDocument.get("username"),
 		(String) rawDocument.get("first-name"),
 		(String) rawDocument.get("last-name"),
-		(String) rawDocument.get("email")
+		(String) rawDocument.get("email"),
+		(String) rawDocument.get("bio")
 		);
 		
     }

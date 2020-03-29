@@ -1,5 +1,7 @@
 package com.anarq.core;
 
+import com.anarq.database.*;
+
 import org.springframework.stereotype.Controller;
 import java.util.Objects;
 import com.mongodb.client.MongoClient;
@@ -82,15 +84,15 @@ public class UpdatePasswordController {
 
         Objects.requireNonNull(newPassword, "the specified new password is null");
 
-        databaseUsername = System.getProperty("database-username");
+        /*databaseUsername = System.getProperty("database-username");
 
         databasePassword = System.getProperty("database-password");
 
         uri = String.format(format, databaseUsername, databasePassword);
 
-        client = MongoClients.create(uri);
+        client = MongoClients.create(uri);*/
 
-        userDatabase = client.getDatabase(databaseName);
+        userDatabase = ConnectToDatabase.getDatabaseConnection();
 
         collection = userDatabase.getCollection(collectionName);
 
@@ -106,7 +108,7 @@ public class UpdatePasswordController {
 
         result = collection.updateOne(filter, update);
 
-        client.close();
+        //client.close();
 
         return result.getModifiedCount() == 1;
     } //updatePassword

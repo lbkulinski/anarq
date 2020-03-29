@@ -14,15 +14,17 @@ public class AccountInfo {
 	private final String firstName;
 	private final String lastName;
 	private final String email;
+	private final String bio;
 	
 	/* Constructs a new Song class */
 
-	public AccountInfo(String username, String firstName, String lastName, String email) {
+	public AccountInfo(String username, String firstName, String lastName, String email, String bio) {
 		
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		this.bio = bio;
 
 	}
 	
@@ -51,6 +53,13 @@ public class AccountInfo {
 	public String getEmail() {
 		
 		return email;
+		
+	}
+	
+	/* Returns the bio of the user */
+	public String getBio() {
+		
+		return bio;
 		
 	}
 	

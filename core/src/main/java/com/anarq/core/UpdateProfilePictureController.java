@@ -1,5 +1,7 @@
 package com.anarq.core;
 
+import com.anarq.database.*;
+
 import org.springframework.stereotype.Controller;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
@@ -66,15 +68,15 @@ public final class UpdateProfilePictureController {
 
         Objects.requireNonNull(bytes, "the specified bytes is null");
 
-        databaseUsername = System.getProperty("database-username");
+        /*databaseUsername = System.getProperty("database-username");
 
         databasePassword = System.getProperty("database-password");
 
         uri = String.format(format, databaseUsername, databasePassword);
 
-        client = MongoClients.create(uri);
+        client = MongoClients.create(uri);*/
 
-        userDatabase = client.getDatabase(databaseName);
+        userDatabase = ConnectToDatabase.getDatabaseConnection();
 
         collection = userDatabase.getCollection(collectionName);
 
@@ -102,7 +104,7 @@ public final class UpdateProfilePictureController {
             same = Arrays.equals(bytes, currentBytes);
         } //end if
 
-        client.close();
+       // client.close();
 
         return same;
     } //profilePictureSame
@@ -137,15 +139,15 @@ public final class UpdateProfilePictureController {
 
         Objects.requireNonNull(bytes, "the specified bytes is null");
 
-        databaseUsername = System.getProperty("database-username");
+        /*databaseUsername = System.getProperty("database-username");
 
         databasePassword = System.getProperty("database-password");
 
         uri = String.format(format, databaseUsername, databasePassword);
 
-        client = MongoClients.create(uri);
+        client = MongoClients.create(uri);*/
 
-        userDatabase = client.getDatabase(databaseName);
+        userDatabase = ConnectToDatabase.getDatabaseConnection();
 
         collection = userDatabase.getCollection(collectionName);
 
@@ -159,7 +161,7 @@ public final class UpdateProfilePictureController {
 
         result = collection.updateOne(filter, update);
 
-        client.close();
+        //client.close();
 
         return result.getModifiedCount() == 1;
     } //updateProfilePicture

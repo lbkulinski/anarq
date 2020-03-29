@@ -1,5 +1,7 @@
 package com.anarq.core;
 
+import com.anarq.database.*;
+
 import org.springframework.stereotype.Controller;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
@@ -65,15 +67,15 @@ public final class UpdateBioController {
 
         Objects.requireNonNull(bio, "the specified bio is null");
 
-        databaseUsername = System.getProperty("database-username");
+        /*databaseUsername = System.getProperty("database-username");
 
         databasePassword = System.getProperty("database-password");
 
         uri = String.format(format, databaseUsername, databasePassword);
 
-        client = MongoClients.create(uri);
+        client = MongoClients.create(uri);*/
 
-        userDatabase = client.getDatabase(databaseName);
+        userDatabase = ConnectToDatabase.getDatabaseConnection();
 
         collection = userDatabase.getCollection(collectionName);
 
@@ -95,7 +97,7 @@ public final class UpdateBioController {
 
         same = Objects.equals(bio, currentBio);
 
-        client.close();
+        //client.close();
 
         return same;
     } //bioSame
@@ -119,7 +121,7 @@ public final class UpdateBioController {
 
         bio = bio.toLowerCase();
 
-        badWords = new HashSet<>();
+        /* badWords = new HashSet<>();
 
         try {
             reader = new BufferedReader(new FileReader(fileName));
@@ -145,9 +147,9 @@ public final class UpdateBioController {
             if (bio.matches(pattern)) {
                 return false;
             } //end if
-        } //end for
+        } //end for*/
 
-        return true;
+        return !NaughtyWords.isANaughtyWord(bio);
     } //bioValid
 
     /**
@@ -180,15 +182,15 @@ public final class UpdateBioController {
 
         Objects.requireNonNull(bio, "the specified bio is null");
 
-        databaseUsername = System.getProperty("database-username");
+        /*databaseUsername = System.getProperty("database-username");
 
         databasePassword = System.getProperty("database-password");
 
         uri = String.format(format, databaseUsername, databasePassword);
 
-        client = MongoClients.create(uri);
+        client = MongoClients.create(uri);*/
 
-        userDatabase = client.getDatabase(databaseName);
+        userDatabase = ConnectToDatabase.getDatabaseConnection();
 
         collection = userDatabase.getCollection(collectionName);
 
@@ -202,7 +204,7 @@ public final class UpdateBioController {
 
         result = collection.updateOne(filter, update);
 
-        client.close();
+        //client.close();
 
         return result.getModifiedCount() == 1;
     } //updateBio
