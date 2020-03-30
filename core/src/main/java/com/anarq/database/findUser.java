@@ -9,6 +9,8 @@ import org.bson.Document;
 
 public class FindUser {
 
+    /**/
+
     String text;
     String field;
 
