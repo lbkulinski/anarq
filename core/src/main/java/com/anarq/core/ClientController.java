@@ -1,5 +1,6 @@
 package com.anarq.core;
 
+import com.anarq.database.*;
 import com.anarq.songrequests.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,12 @@ public class ClientController {
 			System.err.println("Error: Request for non-existant session...\n ID: "
 				+ sessionId + " Username: " + username + "...");
 			return null;
+		}
+		
+		if (NaughtyWords.isANaughtyWord(username)) {
+			
+			return null;
+			
 		}
 		
 		ConnectedClient newConnectedClient = new ConnectedClient(username, isAccount, Permission.JAMMER);

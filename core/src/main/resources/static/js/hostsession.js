@@ -2,8 +2,11 @@ var connectedClientContainer = document.getElementById("connected-clients");
 var requestQueueContainer = document.getElementById("current-requests");
 var sessionHeader = document.getElementById("session-header");
 var quitSession = document.getElementById("quit-session");
+var applyChanges = document.getElementById("apply-changes");
 
 sessionHeader.innerHTML = getCurrentHostSessionId();
+
+setPreferences();
 
 // Loads all the users currently connected
 function loadCurrentUsers() {
@@ -172,6 +175,71 @@ function dislikeSong(songId) {
 	searchRequest.send();
 	
 }
+
+var minBPM = document.getElementById("min-bpm");
+var maxBPM = document.getElementById("max-bpm");
+
+
+function setPreferences() {
+	
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/get-preferences?sessionId=' + getCurrentHostSessionId()
+	+ '&userId=' + getUserId();
+	
+	searchRequest.open('GET', searchPath);
+	searchRequest.onload = function() {
+		
+		var data = JSON.parse(searchRequest.responseText);
+		
+		document.getElementById("max-bpm").value = data.maxBPM;
+		document.getElementById("min-bpm").value = data.minBPM;
+		document.getElementById("explicit").checked = data.explicit;
+		document.getElementById("allowRequests").checked = data.requests;
+		document.getElementById("isVisible").checked = data.visible;
+		document.getElementById("pop").checked = data.pop;
+		document.getElementById("rock").checked = data.rock;
+		document.getElementById("country").checked = data.country;
+		document.getElementById("jazz").checked = data.jazz;
+		document.getElementById("rap").checked = data.rap;
+		document.getElementById("metal").checked = data.metal;
+		document.getElementById("rb").checked = data.rb;
+		document.getElementById("hiphop").checked = data.hiphop;
+		document.getElementById("electronic").checked = data.electronic;
+		document.getElementById("christian").checked = data.christian;
+		
+	};
+	searchRequest.send();
+	
+}
+
+
+applyChanges.addEventListener("click", function(){
+	
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/update-preferences?sessionId=' + getCurrentHostSessionId()
+	+ '&userId=' + getUserId()
+	+ '&minBPM=' + minBPM.value
+	+ '&maxBPM=' + maxBPM.value
+	+ '&allowExplicit=' + document.getElementById("explicit").checked
+	+ '&allowRequests=' + document.getElementById("allowRequests").checked
+	+ '&isVisible=' + document.getElementById("isVisible").checked
+	+ '&allowPop=' + document.getElementById("pop").checked
+	+ '&allowRock=' + document.getElementById("rock").checked
+	+ '&allowCountry=' + document.getElementById("country").checked
+	+ '&allowJazz=' + document.getElementById("jazz").checked
+	+ '&allowRap=' + document.getElementById("rap").checked
+	+ '&allowMetal=' + document.getElementById("metal").checked
+	+ '&allowRB=' + document.getElementById("rb").checked
+	+ '&allowHipHip=' + document.getElementById("hiphop").checked
+	+ '&allowElectronic=' + document.getElementById("electronic").checked
+	+ '&AllowChristian=' + document.getElementById("christian").checked;
+	searchRequest.open('PUT', searchPath);
+	searchRequest.onload = function() {
+		
+	};
+	searchRequest.send();
+	
+});
 
 // When the connect button is clicked, attempt to quit the session
 quitSession.addEventListener("click", function(){

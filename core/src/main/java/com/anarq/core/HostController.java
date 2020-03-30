@@ -1,5 +1,6 @@
 package com.anarq.core;
 
+import com.anarq.songrequests.*;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +18,73 @@ public class HostController {
 		
 		// Redirect
 		return session.getHostClient();
+		
+	}
+	
+	@PutMapping("/update-preferences")
+	public boolean setPreferences(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
+	@RequestParam(value="userId", defaultValue="no_user_id")String userId,
+	@RequestParam(value="maxBPM", defaultValue="400")int maxBPM,
+	@RequestParam(value="minBPM", defaultValue="32")int minBPM,
+	@RequestParam(value="allowExplicit", defaultValue="true")boolean explicit,
+	@RequestParam(value="allowRequests", defaultValue="true")boolean requests,
+	@RequestParam(value="isVisible", defaultValue="true")boolean visible,
+	@RequestParam(value="allowPop", defaultValue="true")boolean pop,
+	@RequestParam(value="allowRock", defaultValue="true")boolean rock,
+	@RequestParam(value="allowCountry", defaultValue="true")boolean country,
+	@RequestParam(value="allowJazz", defaultValue="true")boolean jazz,
+	@RequestParam(value="allowRap", defaultValue="true")boolean rap,
+	@RequestParam(value="allowMetal", defaultValue="true")boolean metal,
+	@RequestParam(value="allowRB", defaultValue="true")boolean rb,
+	@RequestParam(value="allowHipHop", defaultValue="true")boolean hiphop,
+	@RequestParam(value="allowElectronic", defaultValue="true")boolean electronic,
+	@RequestParam(value="allowChristian", defaultValue="true")boolean christian) {
+		
+		// Attempt to obtain the given session based on the sessionId provided
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+		if (session == null) {
+			System.err.println("Error: Request to terminate session that doesn't exist");
+			return false;
+		}
+		// Check if that session has that user
+		if (!session.hasUserForId(userId)) {
+			return false;
+		}
+		
+		System.out.println("Updating preferences....");
+		
+		session.getRequestQueue().setMaxBPM(maxBPM);
+		session.getRequestQueue().setMinBPM(minBPM);
+		
+		session.getRequestQueue().setExplicitFilter(explicit);
+		session.getRequestQueue().setAcceptingRequests(requests);
+		session.getRequestQueue().setVisibility(visible);
+		
+		session.getRequestQueue().setBlacklistedGenres(new boolean[] {pop, rock, country, jazz, rap, metal, rb, hiphop, electronic, christian});
+		
+		// Redirect
+		return true;
+		
+	}
+	
+	@GetMapping("/get-preferences")
+	public PreferencePacket getPreferences(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
+	@RequestParam(value="userId", defaultValue="no_user_id")String userId) {
+		
+		// Attempt to obtain the given session based on the sessionId provided
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+		if (session == null) {
+			System.err.println("Error: Request to terminate session that doesn't exist");
+			return null;
+		}
+		// Check if that session has that user
+		if (!session.hasUserForId(userId)) {
+			return null;
+		}
+		
+		return session.getRequestQueue().getPreferencePacket();
 		
 	}
 	

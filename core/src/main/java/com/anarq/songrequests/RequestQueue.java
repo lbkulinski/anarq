@@ -31,16 +31,16 @@ class VotesComparator implements Comparator<SongRequest> {
 } 
 
 class Genre {
-    boolean pop;
-    boolean rock;
-    boolean country;
-    boolean jazz;
-    boolean rap;
-    boolean metal;
-    boolean rb;
-    boolean hiphop;
-    boolean electronic;
-    boolean christian;
+    public boolean pop;
+    public boolean rock;
+    public boolean country;
+    public boolean jazz;
+    public boolean rap;
+    public boolean metal;
+    public boolean rb;
+    public boolean hiphop;
+    public boolean electronic;
+    public boolean christian;
 
     public Genre() {
         this.pop = true;
@@ -94,8 +94,8 @@ public class RequestQueue {
 	
 	// Private Varaibles
     private int maxRequests;
-    private int minBPM;
-    private int maxBPM;
+    private int minBPM = 32;
+    private int maxBPM = 400;
     private boolean acceptingRequests;
     private boolean autoDJ;
     private boolean explicitFilter;
@@ -114,8 +114,8 @@ public class RequestQueue {
         this.musicChooser = new MusicChooser();
         this.autoDJ = false;
         this.explicitFilter = false;
-        this.minBPM = 0;
-        this.maxBPM = Integer.MAX_VALUE;
+        this.minBPM = 32;
+        this.maxBPM = 400;
         this.visibility = true;
         this.blacklistedGenres = new Genre();
     }
@@ -138,6 +138,48 @@ public class RequestQueue {
         this.visibility = visibility;
         this.blacklistedGenres = new Genre(blacklistedGenres);
     }
+
+	public PreferencePacket getPreferencePacket() {
+		
+		return new PreferencePacket(maxBPM, minBPM, blacklistedGenres.pop,
+		blacklistedGenres.rock,
+		blacklistedGenres.country,
+		blacklistedGenres.jazz,
+		blacklistedGenres.rap,
+		blacklistedGenres.metal,
+		blacklistedGenres.rb,
+		blacklistedGenres.hiphop,
+		blacklistedGenres.electronic,
+		blacklistedGenres.christian,
+		explicitFilter,
+		visibility,
+		acceptingRequests);
+		
+	}
+
+	public void setBlacklistedGenres(boolean[] b) {	
+		this.blacklistedGenres = new Genre(b);
+	}
+	
+	public void setMaxBPM(int newValue) {	
+		this.maxBPM = newValue;
+	}
+	
+	public void setMinBPM(int newValue) {	
+		this.minBPM = newValue;
+	}
+	
+	public void setExplicitFilter(boolean newValue) {	
+		this.explicitFilter = newValue;
+	}
+	
+	public void setVisibility(boolean newValue) {	
+		this.visibility = newValue;
+	}
+	
+	public void setAcceptingRequests(boolean newValue) {	
+		this.acceptingRequests = newValue;
+	}
 
 	/* Returns the max number of requests */
     public int getMaxRequests() {
@@ -186,6 +228,8 @@ public class RequestQueue {
             overrides.add(song);
             return false;
         }
+
+		System.out.println(song.getBPM() + " " + maxBPM + " " + minBPM);
 
         if (song.getBPM() > this.maxBPM || song.getBPM() < this.minBPM) {
             System.out.println("Request Pending: BPM is not in the allowed range ... Override request sent to host");
