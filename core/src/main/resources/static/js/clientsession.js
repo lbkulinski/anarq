@@ -4,6 +4,12 @@ var quitSession = document.getElementById("quit-session");
 
 sessionHeader.innerHTML = getCurrentSessionId();
 
+function loadUserInfo() {
+
+	loadCurrentSongQueue();
+	
+}
+
 function loadCurrentSongQueue() {
 	
 	var songQueueRequest = new XMLHttpRequest();
@@ -23,9 +29,6 @@ function loadCurrentSongQueue() {
 
 }
 
-function loadCurrentUsers() {
-	// Dud function...
-}
 
 // Takes an array of song objects and renders them to the screen
 function renderSongsToHTML(songArray) {

@@ -151,6 +151,40 @@ public class HostController {
 		
 	}
 	
+	@PutMapping("/blacklist-user")
+	public boolean blacklistUser(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
+	@RequestParam(value="userId", defaultValue="no_song_id")String userId) {
+		
+		// Attempt to obtain the given session based on the sessionId provided
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+		if (session == null) {
+			System.err.println("Error: Request for non-existant session was created!\n ID: "
+				+ sessionId);
+			return false;
+		}
+		
+		return session.blacklistClient(userId);
+		
+	}
+	
+	@PutMapping("/unblacklist-user")
+	public boolean unblacklistUser(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
+	@RequestParam(value="userId", defaultValue="no_song_id")String userId) {
+		
+		// Attempt to obtain the given session based on the sessionId provided
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+		if (session == null) {
+			System.err.println("Error: Request for non-existant session was created!\n ID: "
+				+ sessionId);
+			return false;
+		}
+		
+		return session.unblacklistClient(userId);
+		
+	}
+	
 	@GetMapping("/authenticate-host")
 	public boolean isSessionStillActive(
 	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId) {

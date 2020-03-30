@@ -2,8 +2,8 @@ function updateUserInformation() {
 
 	// TODO: add timeout to end this loop if connection is lost
 
-	loadCurrentUsers();
-	loadCurrentSongQueue();
+	loadUserInfo();
+	auth();
 
 	setTimeout(updateUserInformation, 1000);
 }

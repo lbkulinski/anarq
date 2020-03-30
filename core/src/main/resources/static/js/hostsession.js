@@ -1,4 +1,5 @@
 var connectedClientContainer = document.getElementById("connected-clients");
+var blacklistContainer = document.getElementById("blacklist");
 var requestQueueContainer = document.getElementById("current-requests");
 var sessionHeader = document.getElementById("session-header");
 var quitSession = document.getElementById("quit-session");
@@ -7,6 +8,15 @@ var applyChanges = document.getElementById("apply-changes");
 sessionHeader.innerHTML = getCurrentHostSessionId();
 
 setPreferences();
+loadBlacklist();
+
+function loadUserInfo() {
+
+	loadCurrentUsers();
+	loadBlacklist();
+	loadCurrentSongQueue();
+	
+}
 
 // Loads all the users currently connected
 function loadCurrentUsers() {
@@ -20,6 +30,26 @@ function loadCurrentUsers() {
 		
 			var clientArray = JSON.parse(clientListRequest.responseText);
 			renderUsersToHTML(clientArray);
+		
+		}
+			
+	};
+	clientListRequest.send();
+
+}
+
+// Loads the blacklist
+function loadBlacklist() {
+
+	var clientListRequest = new XMLHttpRequest();
+	var clientListPath = '/blacklisted-users?sessionId=' + getCurrentHostSessionId() + '&userId=' + getUserId();
+	clientListRequest.open('GET', clientListPath);
+	clientListRequest.onload = function() {
+		
+		if(clientListRequest.responseText.length > 3) {
+		
+			var clientArray = JSON.parse(clientListRequest.responseText);
+			renderBlacklistToHTML(clientArray);
 		
 		}
 			
@@ -48,6 +78,7 @@ function loadCurrentSongQueue() {
 
 }
 
+
 // Delets a song request
 function deleteRequest(songId) {
 	
@@ -63,7 +94,7 @@ function deleteRequest(songId) {
 	
 }
 
-// Delets a song request
+// kicks a user
 function kickUser(userId) {
 	
 	var searchRequest = new XMLHttpRequest();
@@ -76,6 +107,79 @@ function kickUser(userId) {
 		
 	};
 	searchRequest.send();
+	
+}
+
+// Bans a user
+function blacklistUser(userId) {
+	
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/blacklist-user?sessionId=' + getCurrentSessionId() + '&userId=' + userId;
+	searchRequest.open('PUT', searchPath);
+	searchRequest.onload = function() {
+		
+		// If it's successful, response goes here
+		console.log("blacklisting User " + userId);
+		
+	};
+	searchRequest.send();
+	
+}
+
+// Bans a user
+function unblacklistUser(userId) {
+	
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/unblacklist-user?sessionId=' + getCurrentSessionId() + '&userId=' + userId;
+	searchRequest.open('PUT', searchPath);
+	searchRequest.onload = function() {
+		
+		// If it's successful, response goes here
+		console.log("unblacklisting User " + userId);
+		
+	};
+	searchRequest.send();
+	
+}
+
+// Takes an array of song objects and renders them to the screen
+function renderBlacklistToHTML(clientArray) {
+	
+	console.log("blacklist generating");
+	
+	// Clear container
+	blacklistContainer.innerHTML = "";
+	
+	blacklistContainer.insertAdjacentHTML('beforeend', "<ul>");
+	
+	for (i = 0; i < clientArray.length; i++) {
+		
+		blacklistContainer.insertAdjacentHTML('beforeend', generateBlacklistHTML(clientArray[i]));
+		
+	}
+	
+	if (clientArray.length == 0) {
+		
+		blacklistContainer.insertAdjacentHTML('beforeend', "<h2>No Blacklisted Jammers...</h2>");
+		
+	}
+	
+	blacklistContainer.insertAdjacentHTML('beforeend', "</ul>");
+	
+}
+
+// Generates a single song's HTML code
+function generateBlacklistHTML(client) {
+	
+	var htmlString = "";
+	
+	htmlString += "<div class=\"client-div\">";
+	htmlString += "<h2>" + client.name + "</h2>";
+	htmlString += "<p>" + client.permissionLevel + "</p>";
+	htmlString += "<button type=\"button\" onclick=\"unblacklistUser('" + client.id + "')\">Un-Blacklist User</button>";
+	htmlString += "</div>";
+	
+	return htmlString;
 	
 }
 
@@ -113,6 +217,7 @@ function generateUserHTML(client) {
 	htmlString += "<p>" + client.permissionLevel + "</p>";
 	if (client.permissionLevel != "DJ") {
 		htmlString += "<button type=\"button\" onclick=\"kickUser('" + client.id + "')\">Kick User</button>";
+		htmlString += "<button type=\"button\" onclick=\"blacklistUser('" + client.id + "')\">Ban/Blacklist User</button>";
 	}
 	htmlString += "</div>";
 	

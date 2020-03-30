@@ -17,6 +17,7 @@ public class Session {
 	private MusicChooser musicChooser;
 	private RequestQueue requestQueue;
 	private List<ConnectedClient> connectedClients;
+	private List<ConnectedClient> blacklistedIds;
 	private ConnectedClient hostClient;
 	
 	/* Constructor */
@@ -29,6 +30,7 @@ public class Session {
 		musicChooser = new MusicChooser();
 		requestQueue = new RequestQueue();
 		connectedClients = new ArrayList<ConnectedClient>();
+		blacklistedIds = new ArrayList<ConnectedClient>();
 		
 		// Create a master client for the host
 		hostClient = new ConnectedClient("HOST", true, sessionId);
@@ -80,7 +82,53 @@ public class Session {
 		
 	}
 	
+	public boolean blacklistClient(String userId) {
+		
+		for (int i = 0; i < connectedClients.size(); i++) {
+		
+			if (connectedClients.get(i).getId().equals(userId)) {
+		
+				blacklistedIds.add(connectedClients.get(i));
+				removeClient(userId);
+				return true;
+			
+			}
+		
+		}
+		
+		return false;
+		
+	}
+	
+	public boolean unblacklistClient(String userId) {
+		
+		for (int i = 0; i < connectedClients.size(); i++) {
+		
+			if (blacklistedIds.get(i).getId().equals(userId)) {
+		
+				blacklistedIds.remove(i);
+				return true;
+			
+			}
+		
+		}
+		
+		return false;
+		
+	}
+	
 	public void addClient(ConnectedClient c) {
+		
+		for (int i = 0; i < blacklistedIds.size(); i++) {
+			
+			if (blacklistedIds.get(i).getId().equals(c.getId())) {
+				
+				// User is blacklisted
+				return;
+				
+			}
+			
+		}
 		
 		connectedClients.add(c);
 		
@@ -122,6 +170,20 @@ public class Session {
 		Object[] array = connectedClients.toArray();
 		
 		for (int i = 0; i < connectedClients.size(); i++) {
+			output[i] = (ConnectedClient) array[i];
+		}
+		
+		return output;
+		
+	}
+	
+	/* Returns a reference to the current music queue of this session */
+	public ConnectedClient[] getBlacklistedClients() {
+		
+		ConnectedClient[] output = new ConnectedClient[blacklistedIds.size()];
+		Object[] array = blacklistedIds.toArray();
+		
+		for (int i = 0; i < blacklistedIds.size(); i++) {
 			output[i] = (ConnectedClient) array[i];
 		}
 		

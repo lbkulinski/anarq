@@ -46,6 +46,26 @@ public class RequestController {
 		
 	}
 	
+	@GetMapping("/blacklisted-users")
+	public ConnectedClient[] getBlacklistedClients(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
+	@RequestParam(value="userId", defaultValue="no_user_id")String userId) {
+		
+		// Attempt to obtain the given session based on the sessionId provided
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+		if (session == null) {
+			System.err.println("Error: Request to terminate session that doesn't exist");
+			return null;
+		}
+		// Check if that session has that user
+		if (!session.hasUserForId(userId)) {
+			return null;
+		}	
+		
+		return session.getBlacklistedClients();
+		
+	}
+	
 	@PutMapping("/like-song")
 	public boolean likeSong(
 	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
