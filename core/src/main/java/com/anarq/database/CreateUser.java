@@ -25,8 +25,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class CreateUser {
 
-    /**/
-
     protected String firstName;
     protected String lastName;
     protected String password;

@@ -9,8 +9,6 @@ import org.bson.Document;
 
 public class DeleteUser {
 
-    /**/
-
     String text;
     String field;
 
