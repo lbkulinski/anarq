@@ -4,6 +4,7 @@ var usernameField = document.getElementById("username-field");
 var hostButton = document.getElementById("host");
 var sessionId = document.getElementById("sessionId");
 var username = document.getElementById("username");
+var error = document.getElementById("error-message");
 
 if (getIsLoggedIn() != "false") {
 	userData.innerHTML = "Welcome, " + getUsername()
@@ -31,7 +32,7 @@ connectButton.addEventListener("click", function(){
 		// Check if the connection was successful
 		var result = searchRequest.responseText;
 		
-		if (result != null) {
+		if (result.length > 4) {
 		
 			var data = JSON.parse(searchRequest.responseText);
 		
@@ -47,6 +48,7 @@ connectButton.addEventListener("click", function(){
 		else {
 			
 			// TODO: show alert to say session doesn't exist
+			error.innerHTML = "There was an error connecting to this session, make sure it exists or you don't have a bad word in your name!";
 			
 		}
 		
