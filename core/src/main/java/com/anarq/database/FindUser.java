@@ -5,6 +5,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.BsonDocument;
 import org.bson.BsonString;
+import org.bson.types.Binary;
 import org.bson.Document;
 
 public class FindUser {
@@ -44,12 +45,15 @@ public class FindUser {
 
         Document rawDocument = find();
 		
+		System.out.println(((Binary) rawDocument.get("picture-bytes")).getData());
+		
 		return new AccountInfo(
 		(String) rawDocument.get("username"),
 		(String) rawDocument.get("first-name"),
 		(String) rawDocument.get("last-name"),
 		(String) rawDocument.get("email"),
-		(String) rawDocument.get("bio")
+		(String) rawDocument.get("bio"),
+		((Binary) rawDocument.get("picture-bytes")).getData()
 		);
 		
     }

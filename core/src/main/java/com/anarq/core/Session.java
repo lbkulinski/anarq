@@ -1,5 +1,6 @@
 package com.anarq.core;
 
+import com.anarq.qr.*;
 import java.util.*;
 import com.anarq.songrequests.*;
 
@@ -19,6 +20,7 @@ public class Session {
 	private List<ConnectedClient> connectedClients;
 	private List<ConnectedClient> blacklistedIds;
 	private ConnectedClient hostClient;
+	private byte[] qrCode;
 	
 	/* Constructor */
 	public Session() {
@@ -35,6 +37,20 @@ public class Session {
 		// Create a master client for the host
 		hostClient = new ConnectedClient("HOST", true, sessionId);
 		connectedClients.add(hostClient);
+		
+		qrCodeGenerator qr = new qrCodeGenerator();
+		
+		try {
+		
+			qrCode = qr.getQRCodeImage(sessionId);
+		
+		}catch (Exception e) {
+			
+			qrCode = null;
+			
+		}
+		
+		System.out.println("\n\nQR CODE: " + qrCode + "\n\n");
 		
 	}
 	
@@ -79,6 +95,12 @@ public class Session {
 	public ConnectedClient getHostClient() {
 		
 		return hostClient;
+		
+	}
+	
+	public byte[] getQrCode() {
+		
+		return qrCode;
 		
 	}
 	

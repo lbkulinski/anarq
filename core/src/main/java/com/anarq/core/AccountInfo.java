@@ -1,5 +1,6 @@
 package com.anarq.core;
 
+import org.bson.types.Binary;
 /* 
 	Song
 		Contains information about a User
@@ -15,16 +16,18 @@ public class AccountInfo {
 	private final String lastName;
 	private final String email;
 	private final String bio;
+	private final byte[] imageBytes;
 	
 	/* Constructs a new Song class */
 
-	public AccountInfo(String username, String firstName, String lastName, String email, String bio) {
+	public AccountInfo(String username, String firstName, String lastName, String email, String bio, byte[] imageBytes) {
 		
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.bio = bio;
+		this.imageBytes = imageBytes;
 
 	}
 	
@@ -60,6 +63,13 @@ public class AccountInfo {
 	public String getBio() {
 		
 		return bio;
+		
+	}
+	
+	/* Returns the image of the user */
+	public byte[] getImageBytes() {
+		
+		return imageBytes;
 		
 	}
 	

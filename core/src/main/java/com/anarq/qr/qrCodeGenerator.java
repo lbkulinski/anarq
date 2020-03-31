@@ -16,6 +16,7 @@ public class qrCodeGenerator {
 
     private static final String QR_CODE_IMAGE_PATH = "./MyQRCode.png";
     private final String url= "www.anarq.live/join/room/%d";
+	private final String urlS= "www.anarq.live/join/room/%s";
     final int width = 350;
     final int height = 350;
 
@@ -45,6 +46,17 @@ public class qrCodeGenerator {
         byte[] pngData = pngOutputStream.toByteArray();
         return pngData;
     }
+	
+	 public byte[] getQRCodeImage(String roomCode) throws WriterException, IOException {
+
+        String text = String.format(urlS, roomCode);
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
+        ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
+        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
+        byte[] pngData = pngOutputStream.toByteArray();
+        return pngData;
+    }
 
     /**
      * This method takes the text to be encoded and returns the QR Code in the form of a String
@@ -65,5 +77,18 @@ public class qrCodeGenerator {
         String qrCode = Base64.getEncoder().encodeToString(pngData);
         return qrCode;
     }
+	
+	public String getQRCodeImageString(String roomCode) throws WriterException, IOException {
+
+        String text = String.format(urlS, roomCode);
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
+        ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
+        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
+        byte[] pngData = pngOutputStream.toByteArray();
+        String qrCode = Base64.getEncoder().encodeToString(pngData);
+        return qrCode;
+    }
+	
 }
 

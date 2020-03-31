@@ -4,11 +4,13 @@ var requestQueueContainer = document.getElementById("current-requests");
 var sessionHeader = document.getElementById("session-header");
 var quitSession = document.getElementById("quit-session");
 var applyChanges = document.getElementById("apply-changes");
+var qr = document.getElementById("qr");
 
 sessionHeader.innerHTML = getCurrentHostSessionId();
 
 setPreferences();
 loadBlacklist();
+loadQRCode();
 
 function loadUserInfo() {
 
@@ -16,6 +18,25 @@ function loadUserInfo() {
 	loadBlacklist();
 	loadCurrentSongQueue();
 	
+}
+
+// Loads all the users currently connected
+function loadQRCode() {
+
+	var clientListRequest = new XMLHttpRequest();
+	var clientListPath = '/get-qr-code?sessionId=' + getCurrentHostSessionId() + '&userId=' + getUserId();
+	clientListRequest.open('GET', clientListPath);
+	clientListRequest.onload = function() {
+		
+		if(clientListRequest.responseText.length > 3) {
+		
+			qr.src = 'data:image/png;base64,' + clientListRequest.responseText;
+		
+		}
+			
+	};
+	clientListRequest.send();
+
 }
 
 // Loads all the users currently connected
