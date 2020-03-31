@@ -154,6 +154,44 @@ public class HostController {
 		return ret;
 	}
 	
+	@PutMapping("/approve-override-request")
+	public boolean approveOverrideRequest(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
+	@RequestParam(value="songId", defaultValue="no_song_id")String songId) {
+		
+		// Attempt to obtain the given session based on the sessionId provided
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+		if (session == null) {
+			System.err.println("Error: Request for non-existant session was created!\n ID: "
+				+ sessionId);
+			return false;
+		}
+		
+		String artist = session.getMusicChooser().getSongForSongId(songId).getArtistName();
+		boolean ret = session.approveOverrideSongRequest(songId);
+
+		return ret;
+	}
+	
+	@PutMapping("/delete-override-request")
+	public boolean deleteOverrideRequest(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
+	@RequestParam(value="songId", defaultValue="no_song_id")String songId) {
+		
+		// Attempt to obtain the given session based on the sessionId provided
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+		if (session == null) {
+			System.err.println("Error: Request for non-existant session was created!\n ID: "
+				+ sessionId);
+			return false;
+		}
+		
+		String artist = session.getMusicChooser().getSongForSongId(songId).getArtistName();
+		boolean ret = session.deleteOverrideSongRequest(songId);
+
+		return ret;
+	}
+	
 	@PutMapping("/kick-user")
 	public boolean kickUser(
 	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,

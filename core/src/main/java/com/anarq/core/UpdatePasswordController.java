@@ -76,7 +76,8 @@ public class UpdatePasswordController {
         Bson filter;
         String usernameFieldName = "username";
         String passwordHash;
-        String passwordHashFieldName = "password-hash";
+       //String passwordHashFieldName = "password-hash";
+	   String passwordHashFieldName = "password";
         Bson update;
         UpdateResult result;
 
@@ -104,7 +105,7 @@ public class UpdatePasswordController {
 
         passwordHash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
 
-        update = Updates.set(passwordHashFieldName, passwordHash);
+        update = Updates.set(passwordHashFieldName, newPassword);
 
         result = collection.updateOne(filter, update);
 

@@ -21,7 +21,6 @@ public class NaughtyWords {
 		"dildo",
 		"fag",
 		"fuck",
-		"hell",
 		"homo",
 		"nig",
 		"nigger",
@@ -39,7 +38,8 @@ public class NaughtyWords {
 		"twat",
 		"vagina",
 		"wank",
-		"whore"
+		"whore",
+		"bum"
 	};
 
 	public static boolean isANaughtyWord(String word) {

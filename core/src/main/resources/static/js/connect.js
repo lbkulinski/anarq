@@ -18,7 +18,7 @@ connectButton.addEventListener("click", function(){
 	
 	var searchRequest = new XMLHttpRequest();
 	var searchPath = '/connect?sessionId=' + sessionId.value;
-	if (getIsLoggedIn() == "true") {
+	if (getIsLoggedIn() != "false") {
 		searchPath += '&username=' + getUsername();
 	}
 	else {

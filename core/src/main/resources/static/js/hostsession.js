@@ -1,6 +1,7 @@
 var connectedClientContainer = document.getElementById("connected-clients");
 var blacklistContainer = document.getElementById("blacklist");
 var requestQueueContainer = document.getElementById("current-requests");
+var overrideContainer = document.getElementById("override-requests");
 var sessionHeader = document.getElementById("session-header");
 var quitSession = document.getElementById("quit-session");
 var applyChanges = document.getElementById("apply-changes");
@@ -17,6 +18,7 @@ function loadUserInfo() {
 	loadCurrentUsers();
 	loadBlacklist();
 	loadCurrentSongQueue();
+	loadOverrideQueue();
 	
 }
 
@@ -53,6 +55,11 @@ function loadCurrentUsers() {
 			renderUsersToHTML(clientArray);
 		
 		}
+		else {
+			
+			connectedClientContainer.innerHTML = "";
+			
+		}
 			
 	};
 	clientListRequest.send();
@@ -73,6 +80,12 @@ function loadBlacklist() {
 			renderBlacklistToHTML(clientArray);
 		
 		}
+		else {
+			
+			blacklistContainer.innerHTML = "";
+			
+		}
+			
 			
 	};
 	clientListRequest.send();
@@ -92,6 +105,36 @@ function loadCurrentSongQueue() {
 			var songArray = JSON.parse(songQueueRequest.responseText);
 			renderSongsToHTML(songArray);
 		
+		}
+		else {
+			
+			requestQueueContainer.innerHTML = "";
+			
+		}
+			
+	};
+	songQueueRequest.send();
+
+}
+
+// Loads the current list of songs 
+function loadOverrideQueue() {
+
+	var songQueueRequest = new XMLHttpRequest();
+	var songQueuePath = '/override-requests?sessionId=' + getCurrentHostSessionId() + '&userId=' + getUserId();
+	songQueueRequest.open('GET', songQueuePath);
+	songQueueRequest.onload = function() {
+		
+		if(songQueueRequest.responseText.length > 3) {
+		
+			var songArray = JSON.parse(songQueueRequest.responseText);
+			renderOverrideSongsToHTML(songArray);
+		
+		}
+		else {
+			
+			overrideContainer.innerHTML = "";
+			
 		}
 			
 	};
@@ -247,6 +290,43 @@ function generateUserHTML(client) {
 }
 
 // Takes an array of song objects and renders them to the screen
+function renderOverrideSongsToHTML(songArray) {
+	
+	// Clear container
+	overrideContainer.innerHTML = "";
+	
+	overrideContainer.insertAdjacentHTML('beforeend', "<ul>");
+	
+	for (i = 0; i < songArray.length; i++) {
+		
+		overrideContainer.insertAdjacentHTML('beforeend', generateOverrideSongHTML(songArray[i]));
+		
+	}
+	
+	overrideContainer.insertAdjacentHTML('beforeend', "</ul>");
+	
+}
+
+// Generates a single song's HTML code
+function generateOverrideSongHTML(song) {
+	
+	var htmlString = "";
+	
+	htmlString += "<div class=\"song-div\">";
+	htmlString += "<h1>" + song.name + "</h1>";
+	htmlString += "<h2> " + song.album + "</h2>";
+	htmlString += "<h3> " + song.artist + "</h3>";
+	htmlString += "<p>Requested By: " + song.clientIp + "</p>";
+	htmlString += "<p>Score: " + song.votes + "</p>";
+	htmlString += "<button type=\"button\" onclick=\"approveOverrideRequest('" + song.id + "')\">Override Request</button>";
+	htmlString += "<button type=\"button\" onclick=\"deleteOverrideRequest('" + song.id + "')\">Delete</button>";
+	htmlString += "</div>";
+	
+	return htmlString;
+	
+}
+
+// Takes an array of song objects and renders them to the screen
 function renderSongsToHTML(songArray) {
 	
 	// Clear container
@@ -281,6 +361,24 @@ function generateSongHTML(song) {
 	htmlString += "</div>";
 	
 	return htmlString;
+	
+}
+
+function approveOverrideRequest(songId) {
+
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/approve-override-request?sessionId=' + getCurrentSessionId() + '&songId=' + songId + '&userId=' + getUserId();
+	searchRequest.open('PUT', searchPath);
+	searchRequest.send();
+	
+}
+
+function deleteOverrideRequest(songId) {
+
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/delete-override-request?sessionId=' + getCurrentSessionId() + '&songId=' + songId + '&userId=' + getUserId();
+	searchRequest.open('PUT', searchPath);
+	searchRequest.send();
 	
 }
 

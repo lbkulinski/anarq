@@ -157,6 +157,8 @@ public class RequestQueue {
 		
 	}
 
+	
+
 	public void setBlacklistedGenres(boolean[] b) {	
 		this.blacklistedGenres = new Genre(b);
 	}
@@ -273,20 +275,15 @@ public class RequestQueue {
        return true;
     }
 
-    public void removeOverride(int i, boolean decision) {
-        //if index i is out of bounds
-        if (i >= overrides.size() || i < 0) {
-            System.out.println("Index out of bounds!");
-            return;
-        }
-        //if decision is true, host accepted override for song at index i, add to queue and remove from override list
-        if (decision) {
-            songQueue.add(overrides.remove(i));
-        }
-        //if decision is false, host declined override for song at index i, remove from override list, do not add to queue
-        if (!decision) {
-            overrides.remove(i);
-        }
+    public void removeOverride(SongRequest i) {
+        overrides.remove(i);
+    }
+	
+	public void approveOverride(SongRequest i) {
+
+        songQueue.add(i);
+		overrides.remove(i);
+
     }
 
 	/* Returns a song from the queue */
@@ -436,6 +433,21 @@ public class RequestQueue {
 		}
 		
 		return output;
+	}
+	
+	public SongRequest[] getOverrides() {
+	
+		SongRequest[] output = new SongRequest[overrides.size()];
+		Object[] array = overrides.toArray();
+		
+		for (int i = 0; i < overrides.size(); i++) {
+			
+			output[i] = (SongRequest) array[i];
+			
+		}
+		
+		return output;
+	
 	}
 
 	/* Print a representation of the queue out into the console */

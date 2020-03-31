@@ -70,6 +70,21 @@ public class Session {
 		
 	}
 	
+	/* Removes a song request from the request queue */
+	public boolean deleteOverrideSongRequest(String songRequestId) {
+		
+		requestQueue.removeOverride(requestQueue.getSongFromQueue(songRequestId));
+		return true;
+		
+	}
+	
+	public boolean approveOverrideSongRequest(String songRequestId) {
+		
+		requestQueue.approveOverride(requestQueue.getSongFromQueue(songRequestId));
+		return true;
+		
+	}
+	
 	/* Returns a session ID for the current session */
 	public String getSessionId() {
 		
@@ -124,7 +139,7 @@ public class Session {
 	
 	public boolean unblacklistClient(String userId) {
 		
-		for (int i = 0; i < connectedClients.size(); i++) {
+		for (int i = 0; i < blacklistedIds.size(); i++) {
 		
 			if (blacklistedIds.get(i).getId().equals(userId)) {
 		
