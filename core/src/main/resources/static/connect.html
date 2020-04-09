@@ -10,10 +10,13 @@
 	
 		<div class="signin" id="userdata">
 			<button id="signin" type="button" onclick="location.href = '/signin.html'">Sign In or Log In</button>
-		</div>
-	
-		<div class="centered-in-frame">
-		<image src="images/AnarQLogo.png" width="100%"></image>
+		</div>		
+		
+			<canvas id="c1" width="160" height="96"></canvas>
+			<canvas id="c2" width="160" height="96"></canvas>
+			<video id="video" width="200%" autoplay="autoplay">
+				<source src="media/anim.mp4" type="video/mp4" />
+			</video> 
 			<div class="error" id="error-message"></div>
 			<h1>Join or Host a Session</h1>
 			<p>Session ID:</p>
@@ -32,6 +35,7 @@
 	</header>
 	
 	
+	<script type="text/javascript" src="js/processor.js"></script>
 	<script type="text/javascript" src="js/currentsession.js"></script>
 	<script type="text/javascript" src="js/connect.js"></script>
 </body>
