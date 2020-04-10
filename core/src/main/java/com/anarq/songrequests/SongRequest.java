@@ -34,7 +34,12 @@ public class SongRequest {
 
 	/* Adds one to the score of the request if the clientIP is ok */
     public void likeSong(String clientIp) {
-        if (!clientIp.equals(getClientIp()) && !playing) {
+        if (!clientIp.equals(getClientIp()) && !playing && !hasLiked(clientIp)) {
+            if (hasDisliked(clientIp)) {
+                usersDisliked.remove(clientIp);
+                this.votes++;
+            }
+            usersLiked.add(clientIp);
             this.votes++;
         }
         //updateQueue()
@@ -42,10 +47,25 @@ public class SongRequest {
 
 	/* Removes one from the score of the request if the clientIP is ok */
     public void dislikeSong(String clientIp) {
-        if (!clientIp.equals(getClientIp()) && !playing) {
+        if (!clientIp.equals(getClientIp()) && !playing && !hasDisliked(clientIp)) {
+            if (hasLiked(clientIp)) {
+                usersLiked.remove(clientIp);
+                this.votes--;
+            }
+            usersDisliked.add(clientIp);
             this.votes--;
         }
         //updateQueue()
+    }
+
+    /* Returns whether or not the song has been liked by a user */
+    public boolean hasLiked(String clientIp) {
+        return usersLiked.contains(clientIp);
+    }
+
+    /* Returns whether or not the song has been disliked by a user */
+    public boolean hasDisliked(String clientIp) {
+        return usersDisliked.contains(clientIp);
     }
     
 	/* Returns the ID of the song request */
