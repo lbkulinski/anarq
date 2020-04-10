@@ -1,5 +1,7 @@
 package com.anarq.songrequests;
 
+import java.util.ArrayList;
+
 import com.anarq.core.*;
 
 /* 
@@ -17,6 +19,8 @@ public class SongRequest {
 	private boolean playing;
     private Song songInfo;
     private String clientIp;
+    private ArrayList<String> usersLiked;
+    private ArrayList<String> usersDisliked;
     
 	/* Initalizes a new SongRequest */
     public SongRequest(Song songInfo, String clientIp) {
@@ -24,7 +28,8 @@ public class SongRequest {
 		this.playing = false;
 		this.songInfo = songInfo;
         this.clientIp = clientIp;
-		
+        this.usersLiked = new ArrayList<String>();
+        this.usersDisliked = new ArrayList<String>();
     }
 
 	/* Adds one to the score of the request if the clientIP is ok */
