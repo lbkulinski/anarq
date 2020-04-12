@@ -28,7 +28,7 @@ public class CreateUser {
     protected String firstName;
     protected String lastName;
     protected String password;
-	protected String email;
+    protected String email;
 
     protected String username;
     protected int birthDay;
@@ -47,14 +47,14 @@ public class CreateUser {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-		this.email = email;
+        this.email = email;
         this.birthDay = birthDay;
         this.birthMonth = birthMonth;
         this.birthYear = birthYear;
         this.enabled = true;
 
         database = ConnectToDatabase.getDatabaseConnection();
-		
+        
     }
 
     /**
@@ -62,65 +62,65 @@ public class CreateUser {
      * @return The result code from the sign up process
      */
     public String addJammer() {
-		
-		try {
-		
+        
+        try {
+        
         UsernameValidation usernameCriteria = new UsernameValidation(username);
         PasswordValidation passwordCriteria = new PasswordValidation(password);
 
-		String usernameValidation = usernameCriteria.validateUsername();
-		String passwordValidation = passwordCriteria.validatePassword();
+        String usernameValidation = usernameCriteria.validateUsername();
+        String passwordValidation = passwordCriteria.validatePassword();
 
         if (usernameValidation.equals("Username Taken")) {
-			
-			 String [] altUsernames = new String[3];
+            
+             String [] altUsernames = new String[3];
             for (int i = 0; i < 3; i++) {
                 int randomNumber = Integer.parseInt(getRandomAlternativeString());
                 altUsernames[i] = username + randomNumber;
             }
-			String output = "";
+            String output = "";
             output = output + (username + " is Already Taken. Try: ");
             for (int i = 0; i < 3; i++) {
                 output = output + (altUsernames[i] + " ");
             }
             return output;
-		}
-		if (!usernameValidation.equals("Username Ok")) {
-			
-			return usernameValidation;
-			
-		}
-		
-		if (!passwordValidation.equals("Password Ok")) {
-			
-			return passwordValidation;
-			
-		}
-		
-		userDetails = Map.of("user-id", "ID" + String.format("%X", (int) (Math.random() * 999999.0f)),
-				"username", username,
-				"password", password,
-				"first-name", firstName,
-				"last-name", lastName,
-				"email", email,
-				"birth-day", birthDay,
-				"birth-month", birthMonth,
-				"birth-year", birthYear,
-                "enabled", enabled);
+        }
+        if (!usernameValidation.equals("Username Ok")) {
+            
+            return usernameValidation;
+            
+        }
+        
+        if (!passwordValidation.equals("Password Ok")) {
+            
+            return passwordValidation;
+            
+        }
+        
+        userDetails = Map.of("user-id", "ID" + String.format("%X", (int) (Math.random() * 999999.0f)),
+                             "username", username,
+                             "password", password,
+                             "first-name", firstName,
+                             "last-name", lastName,
+                             "email", email,
+                             "birth-day", birthDay,
+                             "birth-month", birthMonth,
+                             "birth-year", birthYear,
+                             "enabled", enabled);
 
-		MongoCollection<Document> jammerCollection = database.getCollection("users");
-		Document user = new Document(userDetails);
-		jammerCollection.insertOne(user);
-		System.out.println("New User has Signed up!");
-		
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			return "Fatal Error!";
-			
-		}
-		
-		return "Sign Up Success!";
+        MongoCollection<Document> jammerCollection = database.getCollection("users");
+        Document user = new Document(userDetails);
+        jammerCollection.insertOne(user);
+        System.out.println("New User has Signed up!");
+        
+        } catch (Exception e) {
+            
+            e.printStackTrace();
+            return "Fatal Error!";
+            
+        }
+        
+        return "Sign Up Success!";
  
     }
 
@@ -128,14 +128,14 @@ public class CreateUser {
 
         int roomCode = Integer.parseInt(getRandomNumberString());
         userDetails = Map.of("username", username,
-				"password", password,
-				"first-name", firstName,
-				"last-name", lastName,
-				"email", email,
-				"birth-day", birthDay,
-				"birth-month", birthMonth,
-				"birth-year", birthYear,
-                "enabled", enabled);
+                             "password", password,
+                             "first-name", firstName,
+                             "last-name", lastName,
+                             "email", email,
+                             "birth-day", birthDay,
+                             "birth-month", birthMonth,
+                             "birth-year", birthYear,
+                             "enabled", enabled);
 
         MongoCollection<Document> hostCollection = database.getCollection("hosts-list");
         Document user = new Document(userDetails);
