@@ -35,6 +35,8 @@ public class CreateUser {
     protected int birthMonth;
     protected int birthYear;
 
+    protected boolean enabled;
+
     ConnectToDatabase newConnection;
     MongoDatabase database;
     Map<String, Object> userDetails;
@@ -49,6 +51,7 @@ public class CreateUser {
         this.birthDay = birthDay;
         this.birthMonth = birthMonth;
         this.birthYear = birthYear;
+        this.enabled = true;
 
         database = ConnectToDatabase.getDatabaseConnection();
 		
@@ -102,7 +105,8 @@ public class CreateUser {
 				"email", email,
 				"birth-day", birthDay,
 				"birth-month", birthMonth,
-				"birth-year", birthYear);
+				"birth-year", birthYear,
+                "enabled", enabled);
 
 		MongoCollection<Document> jammerCollection = database.getCollection("users");
 		Document user = new Document(userDetails);
@@ -130,7 +134,8 @@ public class CreateUser {
 				"email", email,
 				"birth-day", birthDay,
 				"birth-month", birthMonth,
-				"birth-year", birthYear);
+				"birth-year", birthYear,
+                "enabled", enabled);
 
         MongoCollection<Document> hostCollection = database.getCollection("hosts-list");
         Document user = new Document(userDetails);
