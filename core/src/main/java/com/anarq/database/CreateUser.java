@@ -25,65 +25,65 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class CreateUser {
 
-    protected String firstName;
-    protected String lastName;
-    protected String password;
+	protected String firstName;
+	protected String lastName;
+	protected String password;
 	protected String email;
 
-    protected String username;
-    protected int birthDay;
-    protected int birthMonth;
-    protected int birthYear;
+	protected String username;
+	protected int birthDay;
+	protected int birthMonth;
+	protected int birthYear;
 
-    protected boolean enabled;
+	protected boolean enabled;
 
-    ConnectToDatabase newConnection;
-    MongoDatabase database;
-    Map<String, Object> userDetails;
+	ConnectToDatabase newConnection;
+	MongoDatabase database;
+	Map<String, Object> userDetails;
 
-    public CreateUser(String username, String password, String firstName, String lastName, String email, int birthDay, int birthMonth, int birthYear) {
+	public CreateUser(String username, String password, String firstName, String lastName, String email, int birthDay, int birthMonth, int birthYear) {
 
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.email = email;
-        this.birthDay = birthDay;
-        this.birthMonth = birthMonth;
-        this.birthYear = birthYear;
-        this.enabled = true;
+		this.birthDay = birthDay;
+		this.birthMonth = birthMonth;
+		this.birthYear = birthYear;
+		this.enabled = true;
 
-        database = ConnectToDatabase.getDatabaseConnection();
+		database = ConnectToDatabase.getDatabaseConnection();
 		
-    }
+	}
 
-    /**
-     * Method to add a user to the database
-     * @return The result code from the sign up process
-     */
-    public String addJammer() {
+	/**
+	 * Method to add a user to the database
+	 * @return The result code from the sign up process
+	 */
+	public String addJammer() {
 		
 		try {
 		
-        UsernameValidation usernameCriteria = new UsernameValidation(username);
-        PasswordValidation passwordCriteria = new PasswordValidation(password);
+		UsernameValidation usernameCriteria = new UsernameValidation(username);
+		PasswordValidation passwordCriteria = new PasswordValidation(password);
 
 		String usernameValidation = usernameCriteria.validateUsername();
 		String passwordValidation = passwordCriteria.validatePassword();
 
-        if (usernameValidation.equals("Username Taken")) {
+		if (usernameValidation.equals("Username Taken")) {
 			
 			 String [] altUsernames = new String[3];
-            for (int i = 0; i < 3; i++) {
-                int randomNumber = Integer.parseInt(getRandomAlternativeString());
-                altUsernames[i] = username + randomNumber;
-            }
+			for (int i = 0; i < 3; i++) {
+				int randomNumber = Integer.parseInt(getRandomAlternativeString());
+				altUsernames[i] = username + randomNumber;
+			}
 			String output = "";
-            output = output + (username + " is Already Taken. Try: ");
-            for (int i = 0; i < 3; i++) {
-                output = output + (altUsernames[i] + " ");
-            }
-            return output;
+			output = output + (username + " is Already Taken. Try: ");
+			for (int i = 0; i < 3; i++) {
+				output = output + (altUsernames[i] + " ");
+			}
+			return output;
 		}
 		if (!usernameValidation.equals("Username Ok")) {
 			
@@ -98,15 +98,15 @@ public class CreateUser {
 		}
 		
 		userDetails = Map.of("user-id", "ID" + String.format("%X", (int) (Math.random() * 999999.0f)),
-				"username", username,
-				"password", password,
-				"first-name", firstName,
-				"last-name", lastName,
-				"email", email,
-				"birth-day", birthDay,
-				"birth-month", birthMonth,
-				"birth-year", birthYear,
-                "enabled", enabled);
+							 "username", username,
+							 "password", password,
+							 "first-name", firstName,
+							 "last-name", lastName,
+							 "email", email,
+							 "birth-day", birthDay,
+							 "birth-month", birthMonth,
+							 "birth-year", birthYear,
+							 "enabled", enabled);
 
 		MongoCollection<Document> jammerCollection = database.getCollection("users");
 		Document user = new Document(userDetails);
@@ -122,45 +122,45 @@ public class CreateUser {
 		
 		return "Sign Up Success!";
  
-    }
+	}
 
-    public int addHost() {
+	public int addHost() {
 
-        int roomCode = Integer.parseInt(getRandomNumberString());
-        userDetails = Map.of("username", username,
-				"password", password,
-				"first-name", firstName,
-				"last-name", lastName,
-				"email", email,
-				"birth-day", birthDay,
-				"birth-month", birthMonth,
-				"birth-year", birthYear,
-                "enabled", enabled);
+		int roomCode = Integer.parseInt(getRandomNumberString());
+		userDetails = Map.of("username", username,
+							 "password", password,
+							 "first-name", firstName,
+							 "last-name", lastName,
+							 "email", email,
+							 "birth-day", birthDay,
+							 "birth-month", birthMonth,
+							 "birth-year", birthYear,
+							 "enabled", enabled);
 
-        MongoCollection<Document> hostCollection = database.getCollection("hosts-list");
-        Document user = new Document(userDetails);
-        hostCollection.insertOne(user);
-        System.out.println("Added user and room code = " + roomCode);
-        return 1;
-    }
+		MongoCollection<Document> hostCollection = database.getCollection("hosts-list");
+		Document user = new Document(userDetails);
+		hostCollection.insertOne(user);
+		System.out.println("Added user and room code = " + roomCode);
+		return 1;
+	}
 
-    // code from https://stackoverflow.com/questions/51322750/generate-6-digit-random-number
-    public static String getRandomNumberString() {
-        // It will generate 6 digit random Number.
-        // from 0 to 999999
-        Random rnd = new Random();
-        int number = rnd.nextInt(999999);
-        // this will convert any number sequence into 6 character.
-        return String.format("%06d", number);
-    }
+	// code from https://stackoverflow.com/questions/51322750/generate-6-digit-random-number
+	public static String getRandomNumberString() {
+		// It will generate 6 digit random Number.
+		// from 0 to 999999
+		Random rnd = new Random();
+		int number = rnd.nextInt(999999);
+		// this will convert any number sequence into 6 character.
+		return String.format("%06d", number);
+	}
 
-    public static String getRandomAlternativeString() {
-        // It will generate 6 digit random Number.
-        // from 0 to 999999
-        Random rnd = new Random();
-        int number = rnd.nextInt(999);
-        // this will convert any number sequence into 6 character.
-        return String.format("%03d", number);
-    }
+	public static String getRandomAlternativeString() {
+		// It will generate 6 digit random Number.
+		// from 0 to 999999
+		Random rnd = new Random();
+		int number = rnd.nextInt(999);
+		// this will convert any number sequence into 6 character.
+		return String.format("%03d", number);
+	}
 
 }
