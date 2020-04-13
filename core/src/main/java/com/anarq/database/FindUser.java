@@ -45,15 +45,25 @@ public class FindUser {
 
         Document rawDocument = find();
 		
-		System.out.println(((Binary) rawDocument.get("picture-bytes")).getData());
+		Binary image = ((Binary) rawDocument.get("picture-bytes"));
+		byte[] imageData = new byte[64];
+		if (image != null) {
+			imageData = image.getData();
+		}
+		
+		String bio = (String) rawDocument.get("bio");
+		
+		if (bio == null) {
+			bio = "No Bio";
+		}
 		
 		return new AccountInfo(
 		(String) rawDocument.get("username"),
 		(String) rawDocument.get("first-name"),
 		(String) rawDocument.get("last-name"),
 		(String) rawDocument.get("email"),
-		(String) rawDocument.get("bio"),
-		((Binary) rawDocument.get("picture-bytes")).getData()
+		bio,
+		imageData
 		);
 		
     }
