@@ -7,66 +7,75 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class AccountController {
 
-	@PutMapping("/sign-up")
-	public String signUpForAccount(
-	@RequestParam(value="username", defaultValue="username")String username,
-	@RequestParam(value="email", defaultValue="no_email")String email,
-	@RequestParam(value="firstname", defaultValue="joe")String firstname,
-	@RequestParam(value="lastname", defaultValue="swanson")String lastname,
-	@RequestParam(value="day", defaultValue="1")int day,
-	@RequestParam(value="month", defaultValue="1")int month,
-	@RequestParam(value="year", defaultValue="2000")int year,
-	@RequestParam(value="password", defaultValue="password")String password) {
-		
-		// TODO: Add sign up testing	
-		CreateUser newUser = new CreateUser(username, password, firstname, lastname, email, day, month, year);
-		
-		return newUser.addJammer();
-		
-	}
-	
-	@PutMapping("/log-in")
-	public String loginToAccount(
-	@RequestParam(value="username", defaultValue="username")String username,
-	@RequestParam(value="password", defaultValue="password")String password) {
-		
-		FindUser userLogin = new FindUser(username);
-		
-		if (userLogin == null) {
-			
-			return "Login Failed.";
-			
-		}
-		
-		Document info = userLogin.attemptLogin(password);
-		
-		if (info == null) {
-			
-			return "Login Failed.";
-			
-		}
-		
-		if(info.get("user-id") == null) {
-			
-			return "Login Failed.";
-			
-		}
-		
-		return (String) info.get("user-id");
-	}
-	
-	@GetMapping("/get-account-info")
-	public AccountInfo getAccountInfo(
-	@RequestParam(value="userkey", defaultValue="no_user_key")String userKey) {
-		
-		// TODO: Check if account exists and retrieve info
-		
-		FindUser fu = new FindUser("user-id", userKey);
-		
-		return fu.findAccountInfo();
-		
-		
-	}
-	
-	
+    @PutMapping("/sign-up")
+    public String signUpForAccount(
+    @RequestParam(value="username", defaultValue="username")String username,
+    @RequestParam(value="email", defaultValue="no_email")String email,
+    @RequestParam(value="firstname", defaultValue="joe")String firstname,
+    @RequestParam(value="lastname", defaultValue="swanson")String lastname,
+    @RequestParam(value="day", defaultValue="1")int day,
+    @RequestParam(value="month", defaultValue="1")int month,
+    @RequestParam(value="year", defaultValue="2000")int year,
+    @RequestParam(value="password", defaultValue="password")String password) {
+        
+        // TODO: Add sign up testing    
+        CreateUser newUser = new CreateUser(username, password, firstname, lastname, email, day, month, year);
+        
+        return newUser.addJammer();
+        
+    }
+    
+    @PutMapping("/log-in")
+    public String loginToAccount(
+    @RequestParam(value="username", defaultValue="username")String username,
+    @RequestParam(value="password", defaultValue="password")String password) {
+
+        FindUser userLogin = new FindUser(username);
+        boolean enabled;
+        String enabledFieldName = "enabled";
+        boolean defaultValue = true;
+        
+        if (userLogin == null) {
+            
+            return "Login Failed.";
+            
+        }
+        
+        Document info = userLogin.attemptLogin(password);
+        
+        if (info == null) {
+            
+            return "Login Failed.";
+            
+        }
+        
+        if(info.get("user-id") == null) {
+            
+            return "Login Failed.";
+            
+        }
+
+        enabled = info.getBoolean(enabledFieldName, defaultValue);
+
+        if (!enabled) {
+            return "Account Disabled.";
+        } //end if
+        
+        return (String) info.get("user-id");
+    }
+    
+    @GetMapping("/get-account-info")
+    public AccountInfo getAccountInfo(
+    @RequestParam(value="userkey", defaultValue="no_user_key")String userKey) {
+        
+        // TODO: Check if account exists and retrieve info
+        
+        FindUser fu = new FindUser("user-id", userKey);
+        
+        return fu.findAccountInfo();
+        
+        
+    }
+    
+    
 }
