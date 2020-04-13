@@ -8,8 +8,8 @@ var error = document.getElementById("error-message");
 
 if (getIsLoggedIn() != "false") {
 	userData.innerHTML = "Welcome, " + getUsername()
-	+ "! <br> <button id=\"logout\" type=\"button\" onclick=\"location.href = '/logout.html'\">Log Out</button>"
-	 + "! <br> <button id=\"account-page\" type=\"button\" onclick=\"location.href = '/accountpage.html'\">My Account</button>";
+	+ "!<button id=\"logout\" type=\"button\" onclick=\"location.href = '/logout.html'\">Log Out</button>"
+	 + "<button id=\"account-page\" type=\"button\" onclick=\"location.href = '/accountpage.html'\">My Account</button>";
 	usernameField.innerHTML = "";
 }
 

@@ -64,7 +64,8 @@ function generateSongHTML(song) {
 	htmlString += "<p>Duration: " + song.duration + "</p>";
 	htmlString += "<p>Explicit: " + song.isExplicit + "</p>";
 	htmlString += "<button type=\"button\" onclick=\"requestSong('" + song.songId + "')\">Request this Song</button>";
-	htmlString += "</div>";
+	htmlString += "</div>"
+	htmlString += "<hr>";
 	
 	return htmlString;
 	

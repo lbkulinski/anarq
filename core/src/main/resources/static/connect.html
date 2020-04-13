@@ -6,34 +6,38 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<header>
-	
-		<div class="signin" id="userdata">
-			<button id="signin" type="button" onclick="location.href = '/signin.html'">Sign In or Log In</button>
-		</div>		
-		
-			<canvas id="c1" width="160" height="96"></canvas>
-			<canvas id="c2" width="160" height="96"></canvas>
-			<video id="video" width="200%" autoplay="autoplay">
+
+	<div class="header">	
+			<video id="video" width="200%" playsinline autoplay muted>
 				<source src="media/anim.mp4" type="video/mp4" />
 			</video> 
-			<div class="error" id="error-message"></div>
-			<h1>Join or Host a Session</h1>
-			<p>Session ID:</p>
-			<input id="sessionId" type="text" size="25"></input>
-			<br>
-			<div id="username-field">
-				<p>Username:</p>
-				<input id="username" type="text" size="25"></input>
-			<br>
-			</div>
-			<button id="connect" type="button">Connect to Session</button>
-			<br>
-			<p>Or</p>
-			<button id="host" type="button">Host Session</button>
+				
 		</div>
-	</header>
+	</div>
 	
+	<div class="userdata" id="userdata">
+		<button id="signin" type="button" onclick="location.href = '/signin.html'">Sign In or Log In</button>
+	</div>
+	
+	<div class="content">		
+		
+		<div class="error" id="error-message"></div>
+		
+		<h1>Join or Host a Session</h1>
+		<p>Session ID:</p>
+		<input id="sessionId" type="text" size="25"></input>
+		<br>
+		<div id="username-field">
+			<p>Username:</p>
+			<input id="username" type="text" size="25"></input>
+		<br>
+		</div>
+		<button id="connect" type="button">Connect to Session</button>
+		<br>
+		<p>Or</p>
+		<button id="host" type="button">Host Session</button>
+		
+	</div>
 	
 	<script type="text/javascript" src="js/processor.js"></script>
 	<script type="text/javascript" src="js/currentsession.js"></script>
