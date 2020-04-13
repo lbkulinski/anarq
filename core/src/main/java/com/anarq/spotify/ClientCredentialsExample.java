@@ -5,10 +5,14 @@ import com.wrapper.spotify.SpotifyHttpManager;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
+import com.wrapper.spotify.model_objects.miscellaneous.Device;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
 import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
 import com.wrapper.spotify.requests.data.search.simplified.SearchPlaylistsRequest;
+import com.wrapper.spotify.requests.data.player.GetUsersAvailableDevicesRequest;
+import com.wrapper.spotify.requests.data.player.PauseUsersPlaybackRequest;
+import com.wrapper.spotify.requests.data.player.StartResumeUsersPlaybackRequest;
 
 import java.awt.*;
 import java.io.IOException;
@@ -41,10 +45,13 @@ public class ClientCredentialsExample {
             .build(); // build parameter
     private static final AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodeUri()
 //          .state("x4xkmn9pu3j6ukrs8n")
-          .scope("playlist-modify-public")
+          .scope("playlist-modify-public user-read-email streaming user-read-private user-read-playback-state user-modify-playback-state")
 //          .show_dialog(true)
             .build();
 
+    private static GetUsersAvailableDevicesRequest getUsersAvailableDevicesRequest = null;
+    private static PauseUsersPlaybackRequest pauseUsersPlaybackRequest = null;
+    private static StartResumeUsersPlaybackRequest startResumeUsersPlaybackRequest = null;
     private static AuthorizationCodeRequest authorizationCodeRequest;
 
 
@@ -124,6 +131,42 @@ public class ClientCredentialsExample {
             System.out.println("Error: " + e.getCause().getMessage());
         } catch (CancellationException e) { // catches cancellation exception which does [unknown]
             System.out.println("Async operation cancelled.");
+        }
+    }
+
+    public static void playback() {
+        getUsersAvailableDevicesRequest = spotifyApi.getUsersAvailableDevices().build();
+        try {
+            Device[] devices = getUsersAvailableDevicesRequest.execute();
+            for(int i = 0; i < devices.length; i++) {
+                Device temp = devices[i];
+                System.out.println("The name of device " + (i + 1) + " is: " + temp.getName());
+            }
+            pause();
+            Thread.sleep(5000);
+            resume();
+
+        } catch (IOException | SpotifyWebApiException | InterruptedException pb) {
+            System.out.println("Error in Playback: " + pb.getMessage());
+        }
+    }
+
+    public static void pause() {
+        pauseUsersPlaybackRequest = spotifyApi.pauseUsersPlayback().build();
+        try {
+            String returnValue = pauseUsersPlaybackRequest.execute();
+        } catch (IOException | SpotifyWebApiException p) {
+            System.out.println("Null: " + p.getMessage());
+        }
+    }
+
+    public static void resume() {
+        startResumeUsersPlaybackRequest= spotifyApi.startResumeUsersPlayback().build();
+
+        try {
+            startResumeUsersPlaybackRequest.execute();
+        } catch (IOException | SpotifyWebApiException r) {
+            System.out.println("There was an error while trying to resume the song");
         }
     }
 

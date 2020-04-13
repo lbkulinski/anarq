@@ -6,63 +6,141 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<header>
+
+	<div class="header">	
+		<video id="video" width="200%" playsinline autoplay muted>
+			<source src="media/anim.mp4" type="video/mp4" />
+		</video> 
 		<h2>You are now Hosting!</h2>
 		<h3>Give people this code to connect:</h3>
 		<div class="bigtext"><h1 id="session-header">ID: $SESSIONID</h1></div>
+		<br>
 		<image id="qr" width="512px"></image>
+		<br>
 		<button id="request-song" type="button" onclick="location.href = '/search.html'">Request a Song</button>
 		<button id="quit-session" type="button">Terminate Session</button>
-	</header>
+	</div>
+
 	<div class="column">
-	<h3>Song Request Queue</h3>
-	<div id="current-requests"></div>
-	<h3>Override Requests</h3>
-	<div id="override-requests"></div>
+	
+		<h3>Song Request Queue</h3>
+		<div id="current-requests"></div>
+		<hr>
+		
+		<h3>Override Requests</h3>
+		<div id="override-requests"></div>
+	
 	</div>
+	
 	<div class="column">
-	<h3>Connected Jammers</h3>
-	<div id="connected-clients"></div>
-	<h3>Blacklisted Jammers</h3>
-	<div id="blacklist"></div>
-	<h3>Session Preferences</h3>
-	<button id="apply-changes" type="button">Apply Changes</button>
-	<p>Maximum BPM</p>
-	<div class="slidecontainer">
-		<input id="max-bpm" type="number" min="32" max="400" value="400" size="4"></input>
-	</div>
-	<p>Minimum BPM</p>
-	<div class="slidecontainer">
-		<input id="min-bpm" type="number" min="32" max="400" value="32" size="4"></input>
-	</div>
-	<p>Allowed Genres</p>
-	<input type="checkbox" id="pop" name="pop" checked="true"></input>
-	<label for="pop">pop</label><br>
-	<input type="checkbox" id="rock" name="rock" checked="true"></input>
-	<label for="rock">rock</label><br>
-	<input type="checkbox" id="country" name="country" checked="true"></input>
-	<label for="country">country</label><br>
-	<input type="checkbox" id="jazz" name="jazz" checked="true"></input>
-	<label for="jazz">jazz</label><br>
-	<input type="checkbox" id="rap" name="rap" checked="true"></input>
-	<label for="rap">rap</label><br>
-	<input type="checkbox" id="metal" name="metal" checked="true"></input>
-	<label for="metal">metal</label><br>
-	<input type="checkbox" id="rb" name="rb" checked="true"></input>
-	<label for="rb">rb</label><br>
-	<input type="checkbox" id="hiphop" name="hiphop" checked="true"></input>
-	<label for="hiphop">hiphop</label><br>
-	<input type="checkbox" id="electronic" name="electronic" checked="true"></input>
-	<label for="electronic">electronic</label><br>
-	<input type="checkbox" id="christian" name="christian" checked="true"></input>
-	<label for="christian">christian</label><br>
-	<h3>Misc Settings</h3>
-	<input type="checkbox" id="explicit" name="explicit" checked="true"></input>
-	<label for="explicit">Block Explicit Music</label><br>
-	<input type="checkbox" id="allowRequests" name="allowRequests" checked="true"></input>
-	<label for="allowRequests">Allow Requests</label><br>
-	<input type="checkbox" id="isVisible" name="isVisible" checked="true"></input>
-	<label for="isVisible">Is Session Visible</label><br>
+	
+		<h3>Connected Jammers</h3>
+		<div id="connected-clients"></div>
+		<hr>
+		
+		<h3>Blacklisted Jammers</h3>
+		<div id="blacklist"></div>
+		<hr>
+		
+		<h3>Session Preferences</h3>
+		
+		<button id="apply-changes" type="button">Apply Changes</button>
+		
+		<br>
+		
+		<div class="column"> 
+		
+			<div class="division">
+			
+				<p>Maximum BPM</p>
+				<div class="slidecontainer">
+					<input id="max-bpm" type="number" min="32" max="400" value="400" size="4"></input>
+				</div>
+				<p>Minimum BPM</p>
+				<div class="slidecontainer">
+					<input id="min-bpm" type="number" min="32" max="400" value="32" size="4"></input>
+				</div>
+			
+				<h3>Misc Settings</h3>
+				
+				<input type="checkbox" id="explicit" name="explicit" checked="true"></input>
+				<br>
+				<label for="explicit">Block Explicit Music</label><br>
+				
+				<input type="checkbox" id="allowRequests" name="allowRequests" checked="true"></input>
+				<br>
+				<label for="allowRequests">Allow Requests</label><br>
+				
+				<input type="checkbox" id="isVisible" name="isVisible" checked="true"></input>
+				<br>
+				<label for="isVisible">Is Session Visible</label><br>
+			
+			</div>
+		
+		</div>
+		
+		<div class="column"> 
+		
+			<div class="division">
+			
+				<p>Allowed Genres</p>
+				<div class="genre">
+					<input type="checkbox" id="pop" name="pop" checked="true"></input>
+					<br>
+					<label for="pop">pop</label>
+				</div>
+				<div class="genre">
+					<input type="checkbox" id="rock" name="rock" checked="true"></input>
+					<br>
+					<label for="rock">rock</label>
+				</div>
+				<div class="genre">
+					<input type="checkbox" id="country" name="country" checked="true"></input>
+					<br>
+					<label for="country">country</label>
+				</div>
+				<div class="genre">
+					<input type="checkbox" id="jazz" name="jazz" checked="true"></input>
+					<br>
+					<label for="jazz">jazz</label>
+				</div>
+				<div class="genre">
+					<input type="checkbox" id="rap" name="rap" checked="true"></input>
+					<br>
+					<label for="rap">rap</label>
+				</div>
+				<div class="genre">
+					<input type="checkbox" id="metal" name="metal" checked="true"></input>
+					<br>
+					<label for="metal">metal</label>
+				</div>
+				<div class="genre">
+					<input type="checkbox" id="rb" name="rb" checked="true"></input>
+					<br>
+					<label for="rb">rb</label>
+				</div>
+				<div class="genre">
+					<input type="checkbox" id="hiphop" name="hiphop" checked="true"></input>
+					<br>
+					<label for="hiphop">hiphop</label>
+				</div>
+				<div class="genre">
+					<input type="checkbox" id="electronic" name="electronic" checked="true"></input>
+					<br>
+					<label for="electronic">electronic</label>
+				</div>
+				<div class="genre">
+					<input type="checkbox" id="christian" name="christian" checked="true"></input>
+					<br>
+					<label for="christian">christian</label>
+				</div>
+			
+			</div>
+		
+			<br>
+		
+		</div>
+		
 	</div>
 	
 	

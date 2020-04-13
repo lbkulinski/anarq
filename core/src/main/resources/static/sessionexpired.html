@@ -6,13 +6,18 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<header>
-		<div class="centered-in-frame">
-			<h1>Session doesn't exist or has expired.</h1>
-			<p>Please return to the connect page and try again.</p>
-			<button id="back" type="button" onclick="location.href = '/connect.html'">Return to Connect Page</button>
-		</div>
-	</header>
+	
+	<div class="header">	
+		<video id="video" width="200%" playsinline autoplay muted>
+			<source src="media/anim.mp4" type="video/mp4" />
+		</video> 
+	</div>
+
+	<div class="centered-in-frame">
+		<h1>Session doesn't exist or has expired.</h1>
+		<p>Please return to the connect page and try again.</p>
+		<button id="back" type="button" onclick="location.href = '/connect.html'">Return to Connect Page</button>
+	</div>
 	
 	<script type="text/javascript" src="js/currentsession.js"></script>
 </body>

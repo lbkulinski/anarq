@@ -6,20 +6,26 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<header>
+	<div class="header">	
+		<video id="video" width="200%" playsinline autoplay muted>
+			<source src="media/anim.mp4" type="video/mp4" />
+		</video> 
 		<h2>Welcome to $LOBBY_NAME!</h2>
 		<h3>Connected with ID</h3>
 		<h2 id="session-header">Connected to Session $SESSIONID</h2>
 		<button id="request-song" type="button" onclick="location.href = '/search.html'">Request a Song</button>
 		<button id="quit-session" type="button">Leave Session</button>
-	</header>
-	<div class="column">
-	<p>Song Request Queue</p>
-	<div id="current-requests"></div>
 	</div>
+	
 	<div class="column">
-	<p>Currently Playing</p>
+		<p>Song Request Queue</p>
+		<div id="current-requests"></div>
 	</div>
+	
+		<div class="column">
+		<p>Currently Playing</p>
+	</div>
+	
 	<script type="text/javascript" src="js/currentsession.js"></script>
 	<script type="text/javascript" src="js/authentication.js"></script>
 	<script type="text/javascript" src="js/clientsession.js"></script>

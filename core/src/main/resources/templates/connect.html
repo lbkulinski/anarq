@@ -6,32 +6,40 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<header>
-	
-		<div class="signin" id="userdata">
-			<button id="signin" type="button" onclick="location.href = '/signin.html'">Sign In or Log In</button>
+
+	<div class="header">	
+			<video id="video" width="200%" playsinline autoplay muted>
+				<source src="media/anim.mp4" type="video/mp4" />
+			</video> 
+				
 		</div>
+	</div>
 	
-		<div class="centered-in-frame">
-		<image src="images/AnarQLogo.png" width="100%"></image>
-			<div class="error" id="error-message"></div>
-			<h1>Join or Host a Session</h1>
-			<p>Session ID:</p>
-			<input id="sessionId" type="text" size="25"></input>
-			<br>
-			<div id="username-field">
-				<p>Username:</p>
-				<input id="username" type="text" size="25"></input>
-			<br>
-			</div>
-			<button id="connect" type="button">Connect to Session</button>
-			<br>
-			<p>Or</p>
-			<button id="host" type="button">Host Session</button>
+	<div class="userdata" id="userdata">
+		<button id="signin" type="button" onclick="location.href = '/signin.html'">Sign In or Log In</button>
+	</div>
+	
+	<div class="content">		
+		
+		<div class="error" id="error-message"></div>
+		
+		<h1>Join or Host a Session</h1>
+		<p>Session ID:</p>
+		<input id="sessionId" type="text" size="25"></input>
+		<br>
+		<div id="username-field">
+			<p>Username:</p>
+			<input id="username" type="text" size="25"></input>
+		<br>
 		</div>
-	</header>
+		<button id="connect" type="button">Connect to Session</button>
+		<br>
+		<p>Or</p>
+		<button id="host" type="button">Host Session</button>
+		
+	</div>
 	
-	
+	<script type="text/javascript" src="js/processor.js"></script>
 	<script type="text/javascript" src="js/currentsession.js"></script>
 	<script type="text/javascript" src="js/connect.js"></script>
 </body>

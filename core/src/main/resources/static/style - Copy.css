@@ -1,0 +1,121 @@
+body {
+	
+	font-family: Arial;
+	font-size: 20px;
+	color: white;
+	text-align: center;
+	
+	background-image: url("images/background.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-attachment: fixed;
+	margin:auto;
+	max-width: 700px;
+	
+}
+
+video { margin: 0 auto; width: 100%; }
+
+body h1 {
+	
+	margin: 10px;
+	
+}
+body h2 {
+	
+	margin: 10px;
+	
+}
+body h3 {
+	
+	margin: 10px;
+	
+}
+body p {
+	
+	margin: 10px;
+	
+}
+body input {
+	
+	border-radius: 30px;
+	margin-top: 0;
+	margin-bottom: 0;
+	height: 50px;
+	font-size: 30px;
+	text-align:center;
+	
+}
+body select {
+	
+	border-radius: 30px;
+	margin-top: 0;
+	margin-bottom: 0;
+	height: 50px;
+	font-size: 30px;
+	text-align:center;
+	
+}
+body button {
+	
+	border-radius: 30px;
+	margin: 10px;
+	height: 40px;
+	font-size: 20px;
+	text-align: center;
+	
+}
+.error {
+	
+	color: red;
+	
+}
+.bigtext {
+	
+	font-size: 400%;
+	
+}
+.centered-in-frame {
+	
+	margin: 0;
+	
+}
+
+.column {
+	
+	min-height: 500px;
+	width: 48%;
+	float: right;
+	background-color: rgba(30, 30, 30, 0.8);
+	border-radius: 30px;
+	margin: 1%;
+	overflow:hidden;
+	
+}
+.song-div {
+	
+	background-color: rgba(10, 10, 10, 0.8);
+	border-radius: 30px;
+	margin: 1%;
+	font-size: 24px;
+	
+}
+
+.client-div {
+	
+	background-color: rgba(10, 10, 10, 0.8);
+	border-radius: 30px;
+	margin: 1%;
+	font-size: 24px;
+	
+}
+
+.signin button {
+	
+	border-radius: 30px;
+	margin-top: 0;
+	margin-bottom: 0;
+	height: 25px;
+	font-size: 15px;
+	
+}
