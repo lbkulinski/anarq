@@ -18,6 +18,7 @@ public class Song {
 	private final int duration;
 	private final boolean isExplicit;
 	private final int bpm;
+	//private final Image albumCover;
 	
 	/* Constructs a new Song class */
 
