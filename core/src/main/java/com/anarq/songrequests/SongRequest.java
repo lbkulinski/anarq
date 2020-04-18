@@ -115,6 +115,11 @@ public class SongRequest {
         return songInfo.getBPM();
     }
 
+    /* Returns the explict nature of the song request */
+    public String getAlbumCover() {
+        return songInfo.getAlbumCover();
+    }
+
 	/* Returns the vote score of the song request */
     public int getVotes() {
         return votes;

@@ -18,12 +18,12 @@ public class Song {
 	private final int duration;
 	private final boolean isExplicit;
 	private final int bpm;
-	//private final Image albumCover;
+	private final String albumCover;
 	
 	/* Constructs a new Song class */
 
 	public Song(String songName, String albumName, String artistName, String songGenre, String songId,
-			int duration, boolean isExplicit, int bpm) {
+			int duration, boolean isExplicit, int bpm, String albumCover) {
 		
 		this.songName = songName;
 		this.albumName = albumName;
@@ -33,6 +33,7 @@ public class Song {
 		this.duration = duration;
 		this.isExplicit = isExplicit;
 		this.bpm = bpm;
+		this.albumCover = albumCover;
 	}
 	
 	/* Returns the name of the song */
@@ -88,6 +89,13 @@ public class Song {
 	public int getBPM() {
 		
 		return bpm;
+		
+	}
+
+	/* Returns the album cover of the song */
+	public String getAlbumCover() {
+		
+		return albumCover;
 		
 	}
 	

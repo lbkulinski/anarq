@@ -55,6 +55,7 @@ function generateSongHTML(song) {
 	
 	htmlString += "<div class=\"song-div\">";
 	htmlString += "<h1>" + song.name + "</h1>";
+	htmlString += "<img src=\"" + song.albumCover + "\" alt=\"https://cdn3.iconfinder.com/data/icons/music-and-media-player-ui-filled-outline-s94/96/Music_Icon_Pack_-_Filled_Outline_vinyl-512.png\"" + " width=\"200\" height=\"200\"" + "/>";
 	htmlString += "<h2> " + song.album + "</h2>";
 	htmlString += "<h3> " + song.artist + "</h3>";
 	htmlString += "<p>Requested By: " + song.clientIp + "</p>";

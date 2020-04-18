@@ -43,9 +43,9 @@ function renderSongsToHTML(songArray) {
 	resultsContainer.insertAdjacentHTML('beforeend', "<ul>");
 	
 	for (i = 0; i < songArray.length; i++) {
-		
+
 		resultsContainer.insertAdjacentHTML('beforeend', generateSongHTML(songArray[i]));
-		
+
 	}
 	
 	resultsContainer.insertAdjacentHTML('beforeend', "</ul>");
@@ -59,11 +59,12 @@ function generateSongHTML(song) {
 	
 	htmlString += "<div class=\"song-div\">";
 	htmlString += "<h1>" + song.songName + "</h1>";
-	htmlString += "<h2>on " + song.albumName + "</h2>";
+	htmlString += "<img src=\"" + song.albumCover + "\" alt=\"https://cdn3.iconfinder.com/data/icons/music-and-media-player-ui-filled-outline-s94/96/Music_Icon_Pack_-_Filled_Outline_vinyl-512.png\"" + " width=\"200\" height=\"200\"" + "/>";
+	htmlString += "<h2>" + song.albumName + "</h2>";
 	htmlString += "<h3>by " + song.artistName + "</h3>";
 	htmlString += "<p>Duration: " + song.duration + "</p>";
 	htmlString += "<p>Explicit: " + song.isExplicit + "</p>";
-	htmlString += "<button type=\"button\" onclick=\"requestSong('" + song.songId + "')\">Request this Song</button>";
+	htmlString += "<button type=\"button\" onclick=\"requestSong('" + song.songId + "')\">Request song</button>";
 	htmlString += "</div>"
 	htmlString += "<hr>";
 	

@@ -38,7 +38,8 @@ public class SpotifyGateway extends ClientCredentialsExample{
 				search.tracks[i].getId(),
 				search.tracks[i].getDurationMs()/1000,
 				search.tracks[i].getIsExplicit(),
-				Math.round(spotifyApi.getAudioFeaturesForTrack(search.tracks[i].getId()).build().execute().getTempo())
+                Math.round(spotifyApi.getAudioFeaturesForTrack(search.tracks[i].getId()).build().execute().getTempo()),
+                search.tracks[i].getAlbum().getImages()[0].getUrl()
 				);
 				
 			}
@@ -80,7 +81,8 @@ public class SpotifyGateway extends ClientCredentialsExample{
 			output.getId(),
 			output.getDurationMs()/1000,
 			output.getIsExplicit(),
-			Math.round(spotifyApi.getAudioFeaturesForTrack(output.getId()).build().execute().getTempo())
+            Math.round(spotifyApi.getAudioFeaturesForTrack(output.getId()).build().execute().getTempo()),
+            output.getAlbum().getImages()[0].getUrl()
 			);
 		
 		} catch (Exception e) {
