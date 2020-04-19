@@ -1,4 +1,4 @@
-package com.anarq.update.enable;
+package com.anarq.update.disable;
 
 import org.springframework.stereotype.Controller;
 import com.mongodb.client.MongoClient;
@@ -21,22 +21,22 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import com.anarq.update.ValidationUtils;
 
 /**
- * A controller for enabling a user's account.
+ * A controller for disabling a user's account.
  *
  * @author Logan Kulinski, lbk@purdue.edu
  * @version April 19, 2020
  */
 @Controller
-public final class EnableAccountController {
+public final class DisableAccountController {
     /**
-     * Returns whether or not the account of the user with the specified username is already enabled.
+     * Returns whether or not the account of the user with the specified username is already disabled.
      *
      * @param username the username to be used in the operation
-     * @return {@code true}, if the account of the user with the specified username is already enabled and
+     * @return {@code true}, if the account of the user with the specified username is already disabled and
      * {@code false} otherwise
      * @throws NullPointerException if the specified username is {@code null}
      */
-    private boolean alreadyEnabled(String username) {
+    private boolean alreadyDisabled(String username) {
         String databaseUsername;
         String databasePassword;
         String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
@@ -87,16 +87,16 @@ public final class EnableAccountController {
 
         client.close();
 
-        return currentEnabled;
-    } //alreadyEnabled
+        return !currentEnabled;
+    } //alreadyDisabled
 
     /**
-     * Attempts to enable the account of the user with the specified username.
+     * Attempts to disable the account of the user with the specified username.
      *
      * @param username the username to be used in the operation
-     * @return {@code true}, if the user's account was successfully enabled and {@code false} otherwise
+     * @return {@code true}, if the user's account was successfully disabled and {@code false} otherwise
      */
-    private boolean enableAccount(String username) {
+    private boolean disableAccount(String username) {
         String databaseUsername;
         String databasePassword;
         String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
@@ -134,49 +134,49 @@ public final class EnableAccountController {
 
         filter = Filters.regex(usernameFieldName, regex);
 
-        update = Updates.set(enabledFieldName, true);
+        update = Updates.set(enabledFieldName, false);
 
         result = collection.updateOne(filter, update);
 
         client.close();
 
         return result.getModifiedCount() == 1;
-    } //enableAccount
+    } //disableAccount
 
     /**
-     * Displays the form for enabling a user's account and collects the user's input.
+     * Displays the form for disabling a user's account and collects the user's input.
      *
      * @param model the model to be used in the operation
-     * @return the HTML code for the account enabling form
+     * @return the HTML code for the account disabling form
      */
-    @GetMapping("/enableAccount")
-    public String enableAccountForm(Model model) {
+    @GetMapping("/disableAccount")
+    public String disableAccountForm(Model model) {
         model.addAttribute("userInformation", new UserInformation());
 
-        return "enableAccountForm";
-    } //enableAccountForm
+        return "disableAccountForm";
+    } //disableAccountForm
 
     /**
-     * Displays the result after attempting to enable the user's account.
+     * Displays the result after attempting to disable the user's account.
      *
      * @param userInformation the user information to be used in the operation
-     * @return the HTML code for the account enabling result
+     * @return the HTML code for the account disabling result
      */
-    @PostMapping("/enableAccount")
-    public String enableAccountSubmit(@ModelAttribute UserInformation userInformation) {
+    @PostMapping("/disableAccount")
+    public String disableAccountSubmit(@ModelAttribute UserInformation userInformation) {
         String username = userInformation.getUsername();
         String password = userInformation.getPassword();
 
         if (!ValidationUtils.userPresent(username)) {
-            return "enableAccountUserNotFoundResult";
+            return "disableAccountUserNotFoundResult";
         } else if (!ValidationUtils.passwordCorrect(username, password)) {
-            return "enableAccountIncorrectPasswordResult";
-        } else if (this.alreadyEnabled(username)) {
-            return "enableAccountNoChangeResult";
+            return "disableAccountIncorrectPasswordResult";
+        } else if (this.alreadyDisabled(username)) {
+            return "disableAccountNoChangeResult";
         } else {
-            boolean success = this.enableAccount(username);
+            boolean success = this.disableAccount(username);
 
-            return success ? "enableAccountSuccessResult" : "enableAccountFailureResult";
+            return success ? "disableAccountSuccessResult" : "disableAccountFailureResult";
         } //end if
-    } //enableAccountSubmit
+    } //disableAccountSubmit
 }
