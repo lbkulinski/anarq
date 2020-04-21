@@ -33,10 +33,10 @@ public class SearchArtistsExample {
     public SearchArtistsExample (SpotifyApi spotifyApi, String field) {
         this.spotifyApi = spotifyApi; // brings in spotifyAPI from client credentials class
         this.field = field; // brings in desired search field
-        SearchArtistsRequest searchArtistsRequest = spotifyApi.searchArtists(this.field).limit(10).build(); // searches artists for field
-        SearchAlbumsRequest searchAlbumsRequest = spotifyApi.searchAlbums(this.field).limit(10).build(); // searches albums for the field
-        SearchTracksRequest searchTracksRequest = spotifyApi.searchTracks(this.field).limit(10).build(); // searches songs for the field
-        SearchPlaylistsRequest searchPlaylistsRequest = spotifyApi.searchPlaylists(this.field).limit(10).build();
+        SearchArtistsRequest searchArtistsRequest = spotifyApi.searchArtists(this.field).limit(12).build(); // searches artists for field
+        SearchAlbumsRequest searchAlbumsRequest = spotifyApi.searchAlbums(this.field).limit(12).build(); // searches albums for the field
+        SearchTracksRequest searchTracksRequest = spotifyApi.searchTracks(this.field).limit(12).build(); // searches songs for the field
+        SearchPlaylistsRequest searchPlaylistsRequest = spotifyApi.searchPlaylists(this.field).limit(12).build();
 
         if (spotifyApi == null || searchArtistsRequest == null) {
             System.out.println("Error: Could not verify API Information");
