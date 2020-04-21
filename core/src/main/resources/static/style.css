@@ -30,6 +30,34 @@ body {
 	background-attachment: fixed;
 }
 
+.song-div-req {
+	
+	max-width: 24.5%;
+	min-width: 24.5%;
+	max-height: 600px;
+	float:left;
+	padding:0;
+	margin:0;
+	background-color: var(--background_transparent);
+	font-size: 0.555vw;
+}
+
+.song-div-req p,h2,h3{
+	
+	font-size: 15px;
+	padding: 0;
+	margin: 5%;
+	border: 0;
+
+}
+
+.song-div-req img {
+	
+	width: 90%;
+	height: auto;
+
+}
+
 .header {
 	width: 100%;
 	margin: 0;
