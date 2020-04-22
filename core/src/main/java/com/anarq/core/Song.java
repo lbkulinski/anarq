@@ -12,6 +12,8 @@ public class Song {
 	// Private variables
 	private final String songName;
 	private final String albumName;
+	private final String artistID;
+	private final String[] artistGenres;
 	private final String artistName;
 	private final String songGenre;
 	private final String songId;
@@ -22,9 +24,11 @@ public class Song {
 	
 	/* Constructs a new Song class */
 
-	public Song(String songName, String albumName, String artistName, String songGenre, String songId,
+	public Song(String songName, String albumName, String artistName, String artistID, String[] artistGenres, String songGenre, String songId,
 			int duration, boolean isExplicit, int bpm, String albumCover) {
 		
+		this.artistGenres = artistGenres;
+		this.artistID = artistID;
 		this.songName = songName;
 		this.albumName = albumName;
 		this.artistName = artistName;
@@ -54,6 +58,20 @@ public class Song {
 	public String getArtistName() {
 		
 		return artistName;
+		
+	}
+	
+	/* Returns the artist name of the song */
+	public String getArtistID() {
+		
+		return artistID;
+		
+	}
+	
+	/* Returns the artist name of the song */
+	public String[] getArtistGenres() {
+		
+		return artistGenres;
 		
 	}
 	
