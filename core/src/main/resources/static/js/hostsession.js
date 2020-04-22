@@ -402,6 +402,7 @@ function dislikeSong(songId) {
 
 var minBPM = document.getElementById("min-bpm");
 var maxBPM = document.getElementById("max-bpm");
+var dislikeThreshold = document.getElementById("dislike-threshold");
 
 
 function setPreferences() {
@@ -417,6 +418,7 @@ function setPreferences() {
 		
 		document.getElementById("max-bpm").value = data.maxBPM;
 		document.getElementById("min-bpm").value = data.minBPM;
+		document.getElementById("dislike-threshold").value = data.dislikeThreshold;
 		document.getElementById("explicit").checked = data.explicit;
 		document.getElementById("allowRequests").checked = data.requests;
 		document.getElementById("isVisible").checked = data.visible;
@@ -444,6 +446,7 @@ applyChanges.addEventListener("click", function(){
 	+ '&userId=' + getUserId()
 	+ '&minBPM=' + minBPM.value
 	+ '&maxBPM=' + maxBPM.value
+	+ '&dislikeThreshold=' + dislikeThreshold.value
 	+ '&allowExplicit=' + document.getElementById("explicit").checked
 	+ '&allowRequests=' + document.getElementById("allowRequests").checked
 	+ '&isVisible=' + document.getElementById("isVisible").checked

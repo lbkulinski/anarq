@@ -17,14 +17,16 @@ public class PreferencePacket {
 	private boolean requests;
 	private int maxBPM;
 	private int minBPM;
+	private int dislikeThreshold;
 	
-	public PreferencePacket(int maxBPM, int minBPM, boolean pop, boolean rock,
+	public PreferencePacket(int maxBPM, int minBPM, int dislikeThreshold, boolean pop, boolean rock,
 	boolean country, boolean jazz, boolean rap, boolean metal,
 	boolean rb, boolean hiphop, boolean electronic, boolean christian, boolean explicit,
 	boolean visible, boolean requests) {
 		
 		this.maxBPM = maxBPM;
 		this.minBPM = minBPM;
+		this.dislikeThreshold = dislikeThreshold;
 		this.pop = pop;
 		this.rock = rock;
 		this.country = country;
@@ -47,7 +49,9 @@ public class PreferencePacket {
 	public int getMinBPM() {
 		return minBPM;
 	}
-	
+	public int getDislikeThreshold() {
+		return dislikeThreshold;
+	}
 	public boolean getPop() {
 		return pop;
 	}

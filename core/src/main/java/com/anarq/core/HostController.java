@@ -27,6 +27,7 @@ public class HostController {
 	@RequestParam(value="userId", defaultValue="no_user_id")String userId,
 	@RequestParam(value="maxBPM", defaultValue="400")int maxBPM,
 	@RequestParam(value="minBPM", defaultValue="32")int minBPM,
+	@RequestParam(value="dislikeThreshold", defaultValue="10")int dislikeThreshold,
 	@RequestParam(value="allowExplicit", defaultValue="true")boolean explicit,
 	@RequestParam(value="allowRequests", defaultValue="true")boolean requests,
 	@RequestParam(value="isVisible", defaultValue="true")boolean visible,
@@ -56,6 +57,7 @@ public class HostController {
 		
 		session.getRequestQueue().setMaxBPM(maxBPM);
 		session.getRequestQueue().setMinBPM(minBPM);
+		session.getRequestQueue().setDislikeThreshold(dislikeThreshold);
 		
 		session.getRequestQueue().setExplicitFilter(explicit);
 		session.getRequestQueue().setAcceptingRequests(requests);

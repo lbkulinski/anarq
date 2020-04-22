@@ -96,6 +96,7 @@ public class RequestQueue {
     private int maxRequests;
     private int minBPM = 32;
     private int maxBPM = 400;
+    private int dislikeThreshold = 10;
     private boolean acceptingRequests;
     private boolean autoDJ;
     private boolean explicitFilter;
@@ -116,12 +117,13 @@ public class RequestQueue {
         this.explicitFilter = false;
         this.minBPM = 32;
         this.maxBPM = 400;
+        this.dislikeThreshold = 10;
         this.visibility = true;
         this.blacklistedGenres = new Genre();
     }
 
 	/* Creates a new RequestQueue Instance using the inputs */
-    public RequestQueue(MusicChooser musicChooser, int maxRequests, boolean acceptingRequests, boolean explicitFilter, int minBPM, int maxBPM, boolean visibility, boolean blacklistedGenres[]) {
+    public RequestQueue(MusicChooser musicChooser, int maxRequests, boolean acceptingRequests, boolean explicitFilter, int minBPM, int maxBPM, int dislikeThreshold, boolean visibility, boolean blacklistedGenres[]) {
         this.maxRequests = maxRequests;
         this.musicChooser = musicChooser;
         this.acceptingRequests = acceptingRequests;
@@ -135,13 +137,14 @@ public class RequestQueue {
             this.minBPM = minBPM;
             this.maxBPM = maxBPM;
         }
+        this.dislikeThreshold = dislikeThreshold;
         this.visibility = visibility;
         this.blacklistedGenres = new Genre(blacklistedGenres);
     }
 
 	public PreferencePacket getPreferencePacket() {
 		
-		return new PreferencePacket(maxBPM, minBPM, blacklistedGenres.pop,
+		return new PreferencePacket(maxBPM, minBPM, dislikeThreshold, blacklistedGenres.pop,
 		blacklistedGenres.rock,
 		blacklistedGenres.country,
 		blacklistedGenres.jazz,
@@ -169,6 +172,10 @@ public class RequestQueue {
 	
 	public void setMinBPM(int newValue) {	
 		this.minBPM = newValue;
+    }
+    
+    public void setDislikeThreshold(int newValue) {	
+		this.dislikeThreshold = newValue;
 	}
 	
 	public void setExplicitFilter(boolean newValue) {	
@@ -198,6 +205,10 @@ public class RequestQueue {
 
     public int getMaxBPM() {
         return maxBPM;
+    }
+
+    public int getDislikeThreshold() {
+        return this.dislikeThreshold;
     }
 
     public boolean getVisibility() {
@@ -327,7 +338,10 @@ public class RequestQueue {
         this.acceptingRequests = true;
         songQueue.remove(song);
         song.dislikeSong(client);
-        songQueue.add(song);
+        if (song.getVotes() > -1 * getDislikeThreshold()) {
+            System.out.println("did not pass threshold, Thresh: " + getDislikeThreshold() + " Votes: " + song.getVotes() + "\n");
+            songQueue.add(song);
+        }
 		
         if (!accepting) {
             this.acceptingRequests = false;
