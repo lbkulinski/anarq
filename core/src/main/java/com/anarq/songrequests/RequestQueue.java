@@ -349,7 +349,6 @@ public class RequestQueue {
         songQueue.remove(song);
         song.dislikeSong(client);
         if (song.getVotes() > -1 * getDislikeThreshold()) {
-            System.out.println("did not pass threshold, Thresh: " + getDislikeThreshold() + " Votes: " + song.getVotes() + "\n");
             songQueue.add(song);
         }
 
