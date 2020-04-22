@@ -12,7 +12,7 @@ class GetAndSetSpotifyToken {
 
   String username;
   String spotifyToken;
-  findUser user;
+  FindUser user;
 
   public GetAndSetSpotifyToken(String username, String spotifyToken) {
     this.username = username;
