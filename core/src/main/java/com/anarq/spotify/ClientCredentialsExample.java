@@ -60,30 +60,45 @@ public class ClientCredentialsExample {
           .scope("playlist-modify-public user-read-email streaming user-read-private user-read-playback-state user-modify-playback-state")
 //          .show_dialog(true)
             .build();
-
+    private final AuthorizationCodeUriRequest authorizationCodeUriRequestLocal = spotifyApiLocal.authorizationCodeUri()
+        .scope("playlist-modify-public user-read-email streaming user-read-private user-read-playback-state user-modify-playback-state")
+        .build();
     private static AuthorizationCodeRequest authorizationCodeRequest;
 	private AuthorizationCodeRequest authorizationCodeRequestLocal;
 
 
 
-    public static void authorizationCode_Sync() {
+    public static void authorizationCode_Sync() { //static
         spotifyApi.setAccessToken(getToken());
     }
 
-    public static void reauthorize(String token) {
+    public void authorizationCode() { //local way to authorization code
+        spotifyApiLocal.setAccessToken(getTokenLocal());
+    }
+
+    public static void reauthorize(String token) { // static, may bbe redundant
         spotifyApi.setAccessToken(token);
     }
 
-    public static String authorizationCodeUri_Sync() {
+    public static String authorizationCodeUri_Sync() { // static
         final URI uri = authorizationCodeUriRequest.execute();
         return uri.toString();
     }
 
-    public static void setAuthorizationCodeRequest(String code) {
+    public String getAuthorizationUri() { //local
+        final URI uri = authorizationCodeUriRequestLocal.execute();
+        return uri.toString();
+    }
+
+    public static void setAuthorizationCodeRequest(String code) { //static
         authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
     }
 
-    public static String getToken() {
+    public void setAuthCode(String code) { // local
+        authorizationCodeRequestLocal = spotifyApiLocal.authorizationCode(code).build();
+    }
+
+    public static String getToken() { // static
         try {
             AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
             return authorizationCodeCredentials.getAccessToken();
@@ -93,7 +108,17 @@ public class ClientCredentialsExample {
         return null;
     }
 
-	public void setAccessTokenForLocalAccess(String code) {
+    public String getTokenLocal() { //local
+        try {
+            AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequestLocal.execute();
+            return authorizationCodeCredentials.getAccessToken();
+        } catch (IOException | SpotifyWebApiException | ParseException gt) {
+            System.out.println("Error: " + gt.getMessage());
+        }
+        return null;
+    }
+
+	public void setAccessTokenForLocalAccess(String code) { // local
 		
 		try {
 			
