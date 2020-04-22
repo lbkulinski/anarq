@@ -1,5 +1,6 @@
 package com.anarq.core;
 
+import com.anarq.spotify.*;
 import com.anarq.songrequests.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -157,6 +158,42 @@ public class HostController {
 
 		return ret;
 	}
+	
+	
+	@GetMapping("/connect-spotify")
+	public String connectToSpotify(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId) {
+		
+		return ClientCredentialsExample.authorizationCodeUri_Sync();
+		
+	}
+	
+	@PutMapping("/set-spotify-code")
+	public String connectToSpotify(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
+	@RequestParam(value="code", defaultValue="no_code_given")String code) {
+		
+		if (code == "no_code_given") {
+			
+			return "Failed";
+			
+		}
+		
+		// Attempt to obtain the given session based on the sessionId provided
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+		if (session == null) {
+			System.err.println("Error: Request for non-existant session was created!\n ID: "
+				+ sessionId);
+			return "Failed";
+		}
+		
+		session.setSpotifyAuthKey(code);
+		
+		return "Success!";
+		
+	}
+	
+	//authorizationCodeUri_Sync
 	
 	@PutMapping("/approve-override-request")
 	public boolean approveOverrideRequest(

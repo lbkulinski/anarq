@@ -5,6 +5,7 @@ var overrideContainer = document.getElementById("override-requests");
 var sessionHeader = document.getElementById("session-header");
 var quitSession = document.getElementById("quit-session");
 var applyChanges = document.getElementById("apply-changes");
+var connectSpotify = document.getElementById("sign-in-spotify");
 var qr = document.getElementById("qr");
 
 sessionHeader.innerHTML = getCurrentHostSessionId();
@@ -12,6 +13,27 @@ sessionHeader.innerHTML = getCurrentHostSessionId();
 setPreferences();
 loadBlacklist();
 loadQRCode();
+var urlVars = getUrlVars();
+var spotifyID = urlVars["code"];
+
+if (spotifyID != null) {
+	console.log("Upading Spotify Code");
+	
+	var clientListRequest = new XMLHttpRequest();
+	var clientListPath = '/set-spotify-code?sessionId=' + getCurrentHostSessionId() + '&code=' + spotifyID;
+	clientListRequest.open('PUT', clientListPath);
+	clientListRequest.onload = function() {
+		
+		window.location.href = "/sessionhost.html";
+		
+	};
+	clientListRequest.send();
+	
+	
+}
+else {
+	console.log("Spotify Code is Up-To-Date");
+}
 
 function loadUserInfo() {
 
@@ -364,6 +386,14 @@ function generateSongHTML(song) {
 	
 }
 
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+
 function approveOverrideRequest(songId) {
 
 	var searchRequest = new XMLHttpRequest();
@@ -438,6 +468,20 @@ function setPreferences() {
 	
 }
 
+connectSpotify.addEventListener("click", function(){
+	
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/connect-spotify?sessionId=' + getCurrentHostSessionId();
+	searchRequest.open('GET', searchPath);
+	searchRequest.onload = function() {
+		
+		// Redirect to Spotify
+		window.location.href = searchRequest.responseText;
+		
+	};
+	searchRequest.send();
+	
+});
 
 applyChanges.addEventListener("click", function(){
 	

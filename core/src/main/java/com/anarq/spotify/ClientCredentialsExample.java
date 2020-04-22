@@ -40,10 +40,15 @@ public class ClientCredentialsExample {
 
     private static String clientId = "ad002d4ba9fa4766b6a6ad03fd440d46"; // This is the Client ID for our Spotify Application
     private static String clientSecret = "e1e7830578254628af9d7b10dca9341e"; // This is the Client Secret for our Spotify Application
-    private static URI redirectUri = SpotifyHttpManager.makeUri("http://localhost:8080/connect.html");
+    private static URI redirectUri = SpotifyHttpManager.makeUri("http://localhost:8080/sessionhost.html");
     private static String code = "";
 
     public static final SpotifyApi spotifyApi = new SpotifyApi.Builder() // Creating the Spotify API object spotifyApi
+            .setClientId(clientId) //setting our client ID
+            .setClientSecret(clientSecret) // setting our client secret
+            .setRedirectUri(redirectUri)
+            .build(); //build parameter
+	public final SpotifyApi spotifyApiLocal = new SpotifyApi.Builder() // Creating the Spotify API object spotifyApi
             .setClientId(clientId) //setting our client ID
             .setClientSecret(clientSecret) // setting our client secret
             .setRedirectUri(redirectUri)
@@ -57,6 +62,7 @@ public class ClientCredentialsExample {
             .build();
 
     private static AuthorizationCodeRequest authorizationCodeRequest;
+	private AuthorizationCodeRequest authorizationCodeRequestLocal;
 
 
 
@@ -87,6 +93,22 @@ public class ClientCredentialsExample {
         return null;
     }
 
+	public void setAccessTokenForLocalAccess(String code) {
+		
+		try {
+			
+			authorizationCodeRequestLocal = spotifyApiLocal.authorizationCode(code).build();
+			AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequestLocal.execute();
+			spotifyApiLocal.setAccessToken(authorizationCodeCredentials.getAccessToken());
+			
+			
+			
+		} catch (IOException | SpotifyWebApiException | ParseException gt) {
+            System.out.println("Error: " + gt.getMessage());
+        }
+		
+	}
+
     public static void clientCredentials_Sync() {
         /*
          * This method executes the client credential request and creates a temporary access token
@@ -105,8 +127,8 @@ public class ClientCredentialsExample {
         }
     }
 
-    public static MyDevice[] getDevices() {
-        GetUsersAvailableDevicesRequest getUsersAvailableDevicesRequest = spotifyApi.getUsersAvailableDevices().build();
+    public MyDevice[] getDevices() {
+        GetUsersAvailableDevicesRequest getUsersAvailableDevicesRequest = spotifyApiLocal.getUsersAvailableDevices().build();
         try {
             Device[] devices = getUsersAvailableDevicesRequest.execute();
             if(devices.length == 0) {
@@ -125,9 +147,9 @@ public class ClientCredentialsExample {
         return null;
     }
 
-    public static void chooseDevice(MyDevice[] devices, int i) {
+    public void chooseDevice(MyDevice[] devices, int i) {
         JsonArray deviceIds = JsonParser.parseString("[\"" + devices[i].name + "\"]").getAsJsonArray();
-        TransferUsersPlaybackRequest transferUsersPlaybackRequest = spotifyApi.transferUsersPlayback(deviceIds).build();
+        TransferUsersPlaybackRequest transferUsersPlaybackRequest = spotifyApiLocal.transferUsersPlayback(deviceIds).build();
         try {
             transferUsersPlaybackRequest.execute();
         } catch (IOException | SpotifyWebApiException | ParseException cd) {
@@ -135,8 +157,8 @@ public class ClientCredentialsExample {
         }
     }
 
-    public static String getSong(String id) {
-        GetTrackRequest getTrackRequest = spotifyApi.getTrack(id).build();
+    public String getSong(String id) {
+        GetTrackRequest getTrackRequest = spotifyApiLocal.getTrack(id).build();
         try {
             Track track = getTrackRequest.execute();
             return track.getUri();
@@ -146,13 +168,13 @@ public class ClientCredentialsExample {
         return null;
     }
 
-    public static void playSongAsNext(String songID) {
+    public void playSongAsNext(String songID) {
         addSong(songID);
         skip();
     }
 
-    public static void skip() {
-        SkipUsersPlaybackToNextTrackRequest skipUsersPlaybackToNextTrackRequest = spotifyApi.skipUsersPlaybackToNextTrack().build();
+    public void skip() {
+        SkipUsersPlaybackToNextTrackRequest skipUsersPlaybackToNextTrackRequest = spotifyApiLocal.skipUsersPlaybackToNextTrack().build();
         try {
             skipUsersPlaybackToNextTrackRequest.execute();
         } catch(IOException | SpotifyWebApiException | ParseException s) {
@@ -160,8 +182,8 @@ public class ClientCredentialsExample {
         }
     }
 
-    public static void addSong(String songID) {
-        AddItemToUsersPlaybackQueueRequest addItemToUsersPlaybackQueueRequest = spotifyApi.addItemToUsersPlaybackQueue(getSong(songID)).build();
+    public void addSong(String songID) {
+        AddItemToUsersPlaybackQueueRequest addItemToUsersPlaybackQueueRequest = spotifyApiLocal.addItemToUsersPlaybackQueue(getSong(songID)).build();
         try {
             String val = addItemToUsersPlaybackQueueRequest.execute();
             System.out.println("Null: " + val);
@@ -171,8 +193,8 @@ public class ClientCredentialsExample {
 
     }
 
-    public static void pause() {
-        PauseUsersPlaybackRequest pauseUsersPlaybackRequest = spotifyApi.pauseUsersPlayback().build();
+    public void pause() {
+        PauseUsersPlaybackRequest pauseUsersPlaybackRequest = spotifyApiLocal.pauseUsersPlayback().build();
         try {
             String returnValue = pauseUsersPlaybackRequest.execute();
         } catch (IOException | SpotifyWebApiException | ParseException p) {
@@ -181,8 +203,8 @@ public class ClientCredentialsExample {
     }
 
 
-    public static void resume() {
-        StartResumeUsersPlaybackRequest startResumeUsersPlaybackRequest = spotifyApi.startResumeUsersPlayback().build();
+    public void resume() {
+        StartResumeUsersPlaybackRequest startResumeUsersPlaybackRequest = spotifyApiLocal.startResumeUsersPlayback().build();
 
         try {
             startResumeUsersPlaybackRequest.execute();

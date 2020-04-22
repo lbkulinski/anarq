@@ -1,6 +1,7 @@
 package com.anarq.core;
 
 import com.anarq.qr.*;
+import com.anarq.spotify.*;
 import java.util.*;
 import com.anarq.songrequests.*;
 
@@ -17,6 +18,8 @@ public class Session {
 	
 	// Private Varaibles
 	private final String sessionId;
+	private String spotifyAuthKey;
+	private ClientCredentialsExample spotify;
 	private AutoDJ autoDJ;
 	private MusicChooser musicChooser;
 	private RequestQueue requestQueue;
@@ -32,6 +35,7 @@ public class Session {
 		sessionId = String.format("%06X", (int) ((float)Math.random() * 10000000.0f));
 		System.out.println("New Session created with ID " + sessionId + ".");
 		
+		spotify = new ClientCredentialsExample();
 		autoDJ = new AutoDJ(this);
 		musicChooser = new MusicChooser();
 		requestQueue = new RequestQueue();
@@ -95,6 +99,22 @@ public class Session {
 		
 		requestQueue.approveOverride(requestQueue.getSongFromQueue(songRequestId));
 		return true;
+		
+	}
+	
+	public ClientCredentialsExample getSpotify() {
+		
+		return spotify;
+		
+	}
+	
+	/* Sets the current spotify auth key */
+	public void setSpotifyAuthKey(String key) {
+		
+		spotifyAuthKey = key;
+		getSpotify().setAccessTokenForLocalAccess(key);
+		
+		getSpotify().resume();
 		
 	}
 	
