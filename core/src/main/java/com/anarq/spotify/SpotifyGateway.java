@@ -7,6 +7,7 @@ import com.wrapper.spotify.requests.data.tracks.*;
 import com.wrapper.spotify.requests.data.playlists.CreatePlaylistRequest;
 import com.wrapper.spotify.requests.data.playlists.GetPlaylistsTracksRequest;
 import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
+import org.apache.hc.core5.http.ParseException;
 
 import com.anarq.core.*;
 import com.anarq.songrequests.*;
@@ -67,7 +68,7 @@ public class SpotifyGateway extends ClientCredentialsExample{
 			GetTrackRequest track = spotifyApi.getTrack(songId).build();
 			output = track.execute();
 		
-		} catch (SpotifyWebApiException | IOException e) {
+		} catch (SpotifyWebApiException | IOException | ParseException e) {
             System.out.println("Error: Spotify Error");
         }
 		
@@ -207,7 +208,7 @@ public class SpotifyGateway extends ClientCredentialsExample{
         Paging<PlaylistTrack> plTP;
         try {
             plTP = plTrackRequest.execute();
-        } catch(SpotifyWebApiException | IOException e) {
+        } catch(SpotifyWebApiException | IOException | ParseException e) {
             System.out.println("Error: Spotify API and Web Error");
             return;
         }
@@ -225,7 +226,7 @@ public class SpotifyGateway extends ClientCredentialsExample{
         User user = null;
         try {
             user = getCurrentUsersProfileRequest.execute();
-        } catch (SpotifyWebApiException | IOException e) {
+        } catch (SpotifyWebApiException | IOException | ParseException e) {
             System.out.println("Error! Profile Request not executed!");
         }
 
@@ -237,7 +238,7 @@ public class SpotifyGateway extends ClientCredentialsExample{
         try {
             Playlist playlist = createPlaylistRequest.execute();
 
-        } catch (SpotifyWebApiException | IOException f) {
+        } catch (SpotifyWebApiException | IOException | ParseException f) {
             System.out.println("Error! "+ f.getMessage());
             return;
         }

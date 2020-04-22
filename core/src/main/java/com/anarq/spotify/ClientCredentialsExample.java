@@ -99,7 +99,7 @@ public class ClientCredentialsExample {
             final ClientCredentials clientCredentials = clientCredentialsRequest.execute(); // executes the request for the client credentials object
             spotifyApi.setAccessToken(clientCredentials.getAccessToken()); // Set access token for further "spotifyApi" object usage
             System.out.println("Expires in: " + clientCredentials.getExpiresIn()); // prints how much time before this access token will expire
-        } catch (IOException | SpotifyWebApiException e) {
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage()); // catches any errors and prints exceptions
             return;
         }

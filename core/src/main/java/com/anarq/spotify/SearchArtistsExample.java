@@ -12,6 +12,7 @@ import com.wrapper.spotify.requests.data.search.simplified.SearchPlaylistsReques
 import com.wrapper.spotify.requests.data.search.simplified.SearchTracksRequest;
 import com.wrapper.spotify.model_objects.specification.Recommendations;
 import com.wrapper.spotify.requests.data.browse.GetRecommendationsRequest;
+import org.apache.hc.core5.http.ParseException;
 
 import java.io.*;
 import java.util.concurrent.CancellationException;
@@ -61,7 +62,7 @@ public class SearchArtistsExample {
             this.trackNotFound = this.tracks.length == 0;
             this.playlists = playlistSimplifiedPaging.getItems();
             this.playlistNotFound = this.playlists.length == 0;
-        } catch (SpotifyWebApiException | IOException e) {
+        } catch (SpotifyWebApiException | IOException | ParseException e) {
             System.out.println("Error: Spotify Error");
         }
     }
@@ -71,7 +72,7 @@ public class SearchArtistsExample {
         Paging<PlaylistSimplified> playlistSimplifiedPaging;
         try {
             playlistSimplifiedPaging = searchPlaylistsRequest.execute();
-        } catch(SpotifyWebApiException | IOException e) {
+        } catch(SpotifyWebApiException | IOException | ParseException e) {
             System.out.println("Error: Spotify Error");
             return null;
         }
@@ -151,7 +152,7 @@ public class SearchArtistsExample {
                 }
             }
             //System.out.println("Total: " + artistPaging.getTotal());
-        } catch (IOException | SpotifyWebApiException e) {
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
