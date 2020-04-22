@@ -11,9 +11,9 @@ function logIn(username, password) {
         if (response == "Account Disabled.") {
             var error = "Your account is currently disabled. Please click ";
 
-            error += "here ".link("/enable");
+            error += "here".link("/enableAccount");
 
-            error += "to reenable it.";
+            error += " to reenable it.";
 
             setError(error);
         } else if (response != "Login Failed." && getIsLoggedIn() == "false") {
