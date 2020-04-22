@@ -131,7 +131,7 @@ public class HostController {
 	}
 	
 	@PutMapping("/delete-request")
-	public boolean addSongRequest(
+	public boolean deleteSongRequest(
 	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
 	@RequestParam(value="songId", defaultValue="no_song_id")String songId) {
 		
@@ -146,9 +146,11 @@ public class HostController {
 		String artist = session.getMusicChooser().getSongForSongId(songId).getArtistName();
 		boolean ret = session.deleteSongRequest(songId);
 
+		// AUTODJ
+
 		if (session.getRequestQueue().isEmpty()) {
 			System.out.println("My artist = " + artist);
-			session.requestSong(session.getMusicChooser().searchForSongs(artist)[0], "autoDJ");
+			session.requestSong(session.getAutoDJ().getSongReccomendation(), Session.AUTODJ_NAME);
 		}
 
 		return ret;

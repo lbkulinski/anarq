@@ -1,5 +1,8 @@
 package com.anarq.spotify;
 
+import com.anarq.songrequests.*;
+import com.anarq.core.*;
+import com.wrapper.spotify.requests.data.AbstractDataRequest.*;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.specification.*;
@@ -7,6 +10,8 @@ import com.wrapper.spotify.requests.data.search.simplified.SearchAlbumsRequest;
 import com.wrapper.spotify.requests.data.search.simplified.SearchArtistsRequest;
 import com.wrapper.spotify.requests.data.search.simplified.SearchPlaylistsRequest;
 import com.wrapper.spotify.requests.data.search.simplified.SearchTracksRequest;
+import com.wrapper.spotify.model_objects.specification.Recommendations;
+import com.wrapper.spotify.requests.data.browse.GetRecommendationsRequest;
 
 import java.io.*;
 import java.util.concurrent.CancellationException;
@@ -150,6 +155,35 @@ public class SearchArtistsExample {
             System.out.println("Error: " + e.getMessage());
         }
     }
+	
+	public static Song getRandomReccomendation(String artist, MusicChooser musicChooser) {
+		try {
+			GetRecommendationsRequest getRecommendationsRequest = spotifyApi.getRecommendations()
+			.limit(12)
+			.seed_artists(artist)
+			.build();
+		
+			final CompletableFuture<Recommendations> recommendationsFuture = getRecommendationsRequest.executeAsync();
+
+			// Thread free to do other tasks...
+
+			// Example Only. Never block in production code.
+			final Recommendations recommendations = recommendationsFuture.join();
+
+			int index = (int) ((float) Math.random() * (float) recommendations.getTracks().length);
+			return musicChooser.getSongForSongId(recommendations.getTracks()[index].getId());
+
+		} catch (CompletionException e) {
+		  System.out.println("Error: " + e.getCause().getMessage());
+		} catch (CancellationException e) {
+		  System.out.println("Async operation cancelled.");
+		}
+		
+		return null;
+		
+	}	
+
+	
 }
 
 

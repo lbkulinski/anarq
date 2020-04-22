@@ -13,8 +13,11 @@ import com.anarq.songrequests.*;
 */
 public class Session {
 	
+	public static final String AUTODJ_NAME = "AutoDJ";
+	
 	// Private Varaibles
 	private final String sessionId;
+	private AutoDJ autoDJ;
 	private MusicChooser musicChooser;
 	private RequestQueue requestQueue;
 	private List<ConnectedClient> connectedClients;
@@ -29,6 +32,7 @@ public class Session {
 		sessionId = String.format("%06X", (int) ((float)Math.random() * 10000000.0f));
 		System.out.println("New Session created with ID " + sessionId + ".");
 		
+		autoDJ = new AutoDJ(this);
 		musicChooser = new MusicChooser();
 		requestQueue = new RequestQueue();
 		connectedClients = new ArrayList<ConnectedClient>();
@@ -58,6 +62,15 @@ public class Session {
 	public boolean requestSong(Song song, String requesterId) {
 		
 		SongRequest newSongRequest = new SongRequest(song, requesterId);
+		
+		if (requesterId != AUTODJ_NAME) {
+		
+			// Add to AutoDJ
+			autoDJ.addGenre(song.getSongGenre());
+			autoDJ.addBPM(song.getBPM());
+			autoDJ.addArtist(song.getArtistID());
+		
+		}
 		
 		return requestQueue.addSong(newSongRequest);
 		
@@ -89,6 +102,13 @@ public class Session {
 	public String getSessionId() {
 		
 		return sessionId;
+		
+	}
+	
+	/* Returns a reference to the autodjfor this session */
+	public AutoDJ getAutoDJ() {
+		
+		return autoDJ;
 		
 	}
 	
