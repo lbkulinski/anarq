@@ -17,7 +17,7 @@ class GetAndSetSpotifyToken {
   public GetAndSetSpotifyToken(String username, String spotifyToken) {
     this.username = username;
     this.spotifyToken = spotifyToken;
-    user = new findUser(username);
+    user = new FindUser(username);
   }
 
   /**
