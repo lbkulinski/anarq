@@ -17,7 +17,7 @@ public class SongRequest {
 	// Private Variables
 	private int votes;
 	private boolean playing;
-    private Song songInfo;
+    protected Song songInfo;
     private String clientIp;
     private ArrayList<String> usersLiked;
     private ArrayList<String> usersDisliked;
