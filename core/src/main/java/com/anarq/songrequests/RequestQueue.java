@@ -1,34 +1,34 @@
 package com.anarq.songrequests;
 
 import java.util.ArrayList;
-import java.util.Comparator; 
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import com.anarq.core.*;
 
-/* 
+/*
 	VotesComparator
 		Contains information about comparing the votes of two songs
-	
+
 	Author(s):
 		Nick
 */
-class VotesComparator implements Comparator<SongRequest> { 
+class VotesComparator implements Comparator<SongRequest> {
 
 	/* Compare two song requests based on vote count */
     @Override
-    public int compare(SongRequest song1, SongRequest song2) 
-    { 
+    public int compare(SongRequest song1, SongRequest song2)
+    {
         if (song1.getVotes() < song2.getVotes()) {
-            return 1; 
+            return 1;
         }
         else if (song1.getVotes() > song2.getVotes()) {
-            return -1; 
+            return -1;
         }
         else {
-            return 0; 
+            return 0;
         }
     }
-} 
+}
 
 class Genre {
     public boolean pop;
@@ -82,16 +82,16 @@ class Genre {
         }
     }
 }
-/* 
+/*
 	RequestQueue
 		Contains methods pertaining to the organization and deployment of songrequests
-	
+
 	Author(s):
 		Nick
 		Patrick
 */
 public class RequestQueue {
-	
+
 	// Private Varaibles
     private int maxRequests;
     private int minBPM = 32;
@@ -107,6 +107,7 @@ public class RequestQueue {
     private PriorityQueue<SongRequest> songQueue = new PriorityQueue<SongRequest>(new VotesComparator());
     private ArrayList<SongRequest> overrides = new ArrayList<SongRequest>();
     private Genre blacklistedGenres;
+    CooldownSong cooldown;
 
 	/* Creates a new RequestQueue Instance */
     public RequestQueue() {
@@ -120,6 +121,7 @@ public class RequestQueue {
         this.dislikeThreshold = 10;
         this.visibility = true;
         this.blacklistedGenres = new Genre();
+        cooldown = new CooldownSong();
     }
 
 	/* Creates a new RequestQueue Instance using the inputs */
@@ -140,10 +142,11 @@ public class RequestQueue {
         this.dislikeThreshold = dislikeThreshold;
         this.visibility = visibility;
         this.blacklistedGenres = new Genre(blacklistedGenres);
+        cooldown = new CooldownSong();
     }
 
 	public PreferencePacket getPreferencePacket() {
-		
+
 		return new PreferencePacket(maxBPM, minBPM, dislikeThreshold, blacklistedGenres.pop,
 		blacklistedGenres.rock,
 		blacklistedGenres.country,
@@ -157,36 +160,36 @@ public class RequestQueue {
 		explicitFilter,
 		visibility,
 		acceptingRequests);
-		
+
 	}
 
-	
 
-	public void setBlacklistedGenres(boolean[] b) {	
+
+	public void setBlacklistedGenres(boolean[] b) {
 		this.blacklistedGenres = new Genre(b);
 	}
-	
-	public void setMaxBPM(int newValue) {	
+
+	public void setMaxBPM(int newValue) {
 		this.maxBPM = newValue;
 	}
-	
-	public void setMinBPM(int newValue) {	
+
+	public void setMinBPM(int newValue) {
 		this.minBPM = newValue;
     }
-    
-    public void setDislikeThreshold(int newValue) {	
+
+    public void setDislikeThreshold(int newValue) {
 		this.dislikeThreshold = newValue;
 	}
-	
-	public void setExplicitFilter(boolean newValue) {	
+
+	public void setExplicitFilter(boolean newValue) {
 		this.explicitFilter = newValue;
 	}
-	
-	public void setVisibility(boolean newValue) {	
+
+	public void setVisibility(boolean newValue) {
 		this.visibility = newValue;
 	}
-	
-	public void setAcceptingRequests(boolean newValue) {	
+
+	public void setAcceptingRequests(boolean newValue) {
 		this.acceptingRequests = newValue;
 	}
 
@@ -233,6 +236,13 @@ public class RequestQueue {
         if (!acceptingRequests) {
             System.out.println("Request Failed: Queue is no longer accepting requests");
             return false;
+        }
+
+        if (cooldown.canSongBePlayed(song.songInfo) == false) {
+          System.out.println("Request Failed: This song has been put under a cooldown period and cannot be played right now");
+          //System.out.println("Request Failed: This song has been put under a cooldown period ... Override request sent to host");
+          //overrides.add(song);
+          return false;
         }
 
         if (explicitFilter && song.getIsExplicit()) { //checks if song is explicit AND explicit filter is on
@@ -289,7 +299,7 @@ public class RequestQueue {
     public void removeOverride(SongRequest i) {
         overrides.remove(i);
     }
-	
+
 	public void approveOverride(SongRequest i) {
 
         songQueue.add(i);
@@ -304,36 +314,36 @@ public class RequestQueue {
 
 	/* Attempt to like a song */
     public boolean likeSong(String songId, String client) {
-		
+
 		SongRequest song = getSongFromQueue(songId);
-		
+
 		if(song == null) {
 			return false;
 		}
-		
+
         boolean accepting = this.acceptingRequests;
         this.acceptingRequests = true;
         songQueue.remove(song);
         song.likeSong(client);
         songQueue.add(song);
-		
+
         if (!accepting) {
             this.acceptingRequests = false;
         }
-		
+
 		return true;
-		
+
     }
 
 	/* Attempt to dislike a song */
     public boolean dislikeSong(String songId, String client) {
-		
+
 		SongRequest song = getSongFromQueue(songId);
-		
+
 		if(song == null) {
 			return false;
 		}
-		
+
         boolean accepting = this.acceptingRequests;
         this.acceptingRequests = true;
         songQueue.remove(song);
@@ -342,13 +352,13 @@ public class RequestQueue {
             System.out.println("did not pass threshold, Thresh: " + getDislikeThreshold() + " Votes: " + song.getVotes() + "\n");
             songQueue.add(song);
         }
-		
+
         if (!accepting) {
             this.acceptingRequests = false;
         }
-		
+
 		return true;
-		
+
     }
 
 	/* Attempt to remove a song */
@@ -401,67 +411,67 @@ public class RequestQueue {
 	public SongRequest getCurrentSong() {
 		return currentSong;
 	}
-	
+
 	/* Returns true if that song is already in the queue */
 	public boolean isSongAlreadyInQueue(SongRequest song) {
-		
+
 		SongRequest[] queue = getSongQueue();
-		
+
 		for (int i = 0; i < queue.length; i++) {
 			if(queue[i].getId().equals(song.getId())) {
 				return true;
 			}
-			
+
 		}
-		
+
 		return false;
-		
+
 	}
-	
+
 	/* Returns true if that song is already in the queue */
 	public SongRequest getSongFromQueue(String id) {
-		
+
 		SongRequest[] queue = getSongQueue();
-		
+
 		for (int i = 0; i < queue.length; i++) {
 			if(queue[i].getId().equals(id)) {
 				return queue[i];
 			}
-			
+
 		}
-		
+
 		return null;
-		
+
 	}
-	
+
 	/* Returns the queue of songs to being played */
 	public SongRequest[] getSongQueue() {
-		
+
 		SongRequest[] output = new SongRequest[songQueue.size()];
 		Object[] array = songQueue.toArray();
-		
+
 		for (int i = 0; i < songQueue.size(); i++) {
-			
+
 			output[i] = (SongRequest) array[i];
-			
+
 		}
-		
+
 		return output;
 	}
-	
+
 	public SongRequest[] getOverrides() {
-	
+
 		SongRequest[] output = new SongRequest[overrides.size()];
 		Object[] array = overrides.toArray();
-		
+
 		for (int i = 0; i < overrides.size(); i++) {
-			
+
 			output[i] = (SongRequest) array[i];
-			
+
 		}
-		
+
 		return output;
-	
+
 	}
 
 	/* Print a representation of the queue out into the console */
@@ -472,5 +482,5 @@ public class RequestQueue {
         }
         System.out.println(">");
     }
-	
+
 }
