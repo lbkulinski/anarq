@@ -62,13 +62,18 @@ public class Session {
 		
 		System.out.println("\n\nQR CODE: " + qrCode + "\n\n");
 		
+		
+		
 		sessionThread = new Thread() {
+			
+			boolean primed = false;
 			
 			public void run() {
 				
+				
 				while (isRunning) {
 					
-					if (requestQueue.getCurrentSong() == null || !spotify.isTrackCurrentlyPlaying(requestQueue.getCurrentSong().getId())) {
+					if (requestQueue.getCurrentSong() == null || !spotify.isTrackCurrentlyPlaying()) {
 						
 						if (!requestQueue.isEmpty()) {
 						
@@ -83,11 +88,29 @@ public class Session {
 						requestSong(getAutoDJ().getSongReccomendation(), Session.AUTODJ_NAME);
 					}
 				
+					if (spotify.isTimeToSwitchSong() ) {
+						
+						if (!requestQueue.isEmpty() && !primed) {
+						
+							spotify.addSong(requestQueue.playNextSong().getId());
+							spotify.resume();
+							primed = true;
+						
+						}
+						
+					}
+					else {
+						
+						primed = false;
+						
+					}
+				
 					try {
 						Thread.sleep(500);
 					} catch (Exception e) {
 						
 					}
+					
 					
 				}
 				

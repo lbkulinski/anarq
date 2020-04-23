@@ -244,7 +244,7 @@ public class ClientCredentialsExample {
         }
     }
 	
-	public boolean isTrackCurrentlyPlaying(String currentID) {
+	public boolean isTrackCurrentlyPlaying() {
 		
 		CurrentlyPlaying cp = getUsersCurrentlyPlayingTrack_Async();
 		
@@ -252,7 +252,20 @@ public class ClientCredentialsExample {
 			return false;
 		}
 		else {
-			return cp.getItem().getId().equals(currentID);
+			return cp.getIs_playing();
+		}
+		
+	}
+	
+	public boolean isTimeToSwitchSong() {
+		
+		CurrentlyPlaying cp = getUsersCurrentlyPlayingTrack_Async();
+		
+		if (cp == null) {
+			return true;
+		}
+		else {
+			return (cp.getProgress_ms() + 3000) > cp.getItem().getDurationMs();
 		}
 		
 	}

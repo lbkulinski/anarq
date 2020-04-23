@@ -175,7 +175,13 @@ public class HostController {
 			return null;
 		}
 		
-		return session.getRequestQueue().getCurrentSong().getSongInfo();
+		if (session.getRequestQueue().getCurrentSong() != null)  {
+			
+			return session.getRequestQueue().getCurrentSong().getSongInfo();
+			
+		}
+		
+		return null;
 		
 	}
 	
