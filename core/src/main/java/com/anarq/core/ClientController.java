@@ -7,78 +7,106 @@ import java.util.Map;
 import java.time.Instant;
 import java.time.Duration;
 
+/**
+ * A controller for a client associated with the AnarQ Application.
+ *
+ * @version April 23, 2020
+ */
 @RestController
 public class ClientController {
-	
+    /**
+     * Attempts to connect the client with the specified username to the session with the specified session ID.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @param username the username to be used in the operation
+     * @param isAccount the account flag to be used in the operation
+     * @return the connected client
+     */
 	@PutMapping("/connect")
 	public ConnectedClient attemptToConnectToSession(
-	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
-	@RequestParam(value="username", defaultValue="no_username")String username,
-	@RequestParam(value="isAccount", defaultValue="false")String isAccount) {
-		
-		// Attempt to obtain the given session based on the sessionId provided
-		Session session = CoreApplication.getSessionForSessionId(sessionId);
+	        @RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
+            @RequestParam(value="username", defaultValue="no_username") String username,
+            @RequestParam(value="isAccount", defaultValue="false") String isAccount) {
+	    Session session = CoreApplication.getSessionForSessionId(sessionId);
+
 		if (session == null) {
-			System.err.println("Error: Request for non-existant session...\n ID: "
-				+ sessionId + " Username: " + username + "...");
+			System.err.println("Error: Request for non-existant session...\n ID: " + sessionId + " Username: " +
+                                       username + "...");
+
 			return null;
-		}
+		} //end if
 		
 		if (NaughtyWords.isANaughtyWord(username)) {
-			
 			return null;
-			
-		}
-		
-		ConnectedClient newConnectedClient = new ConnectedClient(username, isAccount.equals("false"), Permission.JAMMER);
+		} //end if
+
+        ConnectedClient newConnectedClient = new ConnectedClient(username, isAccount.equals("false"),
+                                                                 Permission.JAMMER);
+
 		session.addClient(newConnectedClient);
-		
-		// Redirect
+
 		return newConnectedClient;
-		
-	}
-	
+	} //attemptToConnectToSession
+
+    /**
+     * Attempts to disconnect the client with the specified user ID from the session with the specified session ID.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @param userId the user ID to be used in the operation
+     * @return {@code true}, if the user with the specified user ID was disconnected from the session with the
+     * specified session ID and {@code false} otherwise
+     */
 	@PutMapping("/disconnect")
 	public boolean attemptToCloseConnectionToSession(
-	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
-	@RequestParam(value="userId", defaultValue="no_user_id")String userId) {
-		
-		// Attempt to obtain the given session based on the sessionId provided
-		Session session = CoreApplication.getSessionForSessionId(sessionId);
-		if (session == null) {
-			System.err.println("Error: Request for non-existant session...\n ID: "
-				+ sessionId + " UserId: " + userId + "...");
-			return false;
-		}
-		
-		// TODO: Remove client from Session
-		session.removeClient(userId);
-		
-		// Redirect
-		return true;
-		
-	}
-	
+	        @RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
+            @RequestParam(value="userId", defaultValue="no_user_id") String userId) {
+	    Session session = CoreApplication.getSessionForSessionId(sessionId);
+
+	    if (session == null) {
+	        System.err.println("Error: Request for non-existant session...\n ID: " + sessionId + " UserId: " + userId +
+                                       "...");
+
+	        return false;
+		} //end if
+
+	    session.removeClient(userId);
+
+	    return true;
+	} //attemptToCloseConnectionToSession
+
+    /**
+     * Returns whether or not the session with the specified session ID is still active and contains the user with the
+     * specified user ID.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @param userId the user ID to be used in the operation
+     * @return {@code true}, if the session with the specified session ID is still active and contains the user with
+     * the specified user ID and {@code false} otherwise
+     */
 	@GetMapping("/authenticate")
 	public boolean isSessionStillActive(
-	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
-	@RequestParam(value="userId", defaultValue="no_user_id")String userId) {
-		
-		// Attempt to obtain the given session based on the sessionId provided
-		Session session = CoreApplication.getSessionForSessionId(sessionId);
-		if (session == null) {
-			System.err.println("Error: Auth Failed.");
-			return false;
-		}
-		// Check if that session has that user
-		if (!session.hasUserForId(userId)) {
-			return false;
-		}			
-		// Redirect
-		return true;
-		
-	}
+	        @RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
+            @RequestParam(value="userId", defaultValue="no_user_id") String userId) {
+	    Session session = CoreApplication.getSessionForSessionId(sessionId);
 
+	    if (session == null) {
+	        System.err.println("Error: Auth Failed.");
+
+	        return false;
+		} //end if
+
+        return session.hasUserForId(userId);
+    } //isSessionStillActive
+
+    /**
+     * Returns the status of the cooldown period for the user with the specified user ID in the session with the
+     * specified session ID.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @param username the username to be used in the operation
+     * @return the status of the cooldown period for the user with the specified user ID in the session with the
+     * specified session ID
+     */
     @GetMapping("/cooldown-over")
     public String cooldownOver(@RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
                                @RequestParam(value="username", defaultValue="default_username") String username) {
