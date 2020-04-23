@@ -68,7 +68,7 @@ public class Session {
 				
 				while (isRunning) {
 					
-					if (!spotify.isTrackCurrentlyPlaying()) {
+					if (requestQueue.getCurrentSong() == null || !spotify.isTrackCurrentlyPlaying(requestQueue.getCurrentSong().getId())) {
 						
 						if (!requestQueue.isEmpty()) {
 						

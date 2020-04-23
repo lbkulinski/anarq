@@ -244,7 +244,7 @@ public class ClientCredentialsExample {
         }
     }
 	
-	public boolean isTrackCurrentlyPlaying() {
+	public boolean isTrackCurrentlyPlaying(String currentID) {
 		
 		CurrentlyPlaying cp = getUsersCurrentlyPlayingTrack_Async();
 		
@@ -252,9 +252,7 @@ public class ClientCredentialsExample {
 			return false;
 		}
 		else {
-			
-			return cp.getIs_playing();
-			
+			return cp.getItem().getId().equals(currentID);
 		}
 		
 	}
