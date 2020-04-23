@@ -3,26 +3,50 @@ package com.anarq.core;
 import java.time.LocalTime;
 import com.anarq.songrequests.*;
 
-/* 
-	ConnectedClient
-		Handles the information about a certain client who is connected to a Session.
-	
-	Author(s):
-		Nick
-		Patrick
-*/
+/**
+ * A client that is connected to a session of the AnarQ Application.
+ *
+ * @version April 23, 2020
+ */
 public class ConnectedClient {
-	
-	// Private Varaibles
+    /**
+     * The name of this client.
+     */
     private final String name;
+
+    /**
+     * The ID of this client.
+     */
     private final String id;
+
+    /**
+     * Whether or not this client is registered.
+     */
 	private final boolean isRegistered;
+
+    /**
+     * The permission level of this client.
+     */
     private final Permission permissionLevel;
+
+    /**
+     * The last activity time of this client.
+     */
     private LocalTime lastActive;
-	// Reserved for Host client
+
+    /**
+     * The host session ID of this client.
+     */
 	private final String hostSessionId;
 
-	/* Initalizes a new ConnectedClient*/
+    /**
+     * Constructs a newly allocated {@code ConnectedClient} object with the specified name, registration status, and
+     * permission level.
+     *
+     * @param name the name to be used in construction
+     * @param isRegistered the registration status to be used in construction
+     * @param permissionLevel the permission level to be used in construction
+     */
     public ConnectedClient(String name, boolean isRegistered, Permission permissionLevel) {
         this.name = name;
 		this.isRegistered = isRegistered;
@@ -30,10 +54,18 @@ public class ConnectedClient {
 		this.hostSessionId = "NOT_HOST";
 		
 		id = generateId();
+
 		System.out.println(id);
-    }
+    } //ConnectedClient
 	
-	/* Initalizes a new ConnectedClient as a host*/
+	/**
+     * Constructs a newly allocated {@code ConnectedClient} object with the specified name, registration status, and
+     * host session ID. This constructor should be used to create a host.
+     *
+     * @param name the name to be used in construction
+     * @param isRegistered the registration status to be used in construction
+     * @param hostSessionId the host session ID to be used in construction
+     */
     public ConnectedClient(String name, boolean isRegistered, String hostSessionId) {
         this.name = name;
 		this.isRegistered = isRegistered;
@@ -41,37 +73,64 @@ public class ConnectedClient {
 		this.hostSessionId = hostSessionId;
 		
 		id = generateId();
+
 		System.out.println(id);
-    }
+    } //ConnectedClient
 
 	/* Generates an ID number for this client */
-	private String generateId() {
-		return String.format("%08x%08x%08x", name.hashCode()*37, (isRegistered + "").hashCode()*37, permissionLevel.hashCode()*37);
-	}
 
-	/* Returns the client's name */
+    /**
+     * Returns a generated ID for this client.
+     *
+     * @return a generated ID for this client
+     */
+	private String generateId() {
+		return String.format("%08x%08x%08x", name.hashCode() * 37, (isRegistered + "").hashCode() * 37,
+                             permissionLevel.hashCode() * 37);
+	} //generateId
+
+    /**
+     * Returns the name of this client.
+     *
+     * @return the name of this client
+     */
     public String getName() {
         return this.name;
-    }
-	
-	/* Returns the IP Address of the client */
+    } //getName
+
+    /**
+     * Returns the ID of this client.
+     *
+     * @return the ID of this client
+     */
     public String getId() {
         return this.id;
-    }
+    } //getId
 
-	/* Returns the Permission level of the client */
+    /**
+     * Returns the permission level of this client.
+     *
+     * @return the permission level of this client
+     */
     public Permission getPermissionLevel() {
         return this.permissionLevel;
-    }
+    } //getPermissionLevel
 
-	/* Returns the last active time of the client */
+    /**
+     * Returns the last activity time of this client.
+     *
+     * @return the last activity time of this client
+     */
     public LocalTime getLastActive() {
         return this.lastActive;
-    }
-	
-	/* Returns the Host ID of the client (If it's been initalized as a host) */
+    } //getLastActive
+
+    /**
+     * Returns the host session ID of this client.
+     *
+     * @return the host session ID of this client
+     */
     public String getHostSessionId() {
         return this.hostSessionId;
-    }
-	
+    } //getHostSessionId
 }
