@@ -19,19 +19,45 @@ function setBackButton() {
 }
 
 // When the search button is clicked, send a request for songs on the server side.
-searchButton.addEventListener("click", function(){
-	
-	var searchRequest = new XMLHttpRequest();
-	var searchPath = '/search?sessionId=' + getCurrentSessionId() + '&query=' + searchQuery.value + '&userId=' + getUserId();
-	searchRequest.open('GET', searchPath);
-	searchRequest.onload = function() {
-		
-		var songArray = JSON.parse(searchRequest.responseText);
-		renderSongsToHTML(songArray);
-		
-	};
-	searchRequest.send();
-	
+searchButton.addEventListener("click", function() {
+    var username = getUsername();
+    var cooldownRequest = new XMLHttpRequest();
+    var cooldownPath = "/cooldown-over?sessionId=" + getCurrentSessionId();
+
+    cooldownPath += "&username=";
+
+    cooldownPath += username;
+
+    cooldownRequest.open("GET", cooldownPath);
+
+    cooldownRequest.onload = function() {
+        var response = cooldownRequest.responseText;
+
+        if ((response == "Cooldown Expired") || (response == "User Not Found")) {
+            var searchRequest = new XMLHttpRequest();
+            var searchPath = '/search?sessionId=' + getCurrentSessionId() + '&query=' + searchQuery.value + '&userId=' + getUserId();
+
+            searchRequest.open('GET', searchPath);
+
+            searchRequest.onload = function() {
+                var songArray = JSON.parse(searchRequest.responseText);
+
+                renderSongsToHTML(songArray);
+            };
+
+            searchRequest.send();
+        } else {
+            var output = "You are currently in a cooldown period. You may request songs again in ";
+
+            output += response;
+
+            output += ".";
+
+            alert(output);
+        } //end if
+    };
+
+    cooldownRequest.send();
 });
 
 // Takes an array of song objects and renders them to the screen
