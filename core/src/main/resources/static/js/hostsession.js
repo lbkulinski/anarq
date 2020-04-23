@@ -543,7 +543,35 @@ applyChanges.addEventListener("click", function(){
 		
 	};
 	searchRequest.send();
-	
+
+    var username = document.getElementById("username");
+    var period = document.getElementById("period");
+    var cooldownRequest = new XMLHttpRequest();
+    var cooldownPath = "/cooldown-user?sessionId=" + getCurrentSessionId();
+
+    cooldownPath += "&username=";
+
+    cooldownPath += username.value;
+
+    cooldownPath += "&period=";
+
+    cooldownPath += period.value;
+
+    cooldownRequest.open("GET", cooldownPath);
+
+    cooldownRequest.onload = function() {
+        if (cooldownRequest.responseText == "Failure") {
+            alert("The specified user could not be cooled down. Please contact support.");
+        } else if (cooldownRequest.responseText == "User Not Found") {
+            alert("The specified user is not a part of this session!");
+        } else if (cooldownRequest.responseText == "Period Not Integer") {
+            alert("The specified period is not a valid number!");
+        } else if (cooldownRequest.responseText == "Period Out Of Bounds") {
+            alert("The specified period is not greater than or equal to one!");
+        } //end if
+    };
+
+    cooldownRequest.send();
 });
 
 // When the connect button is clicked, attempt to quit the session

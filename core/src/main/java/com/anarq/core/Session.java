@@ -25,6 +25,7 @@ public class Session {
 	private RequestQueue requestQueue;
 	private List<ConnectedClient> connectedClients;
 	private List<ConnectedClient> blacklistedIds;
+    private Map<ConnectedClient, Long> cooldownClients;
 	private ConnectedClient hostClient;
 	private byte[] qrCode;
 	private Thread sessionThread;
@@ -43,6 +44,7 @@ public class Session {
 		requestQueue = new RequestQueue();
 		connectedClients = new ArrayList<ConnectedClient>();
 		blacklistedIds = new ArrayList<ConnectedClient>();
+        cooldownClients = new HashMap<>();
 		
 		// Create a master client for the host
 		hostClient = new ConnectedClient("HOST", true, sessionId);
@@ -263,6 +265,42 @@ public class Session {
 		return false;
 		
 	}
+
+    public boolean cooldownClient(String username, long endTime) {
+        String clientName;
+
+        Objects.requireNonNull(username, "the specified username is null");
+
+        for (ConnectedClient client : this.connectedClients) {
+            clientName = client.getName();
+
+            if (clientName.equalsIgnoreCase(username)) {
+                this.cooldownClients.put(client, endTime);
+
+                return true;
+            } //end if
+        } //end for
+
+        return false;
+    } //cooldownClient
+
+    public boolean uncooldownClient(String username) {
+        String clientName;
+
+        Objects.requireNonNull(username, "the specified username is null");
+
+        for (ConnectedClient client : this.cooldownClients.keySet()) {
+            clientName = client.getName();
+
+            if (clientName.equalsIgnoreCase(username)) {
+                this.cooldownClients.remove(client);
+
+                return true;
+            } //end if
+        } //end for
+
+        return false;
+    } //uncooldownClient
 	
 	public void addClient(ConnectedClient c) {
 		
@@ -338,4 +376,7 @@ public class Session {
 		
 	}
 	
+    public Map<ConnectedClient, Long> getCooldownClients() {
+        return new HashMap<>(cooldownClients);
+    } //getCooldownClients
 }

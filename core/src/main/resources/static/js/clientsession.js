@@ -1,5 +1,6 @@
 var requestQueueContainer = document.getElementById("current-requests");
 var sessionHeader = document.getElementById("session-header");
+var requestSong = document.getElementById("request-song");
 var quitSession = document.getElementById("quit-session");
 
 sessionHeader.innerHTML = getCurrentSessionId();
@@ -85,6 +86,36 @@ function dislikeSong(songId) {
 	searchRequest.send();
 	
 }
+
+requestSong.addEventListener("click", function() {
+    var username = getUsername();
+    var cooldownRequest = new XMLHttpRequest();
+    var cooldownPath = "/cooldown-over?sessionId=" + getCurrentSessionId();
+
+    cooldownPath += "&username=";
+
+    cooldownPath += username;
+
+    cooldownRequest.open("GET", cooldownPath);
+
+    cooldownRequest.onload = function() {
+        var response = cooldownRequest.responseText;
+
+        if ((response == "Cooldown Expired") || (response == "User Not Found")) {
+            window.location.href = "/search.html";
+        } else {
+            var output = "You are currently in a cooldown period. You may request songs again in ";
+
+            output += response;
+
+            output += ".";
+
+            alert(output);
+        } //end if
+    };
+
+    cooldownRequest.send();
+});
 
 // When the connect button is clicked, attempt to quit the session
 quitSession.addEventListener("click", function(){
