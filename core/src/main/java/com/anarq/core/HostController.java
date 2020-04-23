@@ -3,7 +3,6 @@ package com.anarq.core;
 import com.anarq.spotify.*;
 import com.anarq.songrequests.*;
 import org.springframework.web.bind.annotation.*;
-import java.util.Objects;
 import java.util.Map;
 import java.time.Instant;
 import java.time.Duration;
@@ -351,21 +350,22 @@ public class HostController {
             return "Failure";
         } else {
             String clientUsername;
-            boolean found = false;
+            ConnectedClient foundClient = null;
 
             for (ConnectedClient client : session.getConnectedClients()) {
                 clientUsername = client.getName();
 
                 if (clientUsername.equalsIgnoreCase(username)) {
-                    found = true;
+                    foundClient = client;
 
                     break;
                 } //end if
             } //end if
 
-            if (found) {
+            if (foundClient != null) {
                 long period;
                 boolean added;
+                Map<ConnectedClient, Long> cooldownClients;
                 long currentTime;
                 long endTime;
 
@@ -379,6 +379,12 @@ public class HostController {
                     return "Period Out Of Bounds";
                 } //end if
 
+                cooldownClients = session.getCooldownClients();
+
+                if (cooldownClients.containsKey(foundClient)) {
+                    return "Already In Cooldown";
+                } //end if
+
                 currentTime = System.currentTimeMillis();
 
                 endTime = currentTime + (period * 60_000);
@@ -386,76 +392,6 @@ public class HostController {
                 added = session.cooldownClient(username, endTime);
 
                 return (added) ? "Success" : "Failure";
-            } //end if
-
-            return "User Not Found";
-        } //end if
-    } //cooldownUser
-
-    @GetMapping("/cooldown-over")
-    public String cooldownOver(@RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
-                               @RequestParam(value="username", defaultValue="default_username") String username) {
-        Session session = CoreApplication.getSessionForSessionId(sessionId);
-
-        if (session == null) {
-            System.err.println("Error: Auth Failed.");
-
-            return "Failure";
-        } else {
-            Map<ConnectedClient, Long> cooldownClients = session.getCooldownClients();
-            String clientUsername;
-            ConnectedClient foundClient = null;
-
-            for (ConnectedClient client : cooldownClients.keySet()) {
-                clientUsername = client.getName();
-
-                if (clientUsername.equalsIgnoreCase(username)) {
-                    foundClient = client;
-                    
-                    break;
-                } //end if
-            } //end for
-
-            if (foundClient != null) {
-                long currentTime = System.currentTimeMillis();
-                long endTime = cooldownClients.get(foundClient);
-
-                if (currentTime < endTime) {
-                    Instant currentInstant;
-                    Instant endInstant;
-                    Duration remainingTime;
-                    int remainingMinutes;
-                    int remainingSeconds;
-                    String format;
-
-                    currentInstant = Instant.ofEpochMilli(currentTime);
-
-                    endInstant = Instant.ofEpochMilli(endTime);
-
-                    remainingTime = Duration.between(currentInstant, endInstant);
-
-                    remainingMinutes = remainingTime.toMinutesPart();
-
-                    remainingSeconds = remainingTime.toSecondsPart();
-
-                    if (remainingMinutes == 0) {
-                        format = "%d seconds";
-
-                        String.format(format, remainingSeconds);
-                    } else if (remainingMinutes == 1) {
-                        format = "1 minute and %d seconds";
-
-                        String.format(format, remainingSeconds);
-                    } else {
-                        format = "%d minutes and %d seconds";
-
-                        String.format(format, remainingMinutes, remainingSeconds);
-                    } //end if
-                } //end if
-
-                session.uncooldownClient(username);
-
-                return "Cooldown Expired";
             } //end if
 
             return "User Not Found";

@@ -560,14 +560,18 @@ applyChanges.addEventListener("click", function(){
     cooldownRequest.open("GET", cooldownPath);
 
     cooldownRequest.onload = function() {
-        if (cooldownRequest.responseText == "Failure") {
+        var response = cooldownRequest.responseText;
+
+        if (response == "Failure") {
             alert("The specified user could not be cooled down. Please contact support.");
-        } else if (cooldownRequest.responseText == "User Not Found") {
+        } else if (response == "User Not Found") {
             alert("The specified user is not a part of this session!");
-        } else if (cooldownRequest.responseText == "Period Not Integer") {
+        } else if (response == "Period Not Integer") {
             alert("The specified period is not a valid number!");
-        } else if (cooldownRequest.responseText == "Period Out Of Bounds") {
+        } else if (response == "Period Out Of Bounds") {
             alert("The specified period is not greater than or equal to one!");
+        } else if (response == "Already In Cooldown") {
+            alert("The specified user is already in a cooldown period!");
         } //end if
     };
 
