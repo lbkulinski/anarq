@@ -591,6 +591,24 @@ applyChanges.addEventListener("click", function(){
     cooldownRequest.send();
 });
 
+document.getElementById("pause").addEventListener("click", function(){
+	
+	var pauseRequest = new XMLHttpRequest();
+	var searchPath = '/pause?sessionId=' + getCurrentHostSessionId()
+	pauseRequest.open('PUT', searchPath);
+	pauseRequest.send();
+	
+});
+
+document.getElementById("resume").addEventListener("click", function(){
+	
+	var pauseRequest = new XMLHttpRequest();
+	var searchPath = '/resume?sessionId=' + getCurrentHostSessionId()
+	pauseRequest.open('PUT', searchPath);
+	pauseRequest.send();
+	
+});
+
 // When the connect button is clicked, attempt to quit the session
 quitSession.addEventListener("click", function(){
 	

@@ -92,11 +92,12 @@ Patrick
 */
 public class RequestQueue {
 
+  private int dislikeThreshold = 1;
+
   // Private Varaibles
   private int maxRequests;
   private int minBPM = 32;
   private int maxBPM = 400;
-  private int dislikeThreshold = 10;
   private boolean acceptingRequests;
   public boolean autoDJ;
   private boolean explicitFilter;

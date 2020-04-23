@@ -14,6 +14,7 @@ import com.anarq.songrequests.*;
 */
 public class Session {
 	
+	public static final int SONG_COOLDOWN_TIME = 300;
 	public static final String AUTODJ_NAME = "AutoDJ";
 	
 	// Private Varaibles

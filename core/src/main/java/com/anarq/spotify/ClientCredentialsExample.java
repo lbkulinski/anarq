@@ -252,7 +252,7 @@ public class ClientCredentialsExample {
 			return false;
 		}
 		else {
-			return cp.getIs_playing();
+			return true;//cp.getIs_playing();
 		}
 		
 	}

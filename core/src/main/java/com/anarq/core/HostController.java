@@ -265,8 +265,38 @@ public class HostController {
 			return false;
 		}
 		
-		session.getSongCooldownManager().addSong(SpotifyGateway.getSongForSongId(songId), 300);
+		session.getSongCooldownManager().addSong(SpotifyGateway.getSongForSongId(songId), Session.SONG_COOLDOWN_TIME);
 
+		return true;
+	}
+	
+	@PutMapping("/pause")
+	public boolean pauseSong(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId) {
+		
+		// Attempt to obtain the given session based on the sessionId provided
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+		if (session == null) {
+			System.err.println("Error: Request for non-existant session was created!\n ID: "
+				+ sessionId);
+			return false;
+		}
+		session.getSpotify().pause();
+		return true;
+	}
+	
+	@PutMapping("/resume")
+	public boolean resumeSong(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId) {
+		
+		// Attempt to obtain the given session based on the sessionId provided
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+		if (session == null) {
+			System.err.println("Error: Request for non-existant session was created!\n ID: "
+				+ sessionId);
+			return false;
+		}
+		session.getSpotify().resume();
 		return true;
 	}
 	
