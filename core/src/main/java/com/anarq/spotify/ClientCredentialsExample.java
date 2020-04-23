@@ -17,9 +17,16 @@ import com.wrapper.spotify.requests.data.player.*;
 import com.wrapper.spotify.requests.data.search.simplified.SearchPlaylistsRequest;
 import com.wrapper.spotify.model_objects.miscellaneous.CurrentlyPlaying;
 import com.wrapper.spotify.requests.data.player.GetUsersCurrentlyPlayingTrackRequest;
+import com.wrapper.spotify.model_objects.specification.SavedTrack;
+import com.wrapper.spotify.requests.data.library.GetUsersSavedTracksRequest;
+import com.wrapper.spotify.model_objects.specification.Paging;
+
+import com.anarq.core.Song;
 
 import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
 import org.apache.hc.core5.http.ParseException;
+
+import jdk.nashorn.internal.runtime.ParserException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -292,8 +299,37 @@ public class ClientCredentialsExample {
 		
 		return null;
 		
-	}
-	
-	
+    }
+    
+    public Song[] getUsersSavedTracks() {
+        GetUsersSavedTracksRequest getUsersSavedTracksRequest = spotifyApiLocal.getUsersSavedTracks().build();
+        try {
+            Paging<SavedTrack> savedTrackPaging = getUsersSavedTracksRequest.execute();
+            SavedTrack[] savedTracks = savedTrackPaging.getItems();
+            Song[] savedSongs = new Song[savedTracks.length];
+            for(int i = 0; i < savedTracks.length; i++) {
+                Track temp = savedTracks[i].getTrack();
+                String genre = spotifyApiLocal.getArtist(temp.getArtists()[0].getId()).build().execute().getGenres().length > 0 ?
+                        spotifyApiLocal.getArtist(temp.getArtists()[0].getId()).build().execute().getGenres()[0] : "N/A";
 
+                savedSongs[i] = new Song(
+				temp.getName(),
+				temp.getAlbum().getName(),
+                temp.getArtists()[0].getName(),
+				temp.getArtists()[0].getId(),
+				null,
+                genre,
+				temp.getId(),
+				temp.getDurationMs()/1000,
+				temp.getIsExplicit(),
+                Math.round(spotifyApiLocal.getAudioFeaturesForTrack(temp.getId()).build().execute().getTempo()),
+                temp.getAlbum().getImages()[0].getUrl()
+                );
+            }
+            return savedSongs;
+        } catch(IOException | SpotifyWebApiException | ParseException gust) {
+            System.out.println("Error: " + gust.getMessage());
+        }
+        return null;
+    }
 }
