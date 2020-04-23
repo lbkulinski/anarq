@@ -20,6 +20,7 @@ import com.wrapper.spotify.requests.data.player.GetUsersCurrentlyPlayingTrackReq
 import com.wrapper.spotify.model_objects.specification.SavedTrack;
 import com.wrapper.spotify.requests.data.library.GetUsersSavedTracksRequest;
 import com.wrapper.spotify.model_objects.specification.Paging;
+import com.wrapper.spotify.requests.data.library.SaveTracksForUserRequest;
 
 import com.anarq.core.Song;
 
@@ -331,5 +332,16 @@ public class ClientCredentialsExample {
             System.out.println("Error: " + gust.getMessage());
         }
         return null;
+    }
+
+    public void saveSong(String songId) {
+        String[] temp = new String[1];
+        temp[0] = songId;
+        SaveTracksForUserRequest saveTracksForUserRequest = spotifyApi.saveTracksForUser(temp).build();
+        try {
+            saveTracksForUserRequest.execute();
+        } catch (IOException | SpotifyWebApiException | ParseException ss) {
+            
+        }
     }
 }
