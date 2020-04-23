@@ -155,7 +155,6 @@ public class HostController {
 		return ret;
 	}
 	
-	
 	@GetMapping("/connect-spotify")
 	public String connectToSpotify(
 	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId) {
@@ -164,8 +163,40 @@ public class HostController {
 		
 	}
 	
+	@GetMapping("/get-current-song")
+	public Song gerCurrentSong(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId) {
+		
+		// Attempt to obtain the given session based on the sessionId provided
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+		if (session == null) {
+			System.err.println("Error: Request for non-existant session was created!\n ID: "
+				+ sessionId);
+			return null;
+		}
+		
+		return session.getRequestQueue().getCurrentSong().getSongInfo();
+		
+	}
+	
+	@GetMapping("/connected-to-spotify")
+	public boolean isConnectedToSpotify(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId) {
+		
+		// Attempt to obtain the given session based on the sessionId provided
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+		if (session == null) {
+			System.err.println("Error: Request for non-existant session was created!\n ID: "
+				+ sessionId);
+			return false;
+		}
+		
+		return !session.getSpotifyAuthKey().equals("");
+		
+	}
+	
 	@PutMapping("/set-spotify-code")
-	public String connectToSpotify(
+	public String setSpotifyCode(
 	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
 	@RequestParam(value="code", defaultValue="no_code_given")String code) {
 		
@@ -183,6 +214,7 @@ public class HostController {
 			return "Failed";
 		}
 		
+		session.setSpotifyAuthKey(code);
 		session.getSpotify().setAuthCode(code);
 		session.getSpotify().authorizationCode();
 		

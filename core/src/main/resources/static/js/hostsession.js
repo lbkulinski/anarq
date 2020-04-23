@@ -6,6 +6,7 @@ var sessionHeader = document.getElementById("session-header");
 var quitSession = document.getElementById("quit-session");
 var applyChanges = document.getElementById("apply-changes");
 var connectSpotify = document.getElementById("sign-in-spotify");
+var spotifyWarning = document.getElementById("spotify-needs-login");
 var qr = document.getElementById("qr");
 
 sessionHeader.innerHTML = getCurrentHostSessionId();
@@ -35,13 +36,46 @@ else {
 	console.log("Spotify Code is Up-To-Date");
 }
 
+
+var clientListRequest = new XMLHttpRequest();
+	var clientListPath = '/connected-to-spotify?sessionId=' + getCurrentHostSessionId();
+	clientListRequest.open('GET', clientListPath);
+	clientListRequest.onload = function() {
+		
+		if (clientListRequest.responseText == "true") {
+			spotifyWarning.innerHTML = "<h3> Connected To Spotify! </h3>";
+		}
+		
+	};
+	clientListRequest.send();
+
+
 function loadUserInfo() {
 
 	loadCurrentUsers();
 	loadBlacklist();
 	loadCurrentSongQueue();
 	loadOverrideQueue();
+	getCurrentSongInfo();
 	
+}
+
+// Loads all the users currently connected
+function getCurrentSongInfo() {
+
+	var currentSongRequest = new XMLHttpRequest();
+	var path = '/get-current-song?sessionId=' + getCurrentHostSessionId();
+	currentSongRequest.open('GET', path);
+	currentSongRequest.onload = function() {
+		
+		var songInfo = JSON.parse(currentSongRequest.responseText);
+		document.getElementById("current-song-name").innerHTML = songInfo.songName;
+		document.getElementById("current-song-artist").innerHTML = songInfo.artistName;
+		document.getElementById("current-song-album").innerHTML = songInfo.albumName;
+		
+	};
+	currentSongRequest.send();
+
 }
 
 // Loads all the users currently connected

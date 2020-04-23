@@ -135,6 +135,10 @@ public class SongRequest {
         return playing;
     }
 
+	public Song getSongInfo() {
+		return songInfo;
+	}
+
 	/* Compare two song requests */
     @Override
     public boolean equals(Object o) {

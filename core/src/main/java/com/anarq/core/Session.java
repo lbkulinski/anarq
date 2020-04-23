@@ -18,7 +18,7 @@ public class Session {
 	
 	// Private Varaibles
 	private final String sessionId;
-	private String spotifyAuthKey;
+	private String spotifyAuthKey = "";
 	private ClientCredentialsExample spotify;
 	private AutoDJ autoDJ;
 	private MusicChooser musicChooser;
@@ -156,9 +156,12 @@ public class Session {
 	public void setSpotifyAuthKey(String key) {
 		
 		spotifyAuthKey = key;
-		getSpotify().setAccessTokenForLocalAccess(key);
 		
-		getSpotify().resume();
+	}
+	
+	public String getSpotifyAuthKey() {
+		
+		return spotifyAuthKey;
 		
 	}
 	
