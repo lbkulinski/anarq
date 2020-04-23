@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * A controller for account operations associated with the AnarQ Application.
+ * 
+ * @version April 23, 2020
  */
 @RestController
 public class AccountController {
