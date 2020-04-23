@@ -98,7 +98,7 @@ public class RequestQueue {
     private int maxBPM = 400;
     private int dislikeThreshold = 10;
     private boolean acceptingRequests;
-    private boolean autoDJ;
+    public boolean autoDJ;
     private boolean explicitFilter;
     private boolean visibility; // true = public access, false = private access
     private MusicChooser musicChooser;

@@ -15,12 +15,18 @@ import com.wrapper.spotify.requests.authorization.authorization_code.Authorizati
 import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
 import com.wrapper.spotify.requests.data.player.*;
 import com.wrapper.spotify.requests.data.search.simplified.SearchPlaylistsRequest;
+import com.wrapper.spotify.model_objects.miscellaneous.CurrentlyPlaying;
+import com.wrapper.spotify.requests.data.player.GetUsersCurrentlyPlayingTrackRequest;
 
 import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
 import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
 import java.net.URI;
+
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 
 public class ClientCredentialsExample {
@@ -237,5 +243,46 @@ public class ClientCredentialsExample {
             System.out.println("There was an error while trying to resume the song");
         }
     }
+	
+	public boolean isTrackCurrentlyPlaying() {
+		
+		CurrentlyPlaying cp = getUsersCurrentlyPlayingTrack_Async();
+		
+		if (cp == null) {
+			return false;
+		}
+		else {
+			
+			return cp.getIs_playing();
+			
+		}
+		
+	}
+	
+	public CurrentlyPlaying getUsersCurrentlyPlayingTrack_Async() {
+		try {
+			
+			GetUsersCurrentlyPlayingTrackRequest getUsersCurrentlyPlayingTrackRequest = spotifyApiLocal
+				.getUsersCurrentlyPlayingTrack()
+				.build();
+			
+		  final CompletableFuture<CurrentlyPlaying> currentlyPlayingFuture = getUsersCurrentlyPlayingTrackRequest.executeAsync();
+
+		  // Thread free to do other tasks...
+
+		  // Example Only. Never block in production code.
+		  return currentlyPlayingFuture.join();
+		  
+		} catch (CompletionException e) {
+		  System.out.println("Error: " + e.getCause().getMessage());
+		} catch (CancellationException e) {
+		  System.out.println("Async operation cancelled.");
+		}
+		
+		return null;
+		
+	}
+	
+	
 
 }

@@ -27,6 +27,8 @@ public class Session {
 	private List<ConnectedClient> blacklistedIds;
 	private ConnectedClient hostClient;
 	private byte[] qrCode;
+	private Thread sessionThread;
+	private boolean isRunning = true;
 	
 	/* Constructor */
 	public Session() {
@@ -59,6 +61,48 @@ public class Session {
 		}
 		
 		System.out.println("\n\nQR CODE: " + qrCode + "\n\n");
+		
+		sessionThread = new Thread() {
+			
+			public void run() {
+				
+				while (isRunning) {
+					
+					if (!spotify.isTrackCurrentlyPlaying()) {
+						
+						if (!requestQueue.isEmpty()) {
+						
+							spotify.playSongAsNext(requestQueue.playNextSong().getId());
+							spotify.resume();
+							
+						}
+						
+					}
+					
+					if (getRequestQueue().isEmpty() && requestQueue.autoDJ) {
+						requestSong(getAutoDJ().getSongReccomendation(), Session.AUTODJ_NAME);
+					}
+				
+					try {
+						Thread.sleep(500);
+					} catch (Exception e) {
+						
+					}
+					
+				}
+				
+			}
+			
+			
+		};
+		
+		sessionThread.start();
+		
+	}
+	
+	public void terminate() {
+		
+		isRunning = false;
 		
 	}
 	

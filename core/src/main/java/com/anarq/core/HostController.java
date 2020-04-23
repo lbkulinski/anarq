@@ -126,6 +126,7 @@ public class HostController {
 		if (!session.hasUserForId(userId)) {
 			return false;
 		}
+		session.terminate();
 		CoreApplication.terminateSession(sessionId);
 		
 		// Redirect
@@ -151,11 +152,6 @@ public class HostController {
 
 		// AUTODJ
 
-		if (session.getRequestQueue().isEmpty()) {
-			System.out.println("My artist = " + artist);
-			session.requestSong(session.getAutoDJ().getSongReccomendation(), Session.AUTODJ_NAME);
-		}
-
 		return ret;
 	}
 	
@@ -173,7 +169,7 @@ public class HostController {
 	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
 	@RequestParam(value="code", defaultValue="no_code_given")String code) {
 		
-		if (code == "no_code_given") {
+		if (code.equals("no_code_given")) {
 			
 			return "Failed";
 			
@@ -187,7 +183,8 @@ public class HostController {
 			return "Failed";
 		}
 		
-		session.setSpotifyAuthKey(code);
+		session.getSpotify().setAuthCode(code);
+		session.getSpotify().authorizationCode();
 		
 		return "Success!";
 		
