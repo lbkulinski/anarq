@@ -252,6 +252,24 @@ public class HostController {
 		return ret;
 	}
 	
+	@PutMapping("/add-song-to-cooldown")
+	public boolean addSongToCooldown(
+	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
+	@RequestParam(value="songId", defaultValue="no_song_id")String songId) {
+		
+		// Attempt to obtain the given session based on the sessionId provided
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+		if (session == null) {
+			System.err.println("Error: Request for non-existant session was created!\n ID: "
+				+ sessionId);
+			return false;
+		}
+		
+		session.getSongCooldownManager().addSong(SpotifyGateway.getSongForSongId(songId), 300);
+
+		return true;
+	}
+	
 	@PutMapping("/delete-override-request")
 	public boolean deleteOverrideRequest(
 	@RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,

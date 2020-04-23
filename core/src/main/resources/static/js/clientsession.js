@@ -8,6 +8,7 @@ sessionHeader.innerHTML = getCurrentSessionId();
 function loadUserInfo() {
 
 	loadCurrentSongQueue();
+	getCurrentSongInfo();
 	
 }
 
@@ -30,6 +31,24 @@ function loadCurrentSongQueue() {
 
 }
 
+// Loads all the users currently connected
+function getCurrentSongInfo() {
+
+	var currentSongRequest = new XMLHttpRequest();
+	var path = '/get-current-song?sessionId=' + getCurrentSessionId();
+	currentSongRequest.open('GET', path);
+	currentSongRequest.onload = function() {
+		
+		var songInfo = JSON.parse(currentSongRequest.responseText);
+		document.getElementById("current-song-name").innerHTML = songInfo.songName;
+		document.getElementById("current-song-artist").innerHTML = songInfo.artistName;
+		document.getElementById("current-song-album").innerHTML = songInfo.albumName;
+		document.getElementById("current-song-cover").innerHTML = "<img src=\"" + songInfo.albumCover + "\" alt=\"https://cdn3.iconfinder.com/data/icons/music-and-media-player-ui-filled-outline-s94/96/Music_Icon_Pack_-_Filled_Outline_vinyl-512.png\"" + " width=\"200\" height=\"200\"" + "/>";
+		
+	};
+	currentSongRequest.send();
+
+}
 
 // Takes an array of song objects and renders them to the screen
 function renderSongsToHTML(songArray) {

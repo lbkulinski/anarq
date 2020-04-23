@@ -48,7 +48,7 @@ public class CooldownSong {
     int duration = 0;
     container song = null;
     for (container c: cooldownSongs) {
-      if (c.song.equals(songToBeChecked)) {
+      if (c.song.getSongId().equals(songToBeChecked.getSongId())) {
         timeAdded = c.timeAdded;
         duration = c.duration;
         song = c;

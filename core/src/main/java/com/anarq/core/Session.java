@@ -26,6 +26,7 @@ public class Session {
 	private List<ConnectedClient> connectedClients;
 	private List<ConnectedClient> blacklistedIds;
     private Map<ConnectedClient, Long> cooldownClients;
+	private CooldownSong cooldownSong;
 	private ConnectedClient hostClient;
 	private byte[] qrCode;
 	private Thread sessionThread;
@@ -45,6 +46,7 @@ public class Session {
 		connectedClients = new ArrayList<ConnectedClient>();
 		blacklistedIds = new ArrayList<ConnectedClient>();
         cooldownClients = new HashMap<>();
+		cooldownSong = new CooldownSong();
 		
 		// Create a master client for the host
 		hostClient = new ConnectedClient("HOST", true, sessionId);
@@ -131,8 +133,16 @@ public class Session {
 		
 	}
 	
+	public CooldownSong getSongCooldownManager() {
+		return cooldownSong;
+	}
+	
 	/* Requests a new song for the RequestQueue */
 	public boolean requestSong(Song song, String requesterId) {
+		
+		if (!getSongCooldownManager().canSongBePlayed(song)) {
+			return false;
+		}
 		
 		SongRequest newSongRequest = new SongRequest(song, requesterId);
 		

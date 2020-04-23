@@ -10,11 +10,12 @@
 		<video id="video" width="200%" playsinline autoplay muted>
 			<source src="media/anim.mp4" type="video/mp4" />
 		</video> 
-		<h2>Welcome to $LOBBY_NAME!</h2>
+		<h2>Welcome, Jammer!</h2>
 		<h3>Connected with ID</h3>
 		<h2 id="session-header">Connected to Session $SESSIONID</h2>
 		<button id="request-song" type="button">Request a Song</button>
 		<button id="quit-session" type="button">Leave Session</button>
+		<button id="save-button" type="button">Save Queue</button>
 	</div>
 	
 	<div class="column">
@@ -22,13 +23,21 @@
 		<div id="current-requests"></div>
 	</div>
 	
-		<div class="column">
-		<p>Currently Playing</p>
+	<div id="request-queue" class="column">
+		<h2> Currently Playing: </h2>
+		<hr>
+		<div id="current-song-cover">
+			<img src="https://www.healthylifestylesliving.com/wp-content/uploads/2015/12/placeholder-256x256.gif"></img>
+		</div>
+		<h1 id="current-song-name"> SONG NAME </h1>
+		<h2 id="current-song-artist"> ARTIST NAME </h2>
+		<h3 id="current-song-album"> ALBUM NAME </h3>
 	</div>
 	
 	<script type="text/javascript" src="js/currentsession.js"></script>
 	<script type="text/javascript" src="js/authentication.js"></script>
 	<script type="text/javascript" src="js/clientsession.js"></script>
 	<script type="text/javascript" src="js/updateuserinfo.js"></script>
+	<script type="text/javascript" src="js/saveQueue.js"></script>
 </body>
 </html>

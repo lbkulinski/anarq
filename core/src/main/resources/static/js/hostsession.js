@@ -72,6 +72,7 @@ function getCurrentSongInfo() {
 		document.getElementById("current-song-name").innerHTML = songInfo.songName;
 		document.getElementById("current-song-artist").innerHTML = songInfo.artistName;
 		document.getElementById("current-song-album").innerHTML = songInfo.albumName;
+		document.getElementById("current-song-cover").innerHTML = "<img src=\"" + songInfo.albumCover + "\" alt=\"https://cdn3.iconfinder.com/data/icons/music-and-media-player-ui-filled-outline-s94/96/Music_Icon_Pack_-_Filled_Outline_vinyl-512.png\"" + " width=\"200\" height=\"200\"" + "/>";
 		
 	};
 	currentSongRequest.send();
@@ -414,6 +415,7 @@ function generateSongHTML(song) {
 	htmlString += "<button type=\"button\" onclick=\"deleteRequest('" + song.id + "')\">Delete Request</button>";
 	htmlString += "<button type=\"button\" onclick=\"likeSong('" + song.id + "')\">Like</button>";
 	htmlString += "<button type=\"button\" onclick=\"dislikeSong('" + song.id + "')\">Dislike</button>";
+	htmlString += "<button type=\"button\" onclick=\"cooldownSong('" + song.id + "')\">Cooldown Song</button>";
 	htmlString += "</div>";
 	
 	return htmlString;
@@ -452,6 +454,17 @@ function likeSong(songId) {
 	var searchPath = '/like-song?sessionId=' + getCurrentSessionId() + '&songId=' + songId + '&userId=' + getUserId();
 	searchRequest.open('PUT', searchPath);
 	searchRequest.send();
+	
+}
+
+function cooldownSong(songId) {
+	
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/add-song-to-cooldown?sessionId=' + getCurrentSessionId() + '&songId=' + songId + '&userId=' + getUserId();
+	searchRequest.open('PUT', searchPath);
+	searchRequest.send();
+	
+	deleteRequest(songId);
 	
 }
 
