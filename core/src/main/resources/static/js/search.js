@@ -82,13 +82,12 @@ function renderSongsToHTML(songArray) {
 function generateSongHTML(song) {
 	
 	var htmlString = "";
-	
 	htmlString += "<div class=\"song-div-req\">";
 	htmlString += "<h1>" + song.songName + "</h1>";
 	htmlString += "<img src=\"" + song.albumCover + "\" alt=\"https://cdn3.iconfinder.com/data/icons/music-and-media-player-ui-filled-outline-s94/96/Music_Icon_Pack_-_Filled_Outline_vinyl-512.png\"" + " width=\"200\" height=\"200\"" + "></img>";
 	htmlString += "<h2>" + song.albumName + "</h2>";
 	htmlString += "<h3>by " + song.artistName + "</h3>";
-	htmlString += "<p>Duration: " + song.duration + "</p>";
+	htmlString += "<p>Duration: " + parseInt(song.duration/60) + "m" + song.duration%60 + "s</p>";
 	htmlString += "<p>Explicit: " + song.isExplicit + "</p>";
 	htmlString += "<button type=\"button\" onclick=\"requestSong('" + song.songId + "')\">Request song</button>";
 	htmlString += "</div>"
