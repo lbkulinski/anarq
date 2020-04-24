@@ -602,10 +602,19 @@ document.getElementById("pause").addEventListener("click", function(){
 
 document.getElementById("resume").addEventListener("click", function(){
 	
-	var pauseRequest = new XMLHttpRequest();
+	var resumeRequest = new XMLHttpRequest();
 	var searchPath = '/resume?sessionId=' + getCurrentHostSessionId()
-	pauseRequest.open('PUT', searchPath);
-	pauseRequest.send();
+	resumeRequest.open('PUT', searchPath);
+	resumeRequest.send();
+	
+});
+
+document.getElementById("skip").addEventListener("click", function(){
+	
+	var skipRequest = new XMLHttpRequest();
+	var searchPath = '/skip?sessionId=' + getCurrentHostSessionId()
+	skipRequest.open('PUT', searchPath);
+	skipRequest.send();
 	
 });
 

@@ -405,6 +405,28 @@ public class HostController {
     } //resumeSong
 
     /**
+     * Attempts to skip the song playing in the session with the specified session ID.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @return {@code true}, if the song playing in the session with the specified session ID was successfully resumed
+     * and {@code false} otherwise
+     */
+    @PutMapping("/skip")
+    public boolean skipSong(@RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId) {
+        Session session = CoreApplication.getSessionForSessionId(sessionId);
+
+        if (session == null) {
+            System.err.println("Error: Request for non-existant session was created!\n ID: " + sessionId);
+
+            return false;
+        } //end if
+
+        session.getSpotify().playSongAsNext(session.getRequestQueue().playNextSong().getId());
+
+        return true;
+    } //skipSong
+
+    /**
      * Attempts to delete the override request of the song with the specified song ID in the session with the specified
      * session ID.
      *
