@@ -219,8 +219,7 @@ public class HostController {
      * Attempts to connect the session with the specified session ID to Spotify.
      *
      * @param sessionId the session ID to be used in the operation
-     * @return {@code true}, if the session with the specified session ID was successfully connected to Spotify and
-     * {@code false} otherwise
+     * @return the result of the attempt to connect to Spotify
      */
     @GetMapping("/connect-spotify")
     public String connectToSpotify(
@@ -405,92 +404,129 @@ public class HostController {
         return true;
     } //resumeSong
 
+    /**
+     * Attempts to delete the override request of the song with the specified song ID in the session with the specified
+     * session ID.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @param songId the song ID to be used in the operation
+     * @return {@code true}, if the override request of the song with the specified song ID was successfully deleted
+     * and {@code false} otherwise
+     */
     @PutMapping("/delete-override-request")
     public boolean deleteOverrideRequest(
-            @RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
-            @RequestParam(value="songId", defaultValue="no_song_id")String songId) {
-
-        // Attempt to obtain the given session based on the sessionId provided
+            @RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
+            @RequestParam(value="songId", defaultValue="no_song_id") String songId) {
         Session session = CoreApplication.getSessionForSessionId(sessionId);
+
         if (session == null) {
-            System.err.println("Error: Request for non-existant session was created!\n ID: "
-                                       + sessionId);
+            System.err.println("Error: Request for non-existant session was created!\n ID: " + sessionId);
+
             return false;
-        }
+        } //end if
 
-        String artist = session.getMusicChooser().getSongForSongId(songId).getArtistName();
-        boolean ret = session.deleteOverrideSongRequest(songId);
+        String artist = session.getMusicChooser()
+                               .getSongForSongId(songId)
+                               .getArtistName();
 
-        return ret;
-    }
+        return session.deleteOverrideSongRequest(songId);
+    } //deleteOverrideRequest
 
+    /**
+     * Attempts to kick the user with the specified user ID from the session with the specified session ID.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @param userId the user ID to be used in the operation
+     * @return {@code true}, if the user with the specified user ID was successfully kicked and {@code false} otherwise
+     */
     @PutMapping("/kick-user")
-    public boolean kickUser(
-            @RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
-            @RequestParam(value="userId", defaultValue="no_song_id")String userId) {
-
-        // Attempt to obtain the given session based on the sessionId provided
+    public boolean kickUser(@RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
+                            @RequestParam(value="userId", defaultValue="no_song_id") String userId) {
         Session session = CoreApplication.getSessionForSessionId(sessionId);
+
         if (session == null) {
-            System.err.println("Error: Request for non-existant session was created!\n ID: "
-                                       + sessionId);
+            System.err.println("Error: Request for non-existant session was created!\n ID: " + sessionId);
+
             return false;
-        }
+        } //end if
 
         return session.removeClient(userId);
+    } //kickUser
 
-    }
-
+    /**
+     * Attempts to blacklist the user with the specified user ID from the session with the specified session ID.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @param userId the user ID to be used in the operation
+     * @return {@code true}, if the user with the specified user ID was successfully blacklisted and {@code false}
+     * otherwise
+     */
     @PutMapping("/blacklist-user")
-    public boolean blacklistUser(
-            @RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
-            @RequestParam(value="userId", defaultValue="no_song_id")String userId) {
-
-        // Attempt to obtain the given session based on the sessionId provided
+    public boolean blacklistUser(@RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
+                                 @RequestParam(value="userId", defaultValue="no_song_id") String userId) {
         Session session = CoreApplication.getSessionForSessionId(sessionId);
+
         if (session == null) {
-            System.err.println("Error: Request for non-existant session was created!\n ID: "
-                                       + sessionId);
+            System.err.println("Error: Request for non-existant session was created!\n ID: " + sessionId);
+
             return false;
-        }
+        } //end if
 
         return session.blacklistClient(userId);
+    } //blacklistUser
 
-    }
-
+    /**
+     * Attempts to unblacklist the user with the specified user ID from the session with the specified session ID.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @param userId the user ID to be used in the operation
+     * @return {@code true}, if the user with the specified user ID was successfully unblacklisted and {@code false}
+     * otherwise
+     */
     @PutMapping("/unblacklist-user")
     public boolean unblacklistUser(
-            @RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
-            @RequestParam(value="userId", defaultValue="no_song_id")String userId) {
-
-        // Attempt to obtain the given session based on the sessionId provided
+            @RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
+            @RequestParam(value="userId", defaultValue="no_song_id") String userId) {
         Session session = CoreApplication.getSessionForSessionId(sessionId);
+
         if (session == null) {
-            System.err.println("Error: Request for non-existant session was created!\n ID: "
-                                       + sessionId);
+            System.err.println("Error: Request for non-existent session was created!\n ID: " + sessionId);
+
             return false;
-        }
+        } //end if
 
         return session.unblacklistClient(userId);
+    } //unblacklistUser
 
-    }
-
+    /**
+     * Returns whether or not the session with the specified session ID is still active.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @return {@code true}, if the session with the specified session ID is still active and {@code false} otherwise
+     */
     @GetMapping("/authenticate-host")
     public boolean isSessionStillActive(
-            @RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId) {
-
-        // Attempt to obtain the given session based on the sessionId provided
+            @RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId) {
         Session session = CoreApplication.getSessionForSessionId(sessionId);
+
         if (session == null) {
             System.err.println("Error: Auth Failed.");
+
             return false;
-        }
+        } //end if
 
-        // Redirect
         return true;
+    } //isSessionStillActive
 
-    }
-
+    /**
+     * Attempts to place the user with the specified username in a cooldown period in the session with the specified
+     * session ID for the specified period of time.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @param username the username to be used in the operation
+     * @param periodString the period to be used in the operation
+     * @return the result of the attempt to place the user with the specified username in a cooldown period
+     */
     @GetMapping("/cooldown-user")
     public String cooldownUser(@RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
                                @RequestParam(value="username", defaultValue="default_username") String username,
