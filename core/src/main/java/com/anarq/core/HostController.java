@@ -421,7 +421,10 @@ public class HostController {
             return false;
         } //end if
 
-        session.getSpotify().playSongAsNext(session.getRequestQueue().playNextSong().getId());
+        session.getSpotify()
+               .playSongAsNext(session.getRequestQueue()
+                                      .playNextSong()
+                                      .getId());
 
         return true;
     } //skipSong
