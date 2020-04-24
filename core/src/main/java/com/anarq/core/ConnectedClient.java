@@ -1,5 +1,6 @@
 package com.anarq.core;
 
+import com.anarq.spotify.*;
 import java.time.LocalTime;
 import com.anarq.songrequests.*;
 
@@ -29,6 +30,11 @@ public class ConnectedClient {
      */
     private final Permission permissionLevel;
 
+	/**
+     * The Spotify instance of this client.
+     */
+    private final ClientCredentialsExample spotify;
+
     /**
      * The last activity time of this client.
      */
@@ -52,6 +58,7 @@ public class ConnectedClient {
 		this.isRegistered = isRegistered;
         this.permissionLevel = permissionLevel;
 		this.hostSessionId = "NOT_HOST";
+		spotify = new ClientCredentialsExample();
 		
 		id = generateId();
 
@@ -71,6 +78,7 @@ public class ConnectedClient {
 		this.isRegistered = isRegistered;
         this.permissionLevel = Permission.DJ;
 		this.hostSessionId = hostSessionId;
+		spotify = new ClientCredentialsExample();
 		
 		id = generateId();
 
@@ -105,6 +113,15 @@ public class ConnectedClient {
      */
     public String getId() {
         return this.id;
+    } //getId
+	
+	/**
+     * Returns the Spotify instance of this client.
+     *
+     * @return the Spotify instance of this client
+     */
+    public ClientCredentialsExample retrieveSpotify() {
+        return this.spotify;
     } //getId
 
     /**

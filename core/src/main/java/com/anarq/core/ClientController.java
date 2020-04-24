@@ -1,5 +1,6 @@
 package com.anarq.core;
 
+import com.anarq.spotify.*;
 import com.anarq.database.*;
 import com.anarq.songrequests.*;
 import org.springframework.web.bind.annotation.*;
@@ -73,6 +74,53 @@ public class ClientController {
 
 	    return true;
 	} //attemptToCloseConnectionToSession
+
+	/**
+     * Attempts to update the Spotify code of the session with the specified session ID with the specified code.
+     *
+     * @param sessionId the session ID to be used in the operation
+	 * @param userId the user ID to be used in the operation
+     * @param code the code to be used in the operation
+     * @return {@code true}, if the Spotify code of the session with the specified session ID was successfully updated
+     * and {@code false} otherwise
+     */
+    @PutMapping("/set-spotify-code-client")
+    public String setSpotifyCodeClient(@RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
+								 @RequestParam(value="userId", defaultValue="no_user_id") String userId,
+                                 @RequestParam(value="code", defaultValue="no_code_given") String code) {
+        if (code.equals("no_code_given")) {
+            return "Failed";
+        } //end if
+
+        Session session = CoreApplication.getSessionForSessionId(sessionId);
+
+        if (session == null) {
+            System.err.println("Error: Request for non-existant session was created!\n ID: " + sessionId);
+
+            return "Failed";
+        } //end if
+
+		if (session.hasUserForId(userId)) {
+
+			ConnectedClient c = session.getClientForId(userId);
+
+			//c.setSpotifyAuthKey(code);
+
+			c.retrieveSpotify().setAuthCode(code);
+
+			c.retrieveSpotify().authorizationCode();
+
+			return "Success!";
+		
+		}
+		
+		else {
+		
+			return "Failed";
+		
+		}
+		
+    } //setSpotifyCode
 
     /**
      * Returns whether or not the session with the specified session ID is still active and contains the user with the

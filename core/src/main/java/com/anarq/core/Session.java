@@ -473,6 +473,22 @@ public class Session {
 
         return false;
     } //hasUserForId
+	
+	/**
+     * Determines a client with the associated ID.
+     *
+     * @param id the user ID to be used in the operation
+     * @return {@code ConnectedClient}, if this session contains a user with the specified user ID and {@code null} otherwise
+     */
+    public ConnectedClient getClientForId(String id) {
+        for (ConnectedClient connectedClient : connectedClients) {
+            if (connectedClient.getId().equals(id)) {
+                return connectedClient;
+            } //end if
+        } //end for
+
+        return null;
+    } //hasUserForId
 
     /**
      * Returns the connected clients of this session.
