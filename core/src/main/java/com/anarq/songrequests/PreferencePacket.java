@@ -64,6 +64,9 @@ public class PreferencePacket {
 	public boolean getJazz() {
 		return jazz;
 	}
+	public boolean getRap() {
+		return rap;
+	}
 	public boolean getMetal() {
 		return metal;
 	}
