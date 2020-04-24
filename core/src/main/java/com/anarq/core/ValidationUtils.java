@@ -1,8 +1,6 @@
 package com.anarq.core;
 
 import com.anarq.database.*;
-
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
@@ -10,15 +8,13 @@ import java.util.regex.Pattern;
 import org.bson.conversions.Bson;
 import com.mongodb.client.FindIterable;
 import java.util.Objects;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.model.Filters;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 
 /**
  * A set of validation utility methods used by account operations.
  *
  * @author Logan Kulinski, lbk@purdue.edu
- * @version March 29, 2020
+ * @version April 23, 2020
  */
 public final class ValidationUtils {
     /**
@@ -39,12 +35,6 @@ public final class ValidationUtils {
      * @throws NullPointerException if the specified username is {@code null}
      */
     public static boolean userPresent(String username) {
-        String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
-        String databaseUsername;
-        String databasePassword;
-        String uri;
-        MongoClient client;
-        String databaseName = "user-database";
         MongoDatabase userDatabase;
         String collectionName = "users";
         MongoCollection<Document> collection;
@@ -57,15 +47,7 @@ public final class ValidationUtils {
 
         Objects.requireNonNull(username, "the specified username is null");
 
-        /*databaseUsername = System.getProperty("database-username");
-
-        databasePassword = System.getProperty("database-password");
-
-        uri = String.format(format, databaseUsername, databasePassword);
-
-        client = MongoClients.create(uri);*/
-
-        userDatabase = ConnectToDatabase.connectToDatabase();//client.getDatabase(databaseName);
+        userDatabase = ConnectToDatabase.connectToDatabase();
 
         collection = userDatabase.getCollection(collectionName);
 
@@ -78,8 +60,6 @@ public final class ValidationUtils {
         results = collection.find(filter);
 
         present = results.first() != null;
-
-        //client.close();
 
         return present;
     } //presentInDatabase
@@ -94,12 +74,6 @@ public final class ValidationUtils {
      * @throws NullPointerException if the specified username or password is {@code null}
      */
     public static boolean passwordCorrect(String username, String password) {
-        String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
-        String databaseUsername;
-        String databasePassword;
-        String uri;
-        MongoClient client;
-        String databaseName = "user-database";
         MongoDatabase userDatabase;
         String collectionName = "users";
         MongoCollection<Document> collection;
@@ -115,15 +89,7 @@ public final class ValidationUtils {
 
         Objects.requireNonNull(password, "the specified password is null");
 
-        /*databaseUsername = System.getProperty("database-username");
-
-        databasePassword = System.getProperty("database-password");
-
-        uri = String.format(format, databaseUsername, databasePassword);
-
-        client = MongoClients.create(uri);*/
-
-        userDatabase = ConnectToDatabase.connectToDatabase();//client.getDatabase(databaseName);
+        userDatabase = ConnectToDatabase.connectToDatabase();
 
         collection = userDatabase.getCollection(collectionName);
 
@@ -143,8 +109,6 @@ public final class ValidationUtils {
 
         //readPasswordHash = result.get("password-hash", String.class);
 		readPasswordHash = result.get("password", String.class);
-
-        //client.close();
 
         //return BCrypt.checkpw(password, readPasswordHash);
 		return password.equals(readPasswordHash);

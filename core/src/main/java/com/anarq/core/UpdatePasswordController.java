@@ -1,19 +1,15 @@
 package com.anarq.core;
 
 import com.anarq.database.*;
-
 import org.springframework.stereotype.Controller;
 import java.util.Objects;
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import java.util.regex.Pattern;
 import org.bson.conversions.Bson;
 import com.mongodb.client.result.UpdateResult;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.model.Filters;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import com.mongodb.client.model.Updates;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
@@ -24,7 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
  * A controller for updating a user's password.
  *
  * @author Logan Kulinski, lbk@purdue.edu
- * @version March 29, 2020
+ * @version April 23, 2020
  */
 @Controller
 public class UpdatePasswordController {
@@ -62,12 +58,6 @@ public class UpdatePasswordController {
      * @return {@code true}, if the user's password was successfully updated and {@code false} otherwise
      */
     private boolean updatePassword(String username, String newPassword) {
-        String databaseUsername;
-        String databasePassword;
-        String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
-        String uri;
-        MongoClient client;
-        String databaseName = "user-database";
         MongoDatabase userDatabase;
         String collectionName = "users";
         MongoCollection<Document> collection;
@@ -75,23 +65,15 @@ public class UpdatePasswordController {
         Pattern regex;
         Bson filter;
         String usernameFieldName = "username";
-        String passwordHash;
-       //String passwordHashFieldName = "password-hash";
-	   String passwordHashFieldName = "password";
+        //String passwordHash;
+        //String passwordHashFieldName = "password-hash";
+        String passwordHashFieldName = "password";
         Bson update;
         UpdateResult result;
 
         Objects.requireNonNull(username, "the specified username is null");
 
         Objects.requireNonNull(newPassword, "the specified new password is null");
-
-        /*databaseUsername = System.getProperty("database-username");
-
-        databasePassword = System.getProperty("database-password");
-
-        uri = String.format(format, databaseUsername, databasePassword);
-
-        client = MongoClients.create(uri);*/
 
         userDatabase = ConnectToDatabase.getDatabaseConnection();
 
@@ -103,13 +85,11 @@ public class UpdatePasswordController {
 
         filter = Filters.regex(usernameFieldName, regex);
 
-        passwordHash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+        //passwordHash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
 
         update = Updates.set(passwordHashFieldName, newPassword);
 
         result = collection.updateOne(filter, update);
-
-        //client.close();
 
         return result.getModifiedCount() == 1;
     } //updatePassword
