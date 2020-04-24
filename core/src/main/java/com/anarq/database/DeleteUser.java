@@ -1,25 +1,39 @@
 package com.anarq.database;
 
-import java.util.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import org.bson.BsonDocument;
-import org.bson.BsonString;
 import org.bson.Document;
 
+/**
+ * A utility class for deleting a user from the database of the AnarQ Application.
+ *
+ * @version April 24, 2020
+ */
 public class DeleteUser {
-
+    /**
+     * The text of this delete user utility class.
+     */
     String text;
+
+    /**
+     * The field of this delete user utility class.
+     */
     String field;
 
+    /**
+     * Constructs a newly allocated {@code DeleteUser} object with the specified text.
+     *
+     * @param text the text to be used in construction
+     */
     public DeleteUser(String text) {
         this.text = text;
         field = "username";
-    }
+    } //DeleteUser
 
     /**
+     * Attempts to delete a jammer from the database.
      *
-     * @return -1 if user to be deleted is not found or 1 if the user is successfully deleted
+     * @return the result of attempting to delete a jammer from the database
      */
     public int delete() {
         FindUser jammer = new FindUser(text);
@@ -27,24 +41,17 @@ public class DeleteUser {
 
         if (user == null){
             System.out.println("\n\nUser does not exist\n\n");
+
             return -1;
-        }
-        else {
-
-//            Scanner sc = new Scanner(System.in);
-//            System.out.println("Enter password to delete account");
-//            String password = sc.next();
-//            if (!user.containsValue(password)) {
-//                System.out.println("Incorrect Password. Account was not deleted");
-//                return -1;
-//            }
-
+        } else {
             MongoDatabase database = ConnectToDatabase.getDatabaseConnection();
             MongoCollection<Document> jammerCollection = database.getCollection("users");
-            System.out.println("Deleted User - " + user.toString());
-            jammerCollection.deleteOne(user);
-            return 1;
-        }
-    }
 
+            System.out.println("Deleted User - " + user.toString());
+
+            jammerCollection.deleteOne(user);
+
+            return 1;
+        } //end if
+    } //delete
 }
