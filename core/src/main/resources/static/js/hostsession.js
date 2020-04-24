@@ -317,6 +317,7 @@ function generateUserHTML(client) {
 	if (client.permissionLevel != "DJ") {
 		htmlString += "<button type=\"button\" onclick=\"kickUser('" + client.id + "')\">Kick User</button>";
 		htmlString += "<button type=\"button\" onclick=\"blacklistUser('" + client.id + "')\">Ban/Blacklist User</button>";
+		htmlString += "<button type=\"button\" onclick=\"cooldownUser('" + client.name + "')\">Cooldown User</button>";
 	}
 	htmlString += "</div>";
 	
@@ -500,6 +501,42 @@ connectSpotify.addEventListener("click", function(){
 	
 });
 
+function cooldownUser(name) {
+	
+    var period = document.getElementById("period");
+    var cooldownRequest = new XMLHttpRequest();
+    var cooldownPath = "/cooldown-user?sessionId=" + getCurrentSessionId();
+
+    cooldownPath += "&username=";
+
+    cooldownPath += name;
+
+    cooldownPath += "&period=";
+
+    cooldownPath += period.value;
+
+    cooldownRequest.open("GET", cooldownPath);
+
+    cooldownRequest.onload = function() {
+        var response = cooldownRequest.responseText;
+
+        if (response == "Failure") {
+            alert("The specified user could not be cooled down. Please contact support.");
+        } else if (response == "User Not Found") {
+            alert("The specified user is not a part of this session!");
+        } else if (response == "Period Not Integer") {
+            alert("The specified period is not a valid number!");
+        } else if (response == "Period Out Of Bounds") {
+            alert("The specified period is not greater than or equal to one!");
+        } else if (response == "Already In Cooldown") {
+            alert("The specified user is already in a cooldown period!");
+        } //end if
+    };
+
+    cooldownRequest.send();
+	
+}
+
 applyChanges.addEventListener("click", function(){
 	
 	var searchRequest = new XMLHttpRequest();
@@ -527,38 +564,7 @@ applyChanges.addEventListener("click", function(){
 	};
 	searchRequest.send();
 
-    var username = document.getElementById("username");
-    var period = document.getElementById("period");
-    var cooldownRequest = new XMLHttpRequest();
-    var cooldownPath = "/cooldown-user?sessionId=" + getCurrentSessionId();
-
-    cooldownPath += "&username=";
-
-    cooldownPath += username.value;
-
-    cooldownPath += "&period=";
-
-    cooldownPath += period.value;
-
-    cooldownRequest.open("GET", cooldownPath);
-
-    cooldownRequest.onload = function() {
-        var response = cooldownRequest.responseText;
-
-        if (response == "Failure") {
-            alert("The specified user could not be cooled down. Please contact support.");
-        } else if (response == "User Not Found") {
-            alert("The specified user is not a part of this session!");
-        } else if (response == "Period Not Integer") {
-            alert("The specified period is not a valid number!");
-        } else if (response == "Period Out Of Bounds") {
-            alert("The specified period is not greater than or equal to one!");
-        } else if (response == "Already In Cooldown") {
-            alert("The specified user is already in a cooldown period!");
-        } //end if
-    };
-
-    cooldownRequest.send();
+    
 });
 
 document.getElementById("pause").addEventListener("click", function(){
