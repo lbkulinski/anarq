@@ -2,8 +2,61 @@ var requestQueueContainer = document.getElementById("current-requests");
 var sessionHeader = document.getElementById("session-header");
 var requestSong = document.getElementById("request-song");
 var quitSession = document.getElementById("quit-session");
+var connectSpotify = document.getElementById("connect-spotify");
+var likedSongs = document.getElementById("liked-songs");
 
 sessionHeader.innerHTML = getCurrentSessionId();
+
+var connectedToSpot = false;
+
+var clientListRequest = new XMLHttpRequest();
+var clientListPath = '/connected-to-spotify-client?sessionId=' + getCurrentSessionId() + '&userId=' + getUserId();
+clientListRequest.open('GET', clientListPath);
+clientListRequest.onload = function() {
+	
+	if (clientListRequest.responseText == "true") {
+		likedSongs.innerHTML = "";
+		
+		connectedToSpot = true;
+		
+		var savedTrackRequest = new XMLHttpRequest();
+		var savedTracks = '/get-saved-tracks?sessionId=' + getCurrentSessionId() + '&userId=' + getUserId();
+		savedTrackRequest.open('GET', savedTracks);
+		savedTrackRequest.onload = function() {
+
+			var songArray = JSON.parse(savedTrackRequest.responseText);
+
+			likedSongs.innerHTML = "";
+			likedSongs.insertAdjacentHTML('beforeend', "<ul>");
+			
+			for (i = 0; i < songArray.length; i++) {
+				
+				var htmlString = "";
+	
+				htmlString += "<div class=\"song-div\">";
+				htmlString += "<h1>" + songArray[i].songName + "</h1>";
+				htmlString += "<img src=\"" + songArray[i].albumCover + "\" alt=\"https://cdn3.iconfinder.com/data/icons/music-and-media-player-ui-filled-outline-s94/96/Music_Icon_Pack_-_Filled_Outline_vinyl-512.png\"" + " width=\"200\" height=\"200\"" + "/>";
+				htmlString += "<h2> " + songArray[i].albumName + "</h2>";
+				htmlString += "<h3> " + songArray[i].artistName + "</h3>";
+				//htmlString += "<button type=\"button\" onclick=\"request('" + songArray[i].songId + "')\">Request</button>";
+				
+				likedSongs.insertAdjacentHTML('beforeend', htmlString);
+				
+			}
+			
+			likedSongs.insertAdjacentHTML('beforeend', "</ul>");
+
+		};
+		savedTrackRequest.send();
+		
+		
+	}
+	
+};
+clientListRequest.send();
+
+
+
 
 function loadUserInfo() {
 
@@ -82,6 +135,9 @@ function generateSongHTML(song) {
 	htmlString += "<p>Score: " + song.votes + "</p>";
 	htmlString += "<button type=\"button\" onclick=\"likeSong('" + song.id + "')\">Like</button>";
 	htmlString += "<button type=\"button\" onclick=\"dislikeSong('" + song.id + "')\">Dislike</button>";
+	if (connectedToSpot) {
+		htmlString += "<button type=\"button\" onclick=\"saveSong('" + song.id + "')\">Save Song</button>";
+	}
 	htmlString += "</div>";
 	
 	return htmlString;
@@ -94,6 +150,25 @@ function likeSong(songId) {
 	var searchPath = '/like-song?sessionId=' + getCurrentSessionId() + '&songId=' + songId + '&userId=' + getUserId();
 	searchRequest.open('PUT', searchPath);
 	searchRequest.send();
+	
+}
+
+function saveSong(songId) {
+	
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/save-song?sessionId=' + getCurrentSessionId() + '&songId=' + songId + '&userId=' + getUserId();
+	searchRequest.open('PUT', searchPath);
+	searchRequest.send();
+	
+}
+
+function request(songId) {
+	
+	//var searchRequest = new XMLHttpRequest();
+	//var searchPath = '/request-song?sessionId=' + getCurrentSessionId() + '&songId=' + songId + '&userId=' + getUserId();
+	//console.log("requesting " + songId);
+	//searchRequest.open('PUT', searchPath);
+	//searchRequest.send();
 	
 }
 
@@ -134,6 +209,21 @@ requestSong.addEventListener("click", function() {
     };
 
     cooldownRequest.send();
+});
+
+connectSpotify.addEventListener("click", function(){
+	
+	var searchRequest = new XMLHttpRequest();
+	var searchPath = '/connect-spotify-client?sessionId=' + getCurrentHostSessionId() + '&userId=' + getUserId();
+	searchRequest.open('GET', searchPath);
+	searchRequest.onload = function() {
+		
+		// Redirect to Spotify
+		window.location.href = searchRequest.responseText;
+		
+	};
+	searchRequest.send();
+	
 });
 
 // When the connect button is clicked, attempt to quit the session

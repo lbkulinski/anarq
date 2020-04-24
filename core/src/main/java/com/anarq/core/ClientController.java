@@ -15,7 +15,7 @@ import java.time.Duration;
  */
 @RestController
 public class ClientController {
-    /**
+	/**
      * Attempts to connect the client with the specified username to the session with the specified session ID.
      *
      * @param sessionId the session ID to be used in the operation
@@ -76,6 +76,116 @@ public class ClientController {
 	} //attemptToCloseConnectionToSession
 
 	/**
+     * Returns whether or not the session with the specified session ID is connected to Spotify.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @return {@code true}, if the session with the specified session ID is connected to Spotify and {@code false}
+     * otherwise
+     */
+    @GetMapping("/connected-to-spotify-client")
+    public boolean isConnectedToSpotify(
+            @RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
+			@RequestParam(value="userId", defaultValue="no_user_id") String userId) {
+        Session session = CoreApplication.getSessionForSessionId(sessionId);
+
+        if (session == null) {
+            System.err.println("Error: Request for non-existant session was created!\n ID: " + sessionId);
+
+            return false;
+        } //end if
+
+		if (session.hasUserForId(userId)) {
+
+			ConnectedClient c = session.getClientForId(userId);
+
+			return !c.getSpotifyAuthKey().equals("");
+		
+		}
+		
+		return false;
+		
+    } //isConnectedToSpotify
+
+		/**
+     * Attempts to save the song with the specified song ID in the session with the specified session ID.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @param songId the song ID to be used in the operation
+     * @param userId the user ID to be used in the operation
+     * @return {@code true}, if the song with the specified song ID was successfully liked and {@code false} otherwise
+     */
+    @PutMapping("/save-song")
+    public boolean likeSong(@RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
+                            @RequestParam(value="songId", defaultValue="no_song_id") String songId,
+                            @RequestParam(value="userId", defaultValue="no_user_id") String userId) {
+         Session session = CoreApplication.getSessionForSessionId(sessionId);
+
+        if (session == null) {
+            System.err.println("Error: Request for non-existant session was created!\n ID: " + sessionId);
+
+            return false;
+        } //end if
+
+		if (session.hasUserForId(userId)) {
+
+			ConnectedClient c = session.getClientForId(userId);
+
+			c.retrieveSpotify().saveSong(songId);
+			
+			return true;
+			
+		}
+
+        return false;
+    } //saveSong
+
+	/**
+     * Attempts to connect the session with the specified session ID to Spotify.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @return the result of the attempt to connect to Spotify
+     */
+    @GetMapping("/connect-spotify-client")
+    public String connectToSpotify(
+            @RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
+			@RequestParam(value="userId", defaultValue="no_user_id") String userId) {
+        return ClientCredentialsExample.authorizationCodeUri_Sync();
+    } //connectToSpotify
+	
+	/**
+     * Attempts to connect the session with the specified session ID to Spotify.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @return the result of the attempt to connect to Spotify
+     */
+    @GetMapping("/get-saved-tracks")
+    public Song[] getSavedTracks(
+            @RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
+			@RequestParam(value="userId", defaultValue="no_user_id") String userId) {
+        
+		Session session = CoreApplication.getSessionForSessionId(sessionId);
+
+        if (session == null) {
+            System.err.println("Error: Request for non-existant session was created!\n ID: " + sessionId);
+
+            return null;
+        } //end if
+
+		if (session.hasUserForId(userId)) {
+
+			ConnectedClient c = session.getClientForId(userId);
+
+			System.out.println("I got this far");
+
+			return c.retrieveSpotify().getUsersSavedTracks();
+		
+		}
+		
+		return null;
+		
+    } //connectToSpotify
+
+	/**
      * Attempts to update the Spotify code of the session with the specified session ID with the specified code.
      *
      * @param sessionId the session ID to be used in the operation
@@ -104,7 +214,7 @@ public class ClientController {
 
 			ConnectedClient c = session.getClientForId(userId);
 
-			//c.setSpotifyAuthKey(code);
+			c.setSpotifyAuthKey(code);
 
 			c.retrieveSpotify().setAuthCode(code);
 

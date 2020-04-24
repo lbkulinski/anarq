@@ -45,6 +45,11 @@ public class ConnectedClient {
      */
 	private final String hostSessionId;
 
+	/**
+     * The Spotify authentication key of this session.
+     */
+    private String spotifyAuthKey = "";
+
     /**
      * Constructs a newly allocated {@code ConnectedClient} object with the specified name, registration status, and
      * permission level.
@@ -123,6 +128,24 @@ public class ConnectedClient {
     public ClientCredentialsExample retrieveSpotify() {
         return this.spotify;
     } //getId
+
+	/**
+     * Updates the Spotify authentication key of this session with the specified Spotify authentication key.
+     *
+     * @param key the Spotify authentication key
+     */
+    public void setSpotifyAuthKey(String key) {
+        spotifyAuthKey = key;
+    } //setSpotifyAuthKey
+
+    /**
+     * Returns the Spotify authentication key of this session.
+     *
+     * @return the Spotify authentication key of this session
+     */
+    public String getSpotifyAuthKey() {
+        return spotifyAuthKey;
+    } //getSpotifyAuthKey
 
     /**
      * Returns the permission level of this client.

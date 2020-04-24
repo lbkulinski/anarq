@@ -54,7 +54,7 @@ public class ClientCredentialsExample {
 
     private static String clientId = "ad002d4ba9fa4766b6a6ad03fd440d46"; // This is the Client ID for our Spotify Application
     private static String clientSecret = "e1e7830578254628af9d7b10dca9341e"; // This is the Client Secret for our Spotify Application
-    private static URI redirectUri = SpotifyHttpManager.makeUri("http://localhost:8080/sessionhost.html");
+    private static URI redirectUri = SpotifyHttpManager.makeUri("http://localhost:8080/search.html");
     private static String code = "";
 
     public static final SpotifyApi spotifyApi = new SpotifyApi.Builder() // Creating the Spotify API object spotifyApi
@@ -71,11 +71,11 @@ public class ClientCredentialsExample {
             .build(); // build parameter
     private static final AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodeUri()
 //          .state("x4xkmn9pu3j6ukrs8n")
-          .scope("playlist-modify-public user-read-email streaming user-read-private user-read-playback-state user-modify-playback-state")
+          .scope("playlist-modify-public user-read-email streaming user-read-private user-read-playback-state user-modify-playback-state user-library-modify user-library-read")
 //          .show_dialog(true)
             .build();
     private final AuthorizationCodeUriRequest authorizationCodeUriRequestLocal = spotifyApiLocal.authorizationCodeUri()
-        .scope("playlist-modify-public user-read-email streaming user-read-private user-read-playback-state user-modify-playback-state")
+        .scope("playlist-modify-public user-read-email streaming user-read-private user-read-playback-state user-modify-playback-state user-library-modify user-library-read")
         .build();
     private static AuthorizationCodeRequest authorizationCodeRequest;
 	private AuthorizationCodeRequest authorizationCodeRequestLocal;

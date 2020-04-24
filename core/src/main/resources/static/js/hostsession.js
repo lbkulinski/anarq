@@ -14,28 +14,6 @@ sessionHeader.innerHTML = getCurrentHostSessionId();
 setPreferences();
 loadBlacklist();
 loadQRCode();
-var urlVars = getUrlVars();
-var spotifyID = urlVars["code"];
-
-if (spotifyID != null) {
-	console.log("Upading Spotify Code");
-	
-	var clientListRequest = new XMLHttpRequest();
-	var clientListPath = '/set-spotify-code?sessionId=' + getCurrentHostSessionId() + '&code=' + spotifyID;
-	clientListRequest.open('PUT', clientListPath);
-	clientListRequest.onload = function() {
-		
-		window.location.href = "/sessionhost.html";
-		
-	};
-	clientListRequest.send();
-	
-	
-}
-else {
-	console.log("Spotify Code is Up-To-Date");
-}
-
 
 var clientListRequest = new XMLHttpRequest();
 	var clientListPath = '/connected-to-spotify?sessionId=' + getCurrentHostSessionId();
@@ -420,14 +398,6 @@ function generateSongHTML(song) {
 	
 	return htmlString;
 	
-}
-
-function getUrlVars() {
-    var vars = {};
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-        vars[key] = value;
-    });
-    return vars;
 }
 
 function approveOverrideRequest(songId) {

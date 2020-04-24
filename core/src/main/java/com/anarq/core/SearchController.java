@@ -63,7 +63,13 @@ public class SearchController {
         if (!session.hasUserForId(userId)) {
             return false;
         } //end if
-
+		
+		System.out.println(songId);
+		
+		if (SpotifyGateway.getSongForSongId(songId) == null) {
+			return false;
+		}			
+		
         return session.requestSong(SpotifyGateway.getSongForSongId(songId), userId);
     } //addSongRequest
 }

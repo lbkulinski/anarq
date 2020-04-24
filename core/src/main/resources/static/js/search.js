@@ -6,6 +6,58 @@ var searchQuery = document.getElementById("query");
 
 setBackButton();
 
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+
+
+var urlVars = getUrlVars();
+var spotifyID = urlVars["code"];
+
+if (spotifyID != null) {
+	console.log("Upading Spotify Code");
+	console.log("CURRENT SESSION ID " + getCurrentHostSessionId());
+	
+	if (getCurrentHostSessionId().length < 10) {
+	
+		var clientListRequest = new XMLHttpRequest();
+		var clientListPath = '/set-spotify-code?sessionId=' + getCurrentHostSessionId() + '&code=' + spotifyID;
+		clientListRequest.open('PUT', clientListPath);
+		clientListRequest.onload = function() {
+			
+			window.location.href = "/sessionhost.html";
+			//console.log("SERVER");
+			
+		};
+		clientListRequest.send();
+	
+	}
+	else {
+		
+		var clientListRequest = new XMLHttpRequest();
+		var clientListPath = '/set-spotify-code-client?sessionId=' + getCurrentSessionId() + '&userId=' + getUserId() + '&code=' + spotifyID;
+		clientListRequest.open('PUT', clientListPath);
+		clientListRequest.onload = function() {
+			
+			window.location.href = "/session.html";
+			//console.log("CLIENT");
+			
+		};
+		clientListRequest.send();
+	
+	}
+	
+	
+}
+else {
+	console.log("Spotify Code is Up-To-Date");
+}
+
+
 // Generates a back button depending on if it's a host or a client
 function setBackButton() {
 
