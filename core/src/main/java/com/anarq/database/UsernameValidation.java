@@ -1,100 +1,112 @@
 package com.anarq.database;
 
-import java.io.*;
-
+/**
+ * A utility class for performing username validation in the AnarQ Application.
+ *
+ * @version April 24, 2020
+ */
 public class UsernameValidation {
+    /**
+     * The minimum length of a username.
+     */
+	private static final int MIN_USERNAME_LENGTH = 3;
 
-	private static final int MIN_USERNAME_LENGTH = 3; 
-	private static final int MAX_USERNAME_LENGTH = 16; 
+    /**
+     * The maximum length of a username.
+     */
+	private static final int MAX_USERNAME_LENGTH = 16;
+
+    /**
+     * The username of this username validation utility class.
+     */
     String username;
 
-    public UsernameValidation(String name) {
-        username = name;
-    }
+    /**
+     * Constructs a newly allocated {@code UsernameValidation} object with the specified username.
+     *
+     * @param username the username to be used in construction
+     */
+    public UsernameValidation(String username) {
+        this.username = username;
+    } //UsernameValidation
 
     /**
-     * Function to read all the words from the BadWords.txt file and check if the inputted
-     * Username contains any of the words in it
-     * @return True if there is a 'bad word' in the username
-     * @throws IOException
+     * Determines whether or not the username of this username validation utility class contains bad words.
+     *
+     * @return {@code true}, if the username of this username validation utility class contains bad words and
+     * {@code false} otherwise
      */
-
-    public boolean hasBadWords () {
-
+    public boolean hasBadWords() {
         return NaughtyWords.isANaughtyWord(username);
-		
-    }
+    } //hasBadWords
 
     /**
-     * Function to iterate through the database to check if the inputted username has already been taken
-     * @return True if the username is already take and False if it isn't
+     * Determines whether or not the username of this username validation utility class is taken.
+     *
+     * @return {@code true}, if the username of this username validation utility class is taken and {@code false}
+     * otherwise
      */
-
-    public boolean isTaken () {
-
+    public boolean isTaken() {
         FindUser user = new FindUser(username);
-        if (user.find() == null) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+
+        return user.find() != null;
+    } //isTaken
 
     /**
-     * Driver function to check if the username meets our requirements
-     * @return True if it meets our requirements and false if it doesn't
-     * @throws Exception
+     * Returns the result of validation of the username of this username validation utility class.
+     *
+     * @return the result of validation of the username of this username validation utility class
      */
-
     public String validateUsername() {
-
-
-        if ((username.length() < MIN_USERNAME_LENGTH)) {
+        if (username.length() < MIN_USERNAME_LENGTH) {
             return "Username must be at least " + MIN_USERNAME_LENGTH + " characters in length!";
-        }
-		if ((username.length() > MAX_USERNAME_LENGTH)) {
+        } //end if
+
+        if (username.length() > MAX_USERNAME_LENGTH) {
             return "Username must be less than " + MAX_USERNAME_LENGTH + " characters in length!";
-        }
+        } //end if
+
         if (isTaken()) {
             return "Username Taken";
-        }
+        } //end if
+
         if (hasBadWords()) {
             return "Username cannot contain any innappropriate words!";
-        }
+        } //end if
 
-     return "Username Ok";
-    }
+        return "Username Ok";
+    } //validateUsername
 
     /**
-     * Helper function to check if the inputted Username contains the specified word
-     * @param word is the word that user cannot have in the username
-     * @return true if a user has any word from the BadWords.txt in their username
+     * Determines whether or not the username of this username validation utility class contains the specified word.
+     *
+     * @param word the word to be used in the operation
+     * @return {@code true}, if the username of this username validation utility class contains the specified word and
+     * {@code false} otherwise
      */
-
-    public boolean contains (String word) {
-
+    public boolean contains(String word) {
         String name = username.toLowerCase();
 
         do {
             int position = name.indexOf(word.charAt(0));
+
             if (position == -1) {
                 return false;
-            }
+            } //end if
+
             try {
                 String substring = name.substring(position, (position + word.length()));
+
                 if (substring.equalsIgnoreCase(word)) {
-//                    System.out.println("Bad word present in " + username + " is " + word);
                     return true;
                 } else {
                     name = name.substring(position + 1);
-                }
-            } catch (StringIndexOutOfBoundsException s) {   // If the 'bad word' is longer than the remaining username,
-                return false;                               // It cannot be present in the username
-            }
+                } //end if
+            } catch (StringIndexOutOfBoundsException s) {
+                return false;
+            } //end try catch
         } while (name.length() > 0);
 
         return false;
-    }
-
+    } //contains
 }
-
