@@ -1,35 +1,24 @@
 package com.anarq.core;
 
 import org.springframework.stereotype.Controller;
-import java.util.Set;
-import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
-import java.io.BufferedReader;
-import java.util.HashSet;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoCollection;
-import org.bson.Document;
-import org.bson.conversions.Bson;
-import com.mongodb.client.result.UpdateResult;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
+/**
+ * A controller for page redirects of the AnarQ Application.
+ *
+ * @version April 23, 2020
+ */
 @Controller
 public final class PageRedirectController {
-   
+    /**
+     * Redirects the connection to the connect page.
+     *
+     * @return the name of the connect page
+     */
 	@GetMapping("/")
     public String redirectConnect() {
         return "connect";
-    }
+    } //redirectConnect
 	
 	/*@GetMapping("/updateUsername")
     public String updateUsernameForm(Model model) {
@@ -58,5 +47,4 @@ public final class PageRedirectController {
 
         return "updateProfilePictureForm";
     } //updateProfilePictureForm*/
-   
 }
