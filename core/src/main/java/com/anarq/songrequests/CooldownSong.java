@@ -4,7 +4,9 @@ import java.util.*;
 import com.anarq.core.*;
 
 /**
- * A container used in the cooldown song implementation.
+ * A container used in the cooldown song implementation in the AnarQ Application.
+ *
+ * @version April 24, 2020
  */
 class Container {
     /**
@@ -24,7 +26,7 @@ class Container {
 }
 
 /**
- * A group of songs currently in a cooldown period.
+ * A group of songs currently in a cooldown period in the AnarQ Application.
  *
  * @version April 24, 2020
  */
