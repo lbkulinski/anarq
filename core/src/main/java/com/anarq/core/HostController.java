@@ -304,72 +304,106 @@ public class HostController {
         return "Success!";
     } //setSpotifyCode
 
+    /**
+     * Attempts to approve the override request of the song with the specified song ID in the session with the
+     * specified session ID.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @param songId the song ID to be used in the operation
+     * @return {@code true}, if the override request of the song with the specified song ID was successfully approved
+     * and {@code false} otherwise
+     */
     @PutMapping("/approve-override-request")
     public boolean approveOverrideRequest(
-            @RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
-            @RequestParam(value="songId", defaultValue="no_song_id")String songId) {
-
-        // Attempt to obtain the given session based on the sessionId provided
+            @RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
+            @RequestParam(value="songId", defaultValue="no_song_id") String songId) {
         Session session = CoreApplication.getSessionForSessionId(sessionId);
+
         if (session == null) {
-            System.err.println("Error: Request for non-existant session was created!\n ID: "
-                                       + sessionId);
+            System.err.println("Error: Request for non-existant session was created!\n ID: " + sessionId);
+
             return false;
-        }
+        } //end if
 
-        String artist = session.getMusicChooser().getSongForSongId(songId).getArtistName();
-        boolean ret = session.approveOverrideSongRequest(songId);
+        String artist = session.getMusicChooser()
+                               .getSongForSongId(songId)
+                               .getArtistName();
 
-        return ret;
-    }
+        return session.approveOverrideSongRequest(songId);
+    } //approveOverrideRequest
 
+    /**
+     * Attempts to place the song with the specified song ID in a cooldown period in the session with the specified
+     * session ID.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @param songId the song ID to be used in the operation
+     * @return {@code true}, if the song with the specified song ID was successfully placed in a cooldown period and
+     * {@code false} otherwise
+     */
     @PutMapping("/add-song-to-cooldown")
     public boolean addSongToCooldown(
-            @RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId,
-            @RequestParam(value="songId", defaultValue="no_song_id")String songId) {
-
-        // Attempt to obtain the given session based on the sessionId provided
+            @RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId,
+            @RequestParam(value="songId", defaultValue="no_song_id") String songId) {
         Session session = CoreApplication.getSessionForSessionId(sessionId);
-        if (session == null) {
-            System.err.println("Error: Request for non-existant session was created!\n ID: "
-                                       + sessionId);
-            return false;
-        }
 
-        session.getSongCooldownManager().addSong(SpotifyGateway.getSongForSongId(songId), Session.SONG_COOLDOWN_TIME);
+        if (session == null) {
+            System.err.println("Error: Request for non-existant session was created!\n ID: " + sessionId);
+
+            return false;
+        } //end if
+
+        session.getSongCooldownManager()
+               .addSong(SpotifyGateway.getSongForSongId(songId), Session.SONG_COOLDOWN_TIME);
 
         return true;
-    }
+    } //addSongToCooldown
 
+    /**
+     * Attempts to pause the song playing in the session with the specified session ID.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @return {@code true}, if the song playing in the session with the specified session ID was successfully paused
+     * and {@code false} otherwise
+     */
     @PutMapping("/pause")
-    public boolean pauseSong(
-            @RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId) {
-
-        // Attempt to obtain the given session based on the sessionId provided
+    public boolean pauseSong(@RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId) {
         Session session = CoreApplication.getSessionForSessionId(sessionId);
-        if (session == null) {
-            System.err.println("Error: Request for non-existant session was created!\n ID: "
-                                       + sessionId);
-            return false;
-        }
-        session.getSpotify().pause();
-        return true;
-    }
 
+        if (session == null) {
+            System.err.println("Error: Request for non-existant session was created!\n ID: " + sessionId);
+
+            return false;
+        } //end if
+
+        session.getSpotify()
+               .pause();
+
+        return true;
+    } //pauseSong
+
+    /**
+     * Attempts to resume the song playing in the session with the specified session ID.
+     *
+     * @param sessionId the session ID to be used in the operation
+     * @return {@code true}, if the song playing in the session with the specified session ID was successfully resumed
+     * and {@code false} otherwise
+     */
     @PutMapping("/resume")
-    public boolean resumeSong(
-            @RequestParam(value="sessionId", defaultValue="default_session_id")String sessionId) {
-
-        // Attempt to obtain the given session based on the sessionId provided
+    public boolean resumeSong(@RequestParam(value="sessionId", defaultValue="default_session_id") String sessionId) {
         Session session = CoreApplication.getSessionForSessionId(sessionId);
+
         if (session == null) {
-            System.err.println("Error: Request for non-existant session was created!\n ID: "
-                                       + sessionId);
+            System.err.println("Error: Request for non-existant session was created!\n ID: " + sessionId);
+
             return false;
-        }
-        session.getSpotify().resume();
+        } //end if
+
+        session.getSpotify()
+               .resume();
+
         return true;
-    }
+    } //resumeSong
 
     @PutMapping("/delete-override-request")
     public boolean deleteOverrideRequest(
