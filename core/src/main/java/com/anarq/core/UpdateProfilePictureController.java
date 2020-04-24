@@ -1,9 +1,7 @@
 package com.anarq.core;
 
 import com.anarq.database.*;
-
 import org.springframework.stereotype.Controller;
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
@@ -12,7 +10,6 @@ import org.bson.conversions.Bson;
 import com.mongodb.client.FindIterable;
 import org.bson.types.Binary;
 import java.util.Objects;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.model.Filters;
 import java.util.Arrays;
 import com.mongodb.client.result.UpdateResult;
@@ -30,7 +27,7 @@ import java.io.UncheckedIOException;
  * A controller for updating a user's profile picture.
  *
  * @author Logan Kulinski, lbk@purdue.edu
- * @version March 29, 2020
+ * @version April 23, 2020
  */
 @Controller
 public final class UpdateProfilePictureController {
@@ -44,12 +41,6 @@ public final class UpdateProfilePictureController {
      * @throws NullPointerException if the specified username or bytes is {@code null}
      */
     private boolean profilePictureSame(String username, byte[] bytes) {
-        String databaseUsername;
-        String databasePassword;
-        String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
-        String uri;
-        MongoClient client;
-        String databaseName = "user-database";
         MongoDatabase userDatabase;
         String collectionName = "users";
         MongoCollection<Document> collection;
@@ -67,14 +58,6 @@ public final class UpdateProfilePictureController {
         Objects.requireNonNull(username, "the specified username is null");
 
         Objects.requireNonNull(bytes, "the specified bytes is null");
-
-        /*databaseUsername = System.getProperty("database-username");
-
-        databasePassword = System.getProperty("database-password");
-
-        uri = String.format(format, databaseUsername, databasePassword);
-
-        client = MongoClients.create(uri);*/
 
         userDatabase = ConnectToDatabase.getDatabaseConnection();
 
@@ -104,8 +87,6 @@ public final class UpdateProfilePictureController {
             same = Arrays.equals(bytes, currentBytes);
         } //end if
 
-       // client.close();
-
         return same;
     } //profilePictureSame
 
@@ -118,12 +99,6 @@ public final class UpdateProfilePictureController {
      * @throws NullPointerException if the specified username or bytes is {@code null}
      */
     private boolean updateProfilePicture(String username, byte[] bytes) {
-        String databaseUsername;
-        String databasePassword;
-        String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
-        String uri;
-        MongoClient client;
-        String databaseName = "user-database";
         MongoDatabase userDatabase;
         String collectionName = "users";
         MongoCollection<Document> collection;
@@ -139,14 +114,6 @@ public final class UpdateProfilePictureController {
 
         Objects.requireNonNull(bytes, "the specified bytes is null");
 
-        /*databaseUsername = System.getProperty("database-username");
-
-        databasePassword = System.getProperty("database-password");
-
-        uri = String.format(format, databaseUsername, databasePassword);
-
-        client = MongoClients.create(uri);*/
-
         userDatabase = ConnectToDatabase.getDatabaseConnection();
 
         collection = userDatabase.getCollection(collectionName);
@@ -160,8 +127,6 @@ public final class UpdateProfilePictureController {
         update = Updates.set(pictureBytesFieldName, bytes);
 
         result = collection.updateOne(filter, update);
-
-        //client.close();
 
         return result.getModifiedCount() == 1;
     } //updateProfilePicture

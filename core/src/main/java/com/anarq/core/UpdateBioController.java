@@ -3,7 +3,6 @@ package com.anarq.core;
 import com.anarq.database.*;
 
 import org.springframework.stereotype.Controller;
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
@@ -11,13 +10,7 @@ import java.util.regex.Pattern;
 import org.bson.conversions.Bson;
 import com.mongodb.client.FindIterable;
 import java.util.Objects;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.model.Filters;
-import java.io.BufferedReader;
-import java.util.Set;
-import java.util.HashSet;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.UncheckedIOException;
 import com.mongodb.client.result.UpdateResult;
 import com.mongodb.client.model.Updates;
@@ -30,7 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
  * A controller for updating a user's biography.
  *
  * @author Logan Kulinski, lbk@purdue.edu
- * @version March 29, 2020
+ * @version April 23, 2020
  */
 @Controller
 public final class UpdateBioController {
@@ -44,12 +37,6 @@ public final class UpdateBioController {
      * @throws NullPointerException if the specified username or bio is {@code null}
      */
     private boolean bioSame(String username, String bio) {
-        String databaseUsername;
-        String databasePassword;
-        String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
-        String uri;
-        MongoClient client;
-        String databaseName = "user-database";
         MongoDatabase userDatabase;
         String collectionName = "users";
         MongoCollection<Document> collection;
@@ -66,14 +53,6 @@ public final class UpdateBioController {
         Objects.requireNonNull(username, "the specified username is null");
 
         Objects.requireNonNull(bio, "the specified bio is null");
-
-        /*databaseUsername = System.getProperty("database-username");
-
-        databasePassword = System.getProperty("database-password");
-
-        uri = String.format(format, databaseUsername, databasePassword);
-
-        client = MongoClients.create(uri);*/
 
         userDatabase = ConnectToDatabase.getDatabaseConnection();
 
@@ -111,43 +90,9 @@ public final class UpdateBioController {
      * @throws UncheckedIOException if an I/O error occurs while trying to read the file containing the bad words
      */
     private boolean bioValid(String bio) {
-        String fileName = "src/main/BadWords.txt";
-        BufferedReader reader;
-        String line;
-        Set<String> badWords;
-        String pattern;
-
         Objects.requireNonNull(bio, "the specified bio is null");
 
         bio = bio.toLowerCase();
-
-        /* badWords = new HashSet<>();
-
-        try {
-            reader = new BufferedReader(new FileReader(fileName));
-
-            line = reader.readLine();
-
-            while (line != null) {
-                line = line.toLowerCase();
-
-                badWords.add(line);
-
-                line = reader.readLine();
-            } //end while
-
-            reader.close();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        } //end try catch
-
-        for (String badWord : badWords) {
-            pattern = String.format(".*%s.*", badWord);
-
-            if (bio.matches(pattern)) {
-                return false;
-            } //end if
-        } //end for*/
 
         return !NaughtyWords.isANaughtyWord(bio);
     } //bioValid
@@ -161,12 +106,6 @@ public final class UpdateBioController {
      * @throws NullPointerException if the specified username, or bio is {@code null}
      */
     private boolean updateBio(String username, String bio) {
-        String databaseUsername;
-        String databasePassword;
-        String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
-        String uri;
-        MongoClient client;
-        String databaseName = "user-database";
         MongoDatabase userDatabase;
         String collectionName = "users";
         MongoCollection<Document> collection;
@@ -182,14 +121,6 @@ public final class UpdateBioController {
 
         Objects.requireNonNull(bio, "the specified bio is null");
 
-        /*databaseUsername = System.getProperty("database-username");
-
-        databasePassword = System.getProperty("database-password");
-
-        uri = String.format(format, databaseUsername, databasePassword);
-
-        client = MongoClients.create(uri);*/
-
         userDatabase = ConnectToDatabase.getDatabaseConnection();
 
         collection = userDatabase.getCollection(collectionName);
@@ -203,8 +134,6 @@ public final class UpdateBioController {
         update = Updates.set(bioFieldName, bio);
 
         result = collection.updateOne(filter, update);
-
-        //client.close();
 
         return result.getModifiedCount() == 1;
     } //updateBio

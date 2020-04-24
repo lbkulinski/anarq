@@ -1,24 +1,17 @@
 package com.anarq.core;
 
 import com.anarq.database.*;
-
 import org.springframework.stereotype.Controller;
 import java.util.Set;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
-import java.io.BufferedReader;
-import java.util.HashSet;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.UncheckedIOException;
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import java.util.regex.Pattern;
 import org.bson.conversions.Bson;
 import com.mongodb.client.result.UpdateResult;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
  * A controller for updating a user's username.
  *
  * @author Logan Kulinski, lbk@purdue.edu
- * @version March 29, 2020
+ * @version April 23, 2020
  */
 @Controller
 public final class UpdateUsernameController {
@@ -121,45 +114,9 @@ public final class UpdateUsernameController {
      * @throws UncheckedIOException if an I/O error occurs while trying to read the file containing the bad words
      */
     private boolean newUsernameValid(String newUsername) {
-        String fileName = "src/main/BadWords.txt";
-        BufferedReader reader;
-        String line;
-        Set<String> badWords;
-        String pattern;
-
         Objects.requireNonNull(newUsername, "the specified new username is null");
 
         newUsername = newUsername.toLowerCase();
-
-        badWords = new HashSet<>();
-
-        /*try {
-            reader = new BufferedReader(new FileReader(fileName));
-
-            line = reader.readLine();
-
-            while (line != null) {
-                line = line.toLowerCase();
-
-                badWords.add(line);
-
-                line = reader.readLine();
-            } //end while
-
-            reader.close();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        } //end try catch
-
-        for (String badWord : badWords) {
-            pattern = String.format(".*%s.*", badWord);
-
-            if (newUsername.matches(pattern)) {
-                return false;
-            } //end if
-        } //end for
-
-        return true;*/
 		
 		return !NaughtyWords.isANaughtyWord(newUsername);
 		
@@ -174,12 +131,6 @@ public final class UpdateUsernameController {
      * @throws NullPointerException if the specified current username or new username is {@code null}
      */
     private boolean updateUsername(String currentUsername, String newUsername) {
-        String databaseUsername;
-        String databasePassword;
-        String format = "mongodb+srv://%s:%s@cluster0-kwfia.mongodb.net/test?retryWrites=true&w=majority";
-        String uri;
-        MongoClient client;
-        String databaseName = "user-database";
         MongoDatabase userDatabase;
         String collectionName = "users";
         MongoCollection<Document> collection;
@@ -194,15 +145,7 @@ public final class UpdateUsernameController {
 
         Objects.requireNonNull(newUsername, "the specified new username is null");
 
-        /*databaseUsername = System.getProperty("database-username");
-
-        databasePassword = System.getProperty("database-password");
-
-        uri = String.format(format, databaseUsername, databasePassword);
-
-        client = MongoClients.create(uri);*/
-
-        userDatabase = ConnectToDatabase.getDatabaseConnection(); //client.getDatabase(databaseName);
+        userDatabase = ConnectToDatabase.getDatabaseConnection();
 
         collection = userDatabase.getCollection(collectionName);
 
@@ -215,8 +158,6 @@ public final class UpdateUsernameController {
         update = Updates.set(fieldName, newUsername);
 
         result = collection.updateOne(filter, update);
-
-        //client.close();
 
         return result.getModifiedCount() == 1;
     } //updateUsername
