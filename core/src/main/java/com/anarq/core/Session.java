@@ -143,7 +143,7 @@ public class Session {
                     } //end if
 
                     if (getRequestQueue().isEmpty() && requestQueue.autoDJ) {
-                        requestSong(getAutoDJ().getSongReccomendation(), Session.AUTODJ_NAME);
+                        requestSong(getAutoDJ().getSongRecommendation(), Session.AUTODJ_NAME);
                     } //end if
 
                     if (spotify.isTimeToSwitchSong() ) {
