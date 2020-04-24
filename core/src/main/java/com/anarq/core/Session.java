@@ -119,7 +119,7 @@ public class Session {
 
         connectedClients.add(hostClient);
 
-        qrCodeGenerator qr = new qrCodeGenerator();
+        QrCodeGenerator qr = new QrCodeGenerator();
 
         try {
             qrCode = qr.getQRCodeImage(sessionId);
