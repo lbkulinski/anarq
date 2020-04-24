@@ -344,4 +344,9 @@ public class ClientCredentialsExample {
             
         }
     }
+
+    public boolean isSameSong(String songId) {
+        String playingSong = getUsersCurrentlyPlayingTrack_Async().getItem().getId();
+        return playingSong.equals(songId);
+    }
 }
