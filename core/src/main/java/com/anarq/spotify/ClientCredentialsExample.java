@@ -337,7 +337,7 @@ public class ClientCredentialsExample {
     public void saveSong(String songId) {
         String[] temp = new String[1];
         temp[0] = songId;
-        SaveTracksForUserRequest saveTracksForUserRequest = spotifyApi.saveTracksForUser(temp).build();
+        SaveTracksForUserRequest saveTracksForUserRequest = spotifyApiLocal.saveTracksForUser(temp).build();
         try {
             saveTracksForUserRequest.execute();
         } catch (IOException | SpotifyWebApiException | ParseException ss) {
