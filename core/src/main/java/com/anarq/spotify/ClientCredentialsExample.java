@@ -252,6 +252,13 @@ public class ClientCredentialsExample {
         }
     }
 	
+	public String getSongCurrentlyPlaying() {
+		
+		CurrentlyPlaying cp = getUsersCurrentlyPlayingTrack_Async();
+		return cp.getItem().getId();
+		
+	}
+	
 	public boolean isTrackCurrentlyPlaying() {
 		
 		CurrentlyPlaying cp = getUsersCurrentlyPlayingTrack_Async();

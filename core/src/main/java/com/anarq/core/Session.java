@@ -134,29 +134,40 @@ public class Session {
 
             public void run() {
                 while (isRunning) {
-                    if (requestQueue.getCurrentSong() == null || !spotify.isTrackCurrentlyPlaying()) {
-                        if (!requestQueue.isEmpty()) {
-                            spotify.playSongAsNext(requestQueue.playNextSong().getId());
+					
+					if (!spotifyAuthKey.equals("")) {
+					
+						
+					
+						if (requestQueue.getCurrentSong() != null && !spotify.getSongCurrentlyPlaying().equals(requestQueue.getCurrentSong().getId())) {
+							spotify.playSongAsNext(requestQueue.getCurrentSong().getId());
+						}
+						
+						if (requestQueue.getCurrentSong() == null || !spotify.isTrackCurrentlyPlaying()) {
+							if (!requestQueue.isEmpty()) {
+								spotify.playSongAsNext(requestQueue.playNextSong().getId());
 
-                            spotify.resume();
-                        } //end if
-                    } //end if
+								spotify.resume();
+							} //end if
+						} //end if
 
-                    if (getRequestQueue().isEmpty() && requestQueue.autoDJ) {
-                        requestSong(getAutoDJ().getSongRecommendation(), Session.AUTODJ_NAME);
-                    } //end if
+						if (getRequestQueue().isEmpty() && requestQueue.autoDJ) {
+							requestSong(getAutoDJ().getSongRecommendation(), Session.AUTODJ_NAME);
+						} //end if
 
-                    if (spotify.isTimeToSwitchSong() ) {
-                        if (!requestQueue.isEmpty() && !primed) {
-                            spotify.addSong(requestQueue.playNextSong().getId());
+						if (spotify.isTimeToSwitchSong() ) {
+							if (!requestQueue.isEmpty() && !primed) {
+								spotify.addSong(requestQueue.playNextSong().getId());
 
-                            spotify.resume();
+								spotify.resume();
 
-                            primed = true;
-                        } //end if
-                    } else {
-                        primed = false;
-                    } //end if
+								primed = true;
+							} //end if
+						} else {
+							primed = false;
+						} //end if
+
+					}
 
                     try {
                         Thread.sleep(500);
