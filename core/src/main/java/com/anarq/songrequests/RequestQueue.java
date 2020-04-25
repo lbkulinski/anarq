@@ -164,6 +164,11 @@ public class RequestQueue {
   * The current song of this request queue.
   */
   private SongRequest currentSong = null;
+  
+  /**
+  * The last song played before currentSong.
+  */
+  private SongRequest lastSongPlayed = null;
 
   /**
   * The songs of this request queue.
@@ -663,6 +668,7 @@ public class RequestQueue {
       sortQueue();
     }
 
+	lastSongPlayed = currentSong;
     currentSong = ret;
 
     return ret;
@@ -692,6 +698,15 @@ public class RequestQueue {
   */
   public SongRequest getCurrentSong() {
     return currentSong;
+  } //getCurrentSong
+  
+  /**
+  * Returns the current song request of this request queue.
+  *
+  * @return the current song request of this request queue
+  */
+  public SongRequest getLastSongPlayed() {
+    return lastSongPlayed;
   } //getCurrentSong
 
   /**

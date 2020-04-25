@@ -139,7 +139,7 @@ public class Session {
 					
 						
 					
-						if (requestQueue.getCurrentSong() != null && !spotify.getSongCurrentlyPlaying().equals(requestQueue.getCurrentSong().getId())) {
+						if (requestQueue.getCurrentSong() != null && !spotify.getSongCurrentlyPlaying().equals(requestQueue.getCurrentSong().getId()) && !spotify.getSongCurrentlyPlaying().equals(requestQueue.getLastSongPlayed().getId())) {
 							spotify.playSongAsNext(requestQueue.getCurrentSong().getId());
 						}
 						

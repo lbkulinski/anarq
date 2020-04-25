@@ -60,7 +60,7 @@ function getCurrentSongInfo() {
 // Loads all the users currently connected
 function loadQRCode() {
 
-	var clientListRequest = new XMLHttpRequest();
+	/*var clientListRequest = new XMLHttpRequest();
 	var clientListPath = '/get-qr-code?sessionId=' + getCurrentHostSessionId() + '&userId=' + getUserId();
 	clientListRequest.open('GET', clientListPath);
 	clientListRequest.onload = function() {
@@ -72,7 +72,7 @@ function loadQRCode() {
 		}
 			
 	};
-	clientListRequest.send();
+	clientListRequest.send();*/
 
 }
 
