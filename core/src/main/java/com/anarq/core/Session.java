@@ -135,46 +135,53 @@ public class Session {
             public void run() {
                 while (isRunning) {
 					
-					if (!spotifyAuthKey.equals("")) {
+					try {
 					
+						if (!spotifyAuthKey.equals("")) {
 						
-					
-						if (requestQueue.getCurrentSong() != null && !spotify.getSongCurrentlyPlaying().equals(requestQueue.getCurrentSong().getId()) && !spotify.getSongCurrentlyPlaying().equals(requestQueue.getLastSongPlayed().getId())) {
-							spotify.playSongAsNext(requestQueue.getCurrentSong().getId());
+							
+						
+							if (requestQueue.getCurrentSong() != null && !spotify.getSongCurrentlyPlaying().equals(requestQueue.getCurrentSong().getId()) && !spotify.getSongCurrentlyPlaying().equals(requestQueue.getLastSongPlayed().getId())) {
+								spotify.playSongAsNext(requestQueue.getCurrentSong().getId());
+							}
+							
+							if (requestQueue.getCurrentSong() == null || !spotify.isTrackCurrentlyPlaying()) {
+								if (!requestQueue.isEmpty()) {
+									spotify.playSongAsNext(requestQueue.playNextSong().getId());
+
+									spotify.resume();
+								} //end if
+							} //end if
+
+							if (getRequestQueue().isEmpty() && requestQueue.autoDJ) {
+								requestSong(getAutoDJ().getSongRecommendation(), Session.AUTODJ_NAME);
+							} //end if
+
+							if (spotify.isTimeToSwitchSong() ) {
+								if (!requestQueue.isEmpty() && !primed) {
+									spotify.addSong(requestQueue.playNextSong().getId());
+
+									spotify.resume();
+
+									primed = true;
+								} //end if
+							} else {
+								primed = false;
+							} //end if
+
 						}
+
+						try {
+							Thread.sleep(500);
+						} catch (Exception e) {
+							e.printStackTrace();
+						} //end try catch
 						
-						if (requestQueue.getCurrentSong() == null || !spotify.isTrackCurrentlyPlaying()) {
-							if (!requestQueue.isEmpty()) {
-								spotify.playSongAsNext(requestQueue.playNextSong().getId());
-
-								spotify.resume();
-							} //end if
-						} //end if
-
-						if (getRequestQueue().isEmpty() && requestQueue.autoDJ) {
-							requestSong(getAutoDJ().getSongRecommendation(), Session.AUTODJ_NAME);
-						} //end if
-
-						if (spotify.isTimeToSwitchSong() ) {
-							if (!requestQueue.isEmpty() && !primed) {
-								spotify.addSong(requestQueue.playNextSong().getId());
-
-								spotify.resume();
-
-								primed = true;
-							} //end if
-						} else {
-							primed = false;
-						} //end if
-
-					}
-
-                    try {
-                        Thread.sleep(500);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } //end try catch
-                } //end while
+					}catch (Exception e) {
+						System.out.println("oops");
+					}	
+						
+					} //end while
             } //run
         };
 
